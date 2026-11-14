@@ -156,8 +156,8 @@ function Globe() {
       ["Dubai", "Singapore"],
     ];
     return pairs.map(([a, b]) => {
-      const va = latLon(...CITIES[a], R);
-      const vb = latLon(...CITIES[b], R);
+      const va = latLon(CITIES[a][0], CITIES[a][1], R);
+      const vb = latLon(CITIES[b][0], CITIES[b][1], R);
       const mid = va.clone().add(vb).multiplyScalar(0.5).normalize().multiplyScalar(R * 1.35);
       return new THREE.QuadraticBezierCurve3(va, mid, vb);
     });

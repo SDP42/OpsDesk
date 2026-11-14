@@ -431,3 +431,11 @@ body {
     cursor: none !important;
   }
 }
+@keyframes scan {
+  0% {
+    top: 8%;
+  }
+  100% {
+    top: 92%;
+  }
+}

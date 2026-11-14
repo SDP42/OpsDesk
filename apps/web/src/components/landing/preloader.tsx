@@ -74,11 +74,11 @@ export function Preloader() {
         ))}
         <div
           className="absolute inset-0 animate-sweep rounded-full"
-          style={{ background: "conic-gradient(from 0deg, transparent 0 300deg, color-mix(in oklab, var(--color-signal) 45%, transparent) 360deg)", animationDuration: "1.6s" }}
+          style={{ background: "conic-gradient(from 0deg, transparent 0 300deg, color-mix(in oklab, var(--color-beacon) 40%, transparent) 360deg)", animationDuration: "1.6s" }}
         />
-        <span className="relative font-mono text-3xl text-signal tabular">{String(pct).padStart(3, "0")}%</span>
+        <span className="relative font-mono text-3xl text-night tabular">{String(pct).padStart(3, "0")}%</span>
       </div>
-      <p className="micro absolute bottom-[22%] !text-signal">Establishing contact</p>
+      <p className="sign sign-dark absolute bottom-[22%]">Establishing contact</p>
     </div>
   );
 }

@@ -44,11 +44,11 @@ export function CrosshairCursor() {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[100] hidden [@media(pointer:fine)]:block">
-      <div ref={ring} className="absolute -top-5 -left-5 size-10 rounded-full border border-signal/50 transition-[border-color]" />
+      <div ref={ring} className="absolute -top-5 -left-5 size-10 rounded-full border border-night/40 transition-[border-color]" />
       <div ref={dot} className="absolute -top-3 -left-3 size-6">
-        <span className="absolute top-1/2 left-0 h-px w-full bg-signal" />
-        <span className="absolute top-0 left-1/2 h-full w-px bg-signal" />
-        <span className="absolute top-1/2 left-1/2 size-1 -translate-1/2 rounded-full bg-ink-950 ring-1 ring-signal" />
+        <span className="absolute top-1/2 left-0 h-px w-full bg-beacon" />
+        <span className="absolute top-0 left-1/2 h-full w-px bg-beacon" />
+        <span className="absolute top-1/2 left-1/2 size-1 -translate-1/2 rounded-full bg-white ring-1 ring-beacon" />
       </div>
     </div>
   );

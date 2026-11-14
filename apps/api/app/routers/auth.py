@@ -13,10 +13,11 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.core.rbac import Principal, require_any
 from app.core.security import create_access_token, verify_password
+from app.db.base import utcnow
 from app.db.models import User
 from app.db.seed.fixtures import DEMO_ACCOUNTS
 from app.db.session import get_session
-from app.schemas.auth import DemoAccount, LoginIn, MeOut
+from app.schemas.auth import DemoAccount, LoginIn, MeOut, PreferencesIn
 from app.schemas.common import Envelope, Ok
 from app.services.audit import audit
 from app.services.serializers import agency_brief
@@ -48,6 +49,8 @@ def _me(user: User) -> MeOut:
         region=user.region,
         availability=user.availability,
         agency=agency_brief(user.agency) if user.agency else None,
+        data_mode=user.data_mode,
+        onboarded=user.onboarded_at is not None,
     )
 
 
@@ -130,4 +133,25 @@ async def me(
 ) -> Envelope[MeOut]:
     user = await session.get(User, principal.id)
     assert user is not None
+    return Envelope(data=_me(user))
+
+
+@me_router.patch("/me/preferences", response_model=Envelope[MeOut])
+async def preferences(
+    body: PreferencesIn,
+    principal: Principal = Depends(require_any),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[MeOut]:
+    """Switch between the demo airspace and live data, and mark onboarding complete."""
+    user = await session.get(User, principal.id)
+    assert user is not None
+    if body.data_mode:
+        user.data_mode = body.data_mode
+    if body.onboarded is not None:
+        user.onboarded_at = utcnow() if body.onboarded else None
+    audit(
+        session, principal, "user.preferences", "user", user.id, body.model_dump(exclude_none=True)
+    )
+    await session.commit()
+    await session.refresh(user)
     return Envelope(data=_me(user))

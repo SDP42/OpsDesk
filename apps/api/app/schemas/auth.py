@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, EmailStr, Field
 
 from app.schemas.common import StrictModel
@@ -30,6 +32,13 @@ class MeOut(BaseModel):
     region: str | None
     availability: str
     agency: AgencyBrief | None
+    data_mode: str = "demo"
+    onboarded: bool = False
+
+
+class PreferencesIn(StrictModel):
+    data_mode: Literal["demo", "live"] | None = None
+    onboarded: bool | None = None
 
 
 class DemoAccount(BaseModel):

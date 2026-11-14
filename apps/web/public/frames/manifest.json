@@ -1,0 +1,31 @@
+{
+  "sequences": [
+    {
+      "id": "a",
+      "count": 140,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/a/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACQAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JYwC7ACGgZxS4UW8AAP7LlLdYtJtssRDEFdMmhNxZACHU1GPKM0VIJ50bE5pLv8mOtjzlMulIN/8atoMmHzhgAAA="
+    },
+    {
+      "id": "b",
+      "count": 140,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/b/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAABQAwCdASoYAA4ALrV2u12jqampiYC0SgCdIIjEZnLf9vUoSAD+9Zm/428VJFrpY9w+H7Kdp88oA0N5gt6D0w+PmjHQa3Ulyc5BxB4U3oUcbkADgAA="
+    },
+    {
+      "id": "radar",
+      "count": 87,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/radar/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAACwAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JZwDCgBqq4wyat/Ig4AD3HwwIuxE+h7wlxIjRMvtbOpRZdAqVVTXTi3+CZixqOudz11pAIi5iABgP3q4EAAAA"
+    }
+  ]
+}

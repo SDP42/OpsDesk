@@ -345,3 +345,25 @@ def label_of(code: str) -> str:
         if item.code == code:
             return item.label
     return PARENTS.get(code, code)
+
+
+def render_example(
+    code: str,
+    rng: random.Random,
+    tboh: str | None = None,
+    hotel: str | None = None,
+    city: str | None = None,
+) -> str:
+    """Render one realistic ticket text for ``code`` (used by the seed script)."""
+    template = rng.choice(_TEMPLATES[code])
+    return template.format(
+        tboh=tboh or "our booking",
+        hotel=hotel or rng.choice(_HOTELS),
+        city=city or rng.choice(_CITIES),
+        supplier=rng.choice(_SUPPLIERS),
+        days=rng.choice(_DAYS),
+        amount=f"{rng.choice(['AED', 'INR', 'USD', 'GBP'])} {rng.randint(40, 900)}",
+    )
+
+
+INTENT_CODES: list[str] = [i.code for i in SUB_INTENTS]

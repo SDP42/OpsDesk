@@ -28,6 +28,7 @@ from app.routers import (
     intents,
     links,
     meta,
+    partner,
     stream,
     tickets,
 )
@@ -114,6 +115,7 @@ def create_app() -> FastAPI:
         admin,
         meta,
         assistant,
+        partner,
     ):
         api.include_router(module.router)
     api.include_router(auth.me_router)

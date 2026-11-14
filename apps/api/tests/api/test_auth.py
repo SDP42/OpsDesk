@@ -3,8 +3,10 @@ import pytest
 from tests.conftest import AGENT, CHIEF, LEAD, PILOT
 
 
-@pytest.mark.parametrize(("email", "role"), [(PILOT, "requester"), (AGENT, "agent"),
-                                             (CHIEF, "escalation_manager"), (LEAD, "lead")])
+@pytest.mark.parametrize(
+    ("email", "role"),
+    [(PILOT, "requester"), (AGENT, "agent"), (CHIEF, "escalation_manager"), (LEAD, "lead")],
+)
 async def test_all_four_roles_can_log_in(client_factory, email: str, role: str) -> None:
     client = await client_factory(email)
     me = (await client.get("/api/me")).json()["data"]
@@ -27,7 +29,9 @@ async def test_me_requires_session(client_factory) -> None:
 
 async def test_session_cookie_is_httponly(client_factory) -> None:
     client = await client_factory()
-    r = await client.post("/api/auth/login", json={"email": AGENT, "password": "cleared-for-takeoff"})
+    r = await client.post(
+        "/api/auth/login", json={"email": AGENT, "password": "cleared-for-takeoff"}
+    )
     cookie = r.headers["set-cookie"].lower()
     assert "httponly" in cookie and "samesite=lax" in cookie
 
@@ -48,3 +52,16 @@ async def test_unknown_fields_are_rejected(client_factory) -> None:
     client = await client_factory()
     r = await client.post("/api/auth/login", json={"email": AGENT, "password": "x", "admin": True})
     assert r.status_code == 422
+
+
+async def test_data_mode_switches_between_demo_and_live(client_factory) -> None:
+    client = await client_factory(LEAD)
+    demo = (await client.get("/api/tickets", params={"limit": 5})).json()["data"]
+    assert demo
+    me = (
+        await client.patch("/api/me/preferences", json={"data_mode": "live", "onboarded": True})
+    ).json()["data"]
+    assert me["data_mode"] == "live" and me["onboarded"]
+    live = (await client.get("/api/tickets", params={"limit": 200})).json()["data"]
+    assert {t["id"] for t in live}.isdisjoint({t["id"] for t in demo})
+    await client.patch("/api/me/preferences", json={"data_mode": "demo"})

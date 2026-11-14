@@ -32,17 +32,23 @@ async def test_archive_job_moves_old_closed_tickets(client_factory) -> None:
 
     async with get_sessionmaker()() as s:
         ids = (await s.scalars(select(Ticket.id).where(Ticket.status == "closed").limit(5))).all()
-        await s.execute(update(Ticket).where(Ticket.id.in_(ids))
-                        .values(closed_at=utcnow() - timedelta(days=200)))
+        await s.execute(
+            update(Ticket)
+            .where(Ticket.id.in_(ids))
+            .values(closed_at=utcnow() - timedelta(days=200))
+        )
         await s.commit()
     lead = await client_factory(LEAD)
     r = await lead.post("/api/admin/archive-run", json={})
     assert r.status_code == 200
     assert r.json()["data"]["archived"] >= 5
     async with get_sessionmaker()() as s:
-        archived = await s.scalar(select(func.count()).select_from(ArchiveTicket)
-                                  .where(ArchiveTicket.id.in_(ids)))
-        remaining = await s.scalar(select(func.count()).select_from(Ticket).where(Ticket.id.in_(ids)))
+        archived = await s.scalar(
+            select(func.count()).select_from(ArchiveTicket).where(ArchiveTicket.id.in_(ids))
+        )
+        remaining = await s.scalar(
+            select(func.count()).select_from(Ticket).where(Ticket.id.in_(ids))
+        )
     assert archived == 5 and remaining == 0
 
 

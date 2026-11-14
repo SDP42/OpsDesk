@@ -7,14 +7,16 @@ import tempfile
 from pathlib import Path
 
 _TMP = Path(tempfile.mkdtemp(prefix="opsdesk-test-"))
-os.environ.update({
-    "APP_ENV": "test",
-    "DATABASE_URL": f"sqlite+aiosqlite:///{_TMP / 'test.db'}",
-    "INTENT_MODEL_PATH": str(_TMP / "intent.joblib"),
-    "JWT_SECRET": "test-secret-not-for-production-000000000000",
-    "SCHEDULER_ENABLED": "false",
-    "LOGIN_RATE_LIMIT_PER_MINUTE": "10000",
-})
+os.environ.update(
+    {
+        "APP_ENV": "test",
+        "DATABASE_URL": f"sqlite+aiosqlite:///{_TMP / 'test.db'}",
+        "INTENT_MODEL_PATH": str(_TMP / "intent.joblib"),
+        "JWT_SECRET": "test-secret-not-for-production-000000000000",
+        "SCHEDULER_ENABLED": "false",
+        "LOGIN_RATE_LIMIT_PER_MINUTE": "10000",
+    }
+)
 
 import pytest  # noqa: E402
 

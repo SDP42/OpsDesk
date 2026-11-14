@@ -7,10 +7,14 @@ async def test_journey_a_refund_ticket_links_history(client_factory) -> None:
     pilot = await client_factory(PILOT)
     booking = (await pilot.get("/api/bookings/TBOH-88213")).json()["data"]
     assert len(booking["earlier_cases"]) >= 2
-    r = await pilot.post("/api/tickets", json={
-        "title": "Refund for TBOH-88213 still not received",
-        "description": "Asking again: the refund is still pending for TBOH-88213.",
-        "tboh": "TBOH-88213"})
+    r = await pilot.post(
+        "/api/tickets",
+        json={
+            "title": "Refund for TBOH-88213 still not received",
+            "description": "Asking again: the refund is still pending for TBOH-88213.",
+            "tboh": "TBOH-88213",
+        },
+    )
     assert r.status_code == 201, r.text
     body = r.json()["data"]
     tboh_links = [lk for lk in body["links"] if lk["link_type"] == "tboh"]
@@ -29,9 +33,14 @@ async def test_journey_a_refund_ticket_links_history(client_factory) -> None:
 
 async def test_journey_b_dubai_p1_routes_to_uae_controller(client_factory) -> None:
     pilot = await client_factory(DUBAI_PILOT)
-    r = await pilot.post("/api/tickets", json={
-        "title": "Urgent: guest stranded, hotel refusing check-in",
-        "description": "Guest is at the desk now, please help urgently.", "priority": "P1"})
+    r = await pilot.post(
+        "/api/tickets",
+        json={
+            "title": "Urgent: guest stranded, hotel refusing check-in",
+            "description": "Guest is at the desk now, please help urgently.",
+            "priority": "P1",
+        },
+    )
     ticket_id = r.json()["data"]["ticket"]["id"]
     agent = await client_factory(AGENT)
     detail = (await agent.get(f"/api/tickets/{ticket_id}")).json()["data"]
@@ -62,16 +71,22 @@ async def test_journey_c_handoff_keeps_supplier_recipients(client_factory) -> No
     ticket = (await agent.get("/api/tickets", params={"tboh": "TBOH-66120"})).json()["data"][0]
     controllers = (await agent.get("/api/controllers")).json()["data"]
     omar = next(c for c in controllers if c["callsign"] == "AE-01")
-    blocked = await agent.post(f"/api/tickets/{ticket['id']}/reassign", json={"to_user_id": omar["id"]})
+    blocked = await agent.post(
+        f"/api/tickets/{ticket['id']}/reassign", json={"to_user_id": omar["id"]}
+    )
     assert blocked.status_code == 409
     diff = blocked.json()["error"]["details"]
     assert {s["party_type"] for s in diff["stayed"]} >= {"supplier"}
-    ok = await agent.post(f"/api/tickets/{ticket['id']}/reassign",
-                          json={"to_user_id": omar["id"], "handoff_confirmed": True})
+    ok = await agent.post(
+        f"/api/tickets/{ticket['id']}/reassign",
+        json={"to_user_id": omar["id"], "handoff_confirmed": True},
+    )
     assert ok.json()["data"]["owner"]["id"] == omar["id"]
     assert ok.json()["data"]["queue"]["region"] == "AE"
     freq = (await agent.get(f"/api/tickets/{ticket['id']}/frequencies")).json()["data"][0]
-    active_suppliers = [r for r in freq["recipients"] if r["party_type"] == "supplier" and not r["removed_at"]]
+    active_suppliers = [
+        r for r in freq["recipients"] if r["party_type"] == "supplier" and not r["removed_at"]
+    ]
     assert len(active_suppliers) == 2
     timeline = (await agent.get(f"/api/tickets/{ticket['id']}")).json()["data"]["timeline"]
     assert any(e["type"] == "handoff_check" for e in timeline)
@@ -85,14 +100,18 @@ async def test_journey_d_escalation_lands_in_tower_chief_queue(client_factory) -
     r = await agent.post(f"/api/tickets/{ticket['id']}/escalate", json={"reason": "Check-in in 9h"})
     assert r.json()["data"]["status"] == "escalated"
     chief = await client_factory(CHIEF)
-    queue = (await chief.get("/api/tickets", params={"view": "escalations", "limit": 200})).json()["data"]
+    queue = (await chief.get("/api/tickets", params={"view": "escalations", "limit": 200})).json()[
+        "data"
+    ]
     assert ticket["id"] in {t["id"] for t in queue}
 
 
 async def test_escalate_requires_reason(client_factory) -> None:
     agent = await client_factory(AGENT)
     t = (await agent.get("/api/tickets", params={"status": "open", "limit": 1})).json()["data"][0]
-    assert (await agent.post(f"/api/tickets/{t['id']}/escalate", json={"reason": ""})).status_code == 422
+    assert (
+        await agent.post(f"/api/tickets/{t['id']}/escalate", json={"reason": ""})
+    ).status_code == 422
 
 
 async def test_cursor_pagination_has_no_duplicates(client_factory) -> None:
@@ -112,7 +131,11 @@ async def test_cursor_pagination_has_no_duplicates(client_factory) -> None:
 async def test_manual_link_and_intent_suggest(client_factory) -> None:
     agent = await client_factory(AGENT)
     tickets = (await agent.get("/api/tickets", params={"limit": 2})).json()["data"]
-    r = await agent.post(f"/api/tickets/{tickets[0]['id']}/links", json={"target": tickets[1]["number"]})
+    r = await agent.post(
+        f"/api/tickets/{tickets[0]['id']}/links", json={"target": tickets[1]["number"]}
+    )
     assert r.status_code in {201, 409}
-    s = (await agent.post("/api/intents/suggest", json={"text": "voucher not received for Dubai"})).json()["data"]
+    s = (
+        await agent.post("/api/intents/suggest", json={"text": "voucher not received for Dubai"})
+    ).json()["data"]
     assert len(s["top"]) == 3 and s["top"][0]["code"].startswith("voucher")

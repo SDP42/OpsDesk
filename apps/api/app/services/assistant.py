@@ -231,7 +231,7 @@ async def answer(session: AsyncSession, principal: Principal, question: str) -> 
                     .join(FrequencyRecipient, FrequencyRecipient.frequency_id == Frequency.id)
                     .where(
                         FrequencyRecipient.party_type == "supplier",
-                        FrequencyRecipient.party_id == principal.agency_id,
+                        FrequencyRecipient.party_id == principal.supplier_id,
                         FrequencyRecipient.removed_at.is_(None),
                         Frequency.status == "open",
                     )

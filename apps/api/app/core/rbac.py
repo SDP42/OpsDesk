@@ -21,9 +21,15 @@ from app.core.security import decode_access_token
 from app.db.models import Ticket, User
 from app.db.session import get_session
 
-REQUESTER, AGENT, EM, LEAD = "requester", "agent", "escalation_manager", "lead"
+REQUESTER, AGENT, EM, LEAD, SUPPLIER = (
+    "requester",
+    "agent",
+    "escalation_manager",
+    "lead",
+    "supplier",
+)
 STAFF = frozenset({AGENT, EM, LEAD})
-ALL_ROLES = frozenset({REQUESTER, AGENT, EM, LEAD})
+ALL_ROLES = frozenset({REQUESTER, AGENT, EM, LEAD, SUPPLIER})
 
 
 @dataclass(frozen=True)
@@ -34,6 +40,7 @@ class Principal:
     agency_id: str | None
     region: str | None
     data_mode: str = "demo"
+    supplier_id: str | None = None
 
     @property
     def is_staff(self) -> bool:
@@ -63,7 +70,7 @@ async def current_principal(
     if user is None or not user.is_active:
         raise AppError(401, "unauthorized", "Session is no longer valid")
     principal = Principal(
-        user.id, user.name, user.role, user.agency_id, user.region, user.data_mode
+        user.id, user.name, user.role, user.agency_id, user.region, user.data_mode, user.supplier_id
     )
     request.state.principal = principal
     return principal
@@ -85,6 +92,8 @@ require_staff = require_roles(AGENT, EM, LEAD)
 require_agent_or_lead = require_roles(AGENT, LEAD)
 require_lead = require_roles(LEAD)
 require_any = require_roles(*ALL_ROLES)
+require_supplier = require_roles(SUPPLIER)
+require_internal = require_roles(REQUESTER, AGENT, EM, LEAD)
 
 
 # --- Row-level policies ------------------------------------------------------
@@ -93,6 +102,8 @@ require_any = require_roles(*ALL_ROLES)
 def scope_tickets(stmt: Select[Any], principal: Principal) -> Select[Any]:
     """Requesters only ever see their own agency's tickets; data mode picks demo vs live flights."""
     stmt = stmt.where(Ticket.is_demo.is_(principal.data_mode == "demo"))
+    if principal.role == SUPPLIER:
+        return stmt.where(Ticket.id == "__supplier_has_no_ticket_access__")
     if principal.is_requester:
         return stmt.where(Ticket.agency_id == (principal.agency_id or "__none__"))
     return stmt
@@ -103,6 +114,8 @@ def ensure_visible(ticket: Ticket | None, principal: Principal) -> Ticket:
     if ticket is None:
         raise not_found("Flight")
     if principal.is_requester and ticket.agency_id != principal.agency_id:
+        raise not_found("Flight")
+    if principal.role == SUPPLIER:
         raise not_found("Flight")
     return ticket
 

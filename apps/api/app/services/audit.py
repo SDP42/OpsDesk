@@ -20,8 +20,17 @@ def audit(
     meta: dict[str, Any] | None = None,
     ip: str | None = None,
 ) -> None:
-    session.add(AuditLog(actor_id=actor.id if actor else None, action=action, entity=entity,
-                         entity_id=entity_id, meta=meta or {}, ip=ip, at=utcnow()))
+    session.add(
+        AuditLog(
+            actor_id=actor.id if actor else None,
+            action=action,
+            entity=entity,
+            entity_id=entity_id,
+            meta=meta or {},
+            ip=ip,
+            at=utcnow(),
+        )
+    )
 
 
 def timeline(
@@ -31,7 +40,12 @@ def timeline(
     actor: Principal | None,
     payload: dict[str, Any] | None = None,
 ) -> TimelineEvent:
-    event = TimelineEvent(ticket_id=ticket_id, type=type_, actor_id=actor.id if actor else None,
-                          payload=payload or {}, at=utcnow())
+    event = TimelineEvent(
+        ticket_id=ticket_id,
+        type=type_,
+        actor_id=actor.id if actor else None,
+        payload=payload or {},
+        at=utcnow(),
+    )
     session.add(event)
     return event

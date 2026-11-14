@@ -20,20 +20,42 @@ async def sla_tick() -> dict[str, int]:
     now = utcnow()
     changed: list[dict[str, str]] = []
     async with get_sessionmaker()() as session:
-        tickets = (await session.scalars(select(Ticket).where(Ticket.status.in_(OPEN_STATUSES)))).all()
+        tickets = (
+            await session.scalars(select(Ticket).where(Ticket.status.in_(OPEN_STATUSES)))
+        ).all()
         for t in tickets:
             before = t.sla_state
             after = apply_sla(t, now)
             if after != before:
-                timeline(session, t.id, "sla_state_changed", None,
-                         {"from": before, "to": after, "elapsed_pct": t.sla_elapsed_pct})
-                changed.append({"id": t.id, "number": t.number, "from": before, "to": after,
-                                "agency_id": t.agency_id})
+                timeline(
+                    session,
+                    t.id,
+                    "sla_state_changed",
+                    None,
+                    {"from": before, "to": after, "elapsed_pct": t.sla_elapsed_pct},
+                )
+                changed.append(
+                    {
+                        "id": t.id,
+                        "number": t.number,
+                        "from": before,
+                        "to": after,
+                        "agency_id": t.agency_id,
+                    }
+                )
         await session.commit()
     for c in changed:
-        broker.publish("ticket.updated", {"id": c["id"], "number": c["number"], "change": "sla",
-                                          "sla_state": c["to"], "from": c["from"]},
-                       agency_id=c["agency_id"])
+        broker.publish(
+            "ticket.updated",
+            {
+                "id": c["id"],
+                "number": c["number"],
+                "change": "sla",
+                "sla_state": c["to"],
+                "from": c["from"],
+            },
+            agency_id=c["agency_id"],
+        )
     broker.publish("sla.tick", {"evaluated": len(tickets), "changed": len(changed)})
     if changed:
         log.info("sla_tick", evaluated=len(tickets), changed=len(changed))

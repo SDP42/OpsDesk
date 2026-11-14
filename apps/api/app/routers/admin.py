@@ -20,11 +20,20 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 @router.post("/archive-run", response_model=Envelope[ArchiveRunOut])
-async def archive_run(body: ArchiveRunIn | None = None, principal: Principal = Depends(require_lead),
-                      session: AsyncSession = Depends(get_session)) -> Envelope[ArchiveRunOut]:
-    days = body.older_than_days if body and body.older_than_days is not None else get_settings().archive_after_days
+async def archive_run(
+    body: ArchiveRunIn | None = None,
+    principal: Principal = Depends(require_lead),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[ArchiveRunOut]:
+    days = (
+        body.older_than_days
+        if body and body.older_than_days is not None
+        else get_settings().archive_after_days
+    )
     now = utcnow()
     moved = await run_archive(session, now, days)
     audit(session, principal, "admin.archive_run", "archive", None, {"moved": moved, "days": days})
     await session.commit()
-    return Envelope(data=ArchiveRunOut(archived=moved, cutoff=now - timedelta(days=days), policy=POLICY))
+    return Envelope(
+        data=ArchiveRunOut(archived=moved, cutoff=now - timedelta(days=days), policy=POLICY)
+    )

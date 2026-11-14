@@ -44,8 +44,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     if settings.scheduler_enabled and settings.app_env != "test":
         scheduler = build_scheduler()
         scheduler.start()
-    log.info("tower_online", env=settings.app_env, db=settings.database_url.split("://")[0],
-             scheduler=bool(scheduler))
+    log.info(
+        "tower_online",
+        env=settings.app_env,
+        db=settings.database_url.split("://")[0],
+        scheduler=bool(scheduler),
+    )
     yield
     if scheduler:
         scheduler.shutdown(wait=False)
@@ -73,7 +77,9 @@ def create_app() -> FastAPI:
     )
 
     @app.middleware("http")
-    async def request_log(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
+    async def request_log(
+        request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
         request_id = request.headers.get("x-request-id") or uuid.uuid4().hex[:12]
         structlog.contextvars.bind_contextvars(request_id=request_id)
         start = time.perf_counter()
@@ -81,16 +87,32 @@ def create_app() -> FastAPI:
         elapsed = round((time.perf_counter() - start) * 1000, 1)
         response.headers["X-Request-Id"] = request_id
         if request.url.path != "/api/stream":
-            log.info("request", method=request.method, path=request.url.path,
-                     status=response.status_code, ms=elapsed)
+            log.info(
+                "request",
+                method=request.method,
+                path=request.url.path,
+                status=response.status_code,
+                ms=elapsed,
+            )
         structlog.contextvars.clear_contextvars()
         return response
 
     install_error_handlers(app)
 
     api = APIRouter(prefix="/api")
-    for module in (auth, tickets, comments, links, frequencies, intents, insights, export,
-                   stream, admin, meta):
+    for module in (
+        auth,
+        tickets,
+        comments,
+        links,
+        frequencies,
+        intents,
+        insights,
+        export,
+        stream,
+        admin,
+        meta,
+    ):
         api.include_router(module.router)
     api.include_router(auth.me_router)
 

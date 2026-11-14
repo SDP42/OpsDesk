@@ -112,4 +112,6 @@ def ensure_can_modify(ticket: Ticket, principal: Principal) -> None:
         return
     if principal.role == EM and (ticket.status == "escalated" or ticket.escalated_to):
         return
-    raise forbidden("Only controllers, the Airport Director, or the Tower Chief on escalated flights")
+    raise forbidden(
+        "Only controllers, the Airport Director, or the Tower Chief on escalated flights"
+    )

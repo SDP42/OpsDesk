@@ -35,7 +35,12 @@ SUPPLIERS: list[tuple[str, str, str, str]] = [
 ]
 
 HOTELS: dict[str, list[str]] = {
-    "Dubai": ["Marina Pearl Hotel", "Palm Crescent Resort", "Burj Vista Suites", "Creekside Souk Inn"],
+    "Dubai": [
+        "Marina Pearl Hotel",
+        "Palm Crescent Resort",
+        "Burj Vista Suites",
+        "Creekside Souk Inn",
+    ],
     "Abu Dhabi": ["Corniche Sands Hotel", "Saadiyat Shore Resort"],
     "Mumbai": ["Juhu Shores Hotel", "Bandra Heights", "Colaba Causeway Inn"],
     "Goa": ["Konkan Palms Resort", "Calangute Breeze"],
@@ -48,28 +53,119 @@ HOTELS: dict[str, list[str]] = {
     "Bali": ["Ubud Rice Terrace Villas", "Seminyak Sunset Hotel"],
 }
 
-GUESTS = ["A. Sharma", "R. Iyer", "M. Al Mansoori", "S. Patel", "J. Okafor", "L. Chen", "K. Tan",
-          "N. Fernandes", "H. Rahman", "E. Walsh", "P. Kaur", "D. Moreau", "Y. Nakamura",
-          "F. Haddad", "T. Wright", "V. Menon", "C. Lim", "Z. Qureshi"]
+GUESTS = [
+    "A. Sharma",
+    "R. Iyer",
+    "M. Al Mansoori",
+    "S. Patel",
+    "J. Okafor",
+    "L. Chen",
+    "K. Tan",
+    "N. Fernandes",
+    "H. Rahman",
+    "E. Walsh",
+    "P. Kaur",
+    "D. Moreau",
+    "Y. Nakamura",
+    "F. Haddad",
+    "T. Wright",
+    "V. Menon",
+    "C. Lim",
+    "Z. Qureshi",
+]
 
 # name, email-local, region, rank, skills, callsign, slot ("on" covers now, "off", "away", "busy")
 AGENTS: list[tuple[str, str, str, int, list[str], str, str]] = [
-    ("Priya Nair", "priya.nair", "IN", 3, ["refund", "cancellation", "supplier", "voucher"], "IN-01", "on"),
-    ("Arjun Mehta", "arjun.mehta", "IN", 2, ["payment", "rates", "amendment", "voucher"], "IN-02", "on"),
-    ("Omar Haddad", "omar.haddad", "AE", 3, ["refund", "supplier", "special_request", "visa"], "AE-01", "on"),
-    ("Layla Farouk", "layla.farouk", "AE", 2, ["cancellation", "voucher", "payment"], "AE-02", "busy"),
+    (
+        "Priya Nair",
+        "priya.nair",
+        "IN",
+        3,
+        ["refund", "cancellation", "supplier", "voucher"],
+        "IN-01",
+        "on",
+    ),
+    (
+        "Arjun Mehta",
+        "arjun.mehta",
+        "IN",
+        2,
+        ["payment", "rates", "amendment", "voucher"],
+        "IN-02",
+        "on",
+    ),
+    (
+        "Omar Haddad",
+        "omar.haddad",
+        "AE",
+        3,
+        ["refund", "supplier", "special_request", "visa"],
+        "AE-01",
+        "on",
+    ),
+    (
+        "Layla Farouk",
+        "layla.farouk",
+        "AE",
+        2,
+        ["cancellation", "voucher", "payment"],
+        "AE-02",
+        "busy",
+    ),
     ("James Whitlock", "james.whitlock", "UK", 3, ["refund", "rates", "platform"], "UK-01", "on"),
-    ("Sophie Clarke", "sophie.clarke", "UK", 1, ["amendment", "voucher", "special_request"], "UK-02", "off"),
+    (
+        "Sophie Clarke",
+        "sophie.clarke",
+        "UK",
+        1,
+        ["amendment", "voucher", "special_request"],
+        "UK-02",
+        "off",
+    ),
     ("Wei Lim", "wei.lim", "SEA", 3, ["supplier", "rates", "refund", "visa"], "SEA-01", "on"),
-    ("Ananya Rao", "ananya.rao", "SEA", 2, ["payment", "platform", "cancellation"], "SEA-02", "away"),
+    (
+        "Ananya Rao",
+        "ananya.rao",
+        "SEA",
+        2,
+        ["payment", "platform", "cancellation"],
+        "SEA-02",
+        "away",
+    ),
 ]
 
-TOWER_CHIEFS = [("Rahul Kapoor", "rahul.kapoor", "TC-01"), ("Fatima Al Zahra", "fatima.alzahra", "TC-02")]
+TOWER_CHIEFS = [
+    ("Rahul Kapoor", "rahul.kapoor", "TC-01"),
+    ("Fatima Al Zahra", "fatima.alzahra", "TC-02"),
+]
 LEAD = ("Meera Iyer", "meera.iyer", "DIR-01")
 
-REQUESTER_FIRST = ["Aarav", "Diya", "Kabir", "Isha", "Yousef", "Mariam", "Oliver", "Amelia",
-                   "Ethan", "Grace", "Jun", "Mei", "Rizal", "Siti", "Anand", "Noor",
-                   "Harry", "Fiona", "Kiran", "Hana", "Tariq", "Lina", "Ravi", "Ploy"]
+REQUESTER_FIRST = [
+    "Aarav",
+    "Diya",
+    "Kabir",
+    "Isha",
+    "Yousef",
+    "Mariam",
+    "Oliver",
+    "Amelia",
+    "Ethan",
+    "Grace",
+    "Jun",
+    "Mei",
+    "Rizal",
+    "Siti",
+    "Anand",
+    "Noor",
+    "Harry",
+    "Fiona",
+    "Kiran",
+    "Hana",
+    "Tariq",
+    "Lina",
+    "Ravi",
+    "Ploy",
+]
 
 DOMAIN = "opsdesk.demo"
 
@@ -109,14 +205,29 @@ QUEUES = [
 
 # Relative intent frequencies for generated tickets.
 INTENT_WEIGHTS = {
-    "refund.status": 9, "refund.delay": 8, "refund.amount_mismatch": 4,
-    "cancellation.request": 7, "cancellation.charges": 4,
-    "amendment.dates": 5, "amendment.guest_name": 3, "amendment.room_type": 2,
-    "voucher.not_received": 6, "voucher.confirmation_number": 5,
-    "payment.failed": 3, "payment.credit_limit": 2, "payment.double_charge": 2,
-    "rates.mismatch": 4, "rates.inventory_sync": 3,
-    "supplier.confirmation_pending": 6, "supplier.overbooking": 2,
-    "special_request.early_checkin": 3, "special_request.accessibility": 1,
-    "special_request.meal": 1, "visa.status": 2, "visa.documents": 2,
-    "platform.login": 2, "platform.api_error": 2, "platform.search": 1,
+    "refund.status": 9,
+    "refund.delay": 8,
+    "refund.amount_mismatch": 4,
+    "cancellation.request": 7,
+    "cancellation.charges": 4,
+    "amendment.dates": 5,
+    "amendment.guest_name": 3,
+    "amendment.room_type": 2,
+    "voucher.not_received": 6,
+    "voucher.confirmation_number": 5,
+    "payment.failed": 3,
+    "payment.credit_limit": 2,
+    "payment.double_charge": 2,
+    "rates.mismatch": 4,
+    "rates.inventory_sync": 3,
+    "supplier.confirmation_pending": 6,
+    "supplier.overbooking": 2,
+    "special_request.early_checkin": 3,
+    "special_request.accessibility": 1,
+    "special_request.meal": 1,
+    "visa.status": 2,
+    "visa.documents": 2,
+    "platform.login": 2,
+    "platform.api_error": 2,
+    "platform.search": 1,
 }

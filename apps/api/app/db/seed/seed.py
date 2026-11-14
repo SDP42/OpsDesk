@@ -135,7 +135,7 @@ class World:
                     created_at=self.now,
                 )
             )
-        for name, region, kind in fx.QUEUES:
+        for _name, region, kind in fx.QUEUES:
             self.queue_ids[region or kind] = new_id()
         for code, _, _ in fx.THEMES:
             self.theme_ids[code] = new_id()
@@ -363,7 +363,7 @@ class World:
         priority: str,
         status: str,
         tboh: str | None = None,
-        owner_id: str | None | bool = True,
+        owner_id: str | bool | None = True,
         load: dict[str, int] | None = None,
         light: bool = False,
         resolved_after_h: float | None = None,

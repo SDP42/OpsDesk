@@ -32,16 +32,25 @@ async def open_counts(session: AsyncSession) -> dict[str, int]:
     return {owner: count for owner, count in rows.all()}
 
 
-async def load_controllers(session: AsyncSession, role: str = "agent") -> list[vectoring.Controller]:
-    users = (await session.scalars(
-        select(User).where(User.role == role, User.is_active.is_(True))
-    )).all()
+async def load_controllers(
+    session: AsyncSession, role: str = "agent"
+) -> list[vectoring.Controller]:
+    users = (
+        await session.scalars(select(User).where(User.role == role, User.is_active.is_(True)))
+    ).all()
     counts = await open_counts(session)
     return [
         vectoring.Controller(
-            id=u.id, name=u.name, region=u.region or "IN", languages=u.languages or [],
-            shift_start=u.shift_start, shift_end=u.shift_end, availability=u.availability,
-            open_tickets=counts.get(u.id, 0), capacity=u.capacity, skills=u.skills or [],
+            id=u.id,
+            name=u.name,
+            region=u.region or "IN",
+            languages=u.languages or [],
+            shift_start=u.shift_start,
+            shift_end=u.shift_end,
+            availability=u.availability,
+            open_tickets=counts.get(u.id, 0),
+            capacity=u.capacity,
+            skills=u.skills or [],
             rank=u.rank,
         )
         for u in users
@@ -66,19 +75,35 @@ async def vector_ticket(
     preset = preset or get_preset()
     controllers = await load_controllers(session)
     result = vectoring.route(
-        vectoring.RoutingTicket(id=ticket.id, region=ticket.region, priority=ticket.priority,
-                                intent_code=ticket.intent.code if ticket.intent else None,
-                                agency_tier=ticket.agency.tier if ticket.agency else 2),
-        controllers, now, preset,
+        vectoring.RoutingTicket(
+            id=ticket.id,
+            region=ticket.region,
+            priority=ticket.priority,
+            intent_code=ticket.intent.code if ticket.intent else None,
+            agency_tier=ticket.agency.tier if ticket.agency else 2,
+        ),
+        controllers,
+        now,
+        preset,
     )
     queue = await queue_for_region(session, result.queue_region if result.chosen_id else None)
     ticket.owner_id = result.chosen_id
     ticket.queue_id = queue.id if queue else None
     payload = result.model_dump(mode="json")
-    ticket.routing_reason = {"reason": result.reason, "preset": preset, "total": result.total,
-                             "breakdown": payload["breakdown"]}
-    decision = RoutingDecision(ticket_id=ticket.id, chosen_user_id=result.chosen_id,
-                               queue_id=ticket.queue_id, scores=payload, reason=result.reason,
-                               preset=preset, created_at=now)
+    ticket.routing_reason = {
+        "reason": result.reason,
+        "preset": preset,
+        "total": result.total,
+        "breakdown": payload["breakdown"],
+    }
+    decision = RoutingDecision(
+        ticket_id=ticket.id,
+        chosen_user_id=result.chosen_id,
+        queue_id=ticket.queue_id,
+        scores=payload,
+        reason=result.reason,
+        preset=preset,
+        created_at=now,
+    )
     session.add(decision)
     return result, decision

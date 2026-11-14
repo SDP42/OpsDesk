@@ -15,16 +15,22 @@ router = APIRouter(prefix="/tickets/{ticket_id}/links", tags=["links"])
 
 
 @router.get("", response_model=Envelope[list[LinkOut]])
-async def list_links(ticket_id: str, principal: Principal = Depends(require_any),
-                     session: AsyncSession = Depends(get_session)) -> Envelope[list[LinkOut]]:
+async def list_links(
+    ticket_id: str,
+    principal: Principal = Depends(require_any),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[list[LinkOut]]:
     ticket = ensure_visible(await svc.load_ticket(session, ticket_id), principal)
     return Envelope(data=await svc.get_links(session, ticket.id))
 
 
 @router.post("", response_model=Envelope[list[LinkOut]], status_code=201)
-async def add_link(ticket_id: str, body: ManualLinkIn,
-                   principal: Principal = Depends(require_agent_or_lead),
-                   session: AsyncSession = Depends(get_session)) -> Envelope[list[LinkOut]]:
+async def add_link(
+    ticket_id: str,
+    body: ManualLinkIn,
+    principal: Principal = Depends(require_agent_or_lead),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[list[LinkOut]]:
     ticket = ensure_visible(await svc.load_ticket(session, ticket_id), principal)
     await svc.manual_link(session, ticket, body.target, body.reason, principal)
     await session.commit()

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import func, select
+from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.errors import not_found
@@ -115,16 +115,17 @@ async def controllers(
 
 @router.get("/stats/overview", response_model=Envelope[OverviewOut])
 async def overview(
-    _: Principal = Depends(require_staff), session: AsyncSession = Depends(get_session)
+    principal: Principal = Depends(require_staff), session: AsyncSession = Depends(get_session)
 ) -> Envelope[OverviewOut]:
-    open_filter = Ticket.status.in_(OPEN_STATUSES)
+    mode = Ticket.is_demo.is_(principal.data_mode == "demo")
+    open_filter = and_(Ticket.status.in_(OPEN_STATUSES), mode)
 
     async def grouped(col) -> dict[str, int]:  # type: ignore[no-untyped-def]
         rows = await session.execute(select(col, func.count()).where(open_filter).group_by(col))
         return {str(k): int(v) for k, v in rows.all()}
 
     by_status_rows = await session.execute(
-        select(Ticket.status, func.count()).group_by(Ticket.status)
+        select(Ticket.status, func.count()).where(mode).group_by(Ticket.status)
     )
     unassigned = await session.scalar(
         select(func.count()).select_from(Ticket).where(open_filter, Ticket.owner_id.is_(None))

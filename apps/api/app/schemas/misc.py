@@ -106,3 +106,21 @@ class ArchiveRunOut(BaseModel):
     archived: int
     cutoff: datetime
     policy: str
+
+
+class TrendPoint(BaseModel):
+    day: str
+    created: int
+    resolved: int
+    breached: int
+
+
+class IntentShare(BaseModel):
+    parent: str
+    count: int
+
+
+class TrendOut(BaseModel):
+    days: list[TrendPoint]
+    intents: list[IntentShare]
+    agencies_at_risk: list[dict[str, object]]

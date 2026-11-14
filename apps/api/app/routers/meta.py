@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,13 +11,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.errors import not_found
 from app.core.rbac import Principal, require_any, require_lead, require_staff
 from app.db.base import utcnow
-from app.db.models import Agency, Booking, Ticket, User
+from app.db.models import Agency, Booking, Intent, Ticket, User
 from app.db.session import get_session
 from app.engines.lifecycle import OPEN_STATUSES
 from app.engines.vectoring import Controller, is_on_shift
 from app.schemas.auth import AgencyBrief
 from app.schemas.common import Envelope
-from app.schemas.misc import BookingOut, ControllerOut, OverviewOut, PresetIn
+from app.schemas.misc import (
+    BookingOut,
+    ControllerOut,
+    IntentShare,
+    OverviewOut,
+    PresetIn,
+    TrendOut,
+    TrendPoint,
+)
 from app.services import routing as routing_service
 from app.services.audit import audit
 from app.services.serializers import agency_brief
@@ -161,3 +171,60 @@ async def put_preset(
     audit(session, principal, "routing.preset", "routing", None, {"preset": body.preset})
     await session.commit()
     return Envelope(data=body)
+
+
+@router.get("/stats/trend", response_model=Envelope[TrendOut])
+async def trend(
+    days: int = 14,
+    principal: Principal = Depends(require_staff),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[TrendOut]:
+    """Daily created/resolved/breached counts, intent mix and the most turbulent agencies."""
+    days = max(3, min(days, 60))
+    now = utcnow()
+    since = now - timedelta(days=days)
+    mode = Ticket.is_demo.is_(principal.data_mode == "demo")
+    rows = (
+        await session.execute(
+            select(Ticket.created_at, Ticket.resolved_at, Ticket.sla_state, Intent.code)
+            .outerjoin(Intent, Intent.id == Ticket.intent_id)
+            .where(mode, Ticket.created_at >= since)
+        )
+    ).all()
+    buckets: dict[str, dict[str, int]] = {}
+    for i in range(days + 1):
+        key = (since + timedelta(days=i)).date().isoformat()
+        buckets[key] = {"created": 0, "resolved": 0, "breached": 0}
+    intents: dict[str, int] = {}
+    for created, resolved, sla, code in rows:
+        c = created.date().isoformat()
+        if c in buckets:
+            buckets[c]["created"] += 1
+            if sla == "breached":
+                buckets[c]["breached"] += 1
+        if resolved is not None and resolved.date().isoformat() in buckets:
+            buckets[resolved.date().isoformat()]["resolved"] += 1
+        parent = (code or "unclassified").split(".")[0]
+        intents[parent] = intents.get(parent, 0) + 1
+    agencies = (
+        await session.scalars(select(Agency).order_by(Agency.turbulence_score.desc()).limit(5))
+    ).all()
+    return Envelope(
+        data=TrendOut(
+            days=[TrendPoint(day=k, **v) for k, v in buckets.items()],
+            intents=[
+                IntentShare(parent=k, count=v)
+                for k, v in sorted(intents.items(), key=lambda kv: -kv[1])
+            ],
+            agencies_at_risk=[
+                {
+                    "id": a.id,
+                    "name": a.name,
+                    "city": a.city,
+                    "region": a.region,
+                    "turbulence": round(a.turbulence_score, 1),
+                }
+                for a in agencies
+            ],
+        )
+    )

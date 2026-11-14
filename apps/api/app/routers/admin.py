@@ -37,3 +37,54 @@ async def archive_run(
     return Envelope(
         data=ArchiveRunOut(archived=moved, cutoff=now - timedelta(days=days), policy=POLICY)
     )
+
+
+CHAOS_LINES = [
+    "Palm Crescent Resort says it is overbooked and walked our guest",
+    "Guest arrived at Palm Crescent Resort, no room available, hotel overbooked",
+    "Overbooking at Palm Crescent Resort: guest stranded in the lobby",
+    "Palm Crescent Resort refusing check-in due to overbooking",
+    "Another guest walked from Palm Crescent Resort tonight, overbooked again",
+]
+
+
+@router.post("/chaos", response_model=Envelope[dict[str, int]])
+async def chaos(
+    count: int = 40,
+    principal: Principal = Depends(require_lead),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[dict[str, int]]:
+    """Chaos Mode: inject a burst of overbooking flights from many agencies to show live routing."""
+    import random
+
+    from sqlalchemy import select
+
+    from app.core.rbac import Principal as P
+    from app.db.models import User
+    from app.schemas.tickets import TicketCreateIn
+    from app.services.tickets import create_ticket
+
+    pilots = (
+        await session.scalars(
+            select(User).where(User.role == "requester", User.callsign.is_not(None))
+        )
+    ).all()
+    rng = random.Random()
+    created = 0
+    for i in range(max(1, min(count, 60))):
+        u = rng.choice(pilots)
+        actor = P(u.id, u.name, u.role, u.agency_id, u.region, principal.data_mode)
+        line = rng.choice(CHAOS_LINES)
+        await create_ticket(
+            session,
+            TicketCreateIn(
+                title=line,
+                description=f"Chaos #{i + 1}: {line}. Supplier not answering.",
+                priority=rng.choice(["P1", "P2", "P2", "P3"]),
+            ),
+            actor,
+        )
+        created += 1
+    audit(session, principal, "admin.chaos", "ticket", None, {"created": created})
+    await session.commit()
+    return Envelope(data={"created": created})

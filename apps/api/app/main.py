@@ -19,6 +19,7 @@ from app.db.session import dispose_engine
 from app.jobs.scheduler import build_scheduler
 from app.routers import (
     admin,
+    assistant,
     auth,
     comments,
     export,
@@ -112,6 +113,7 @@ def create_app() -> FastAPI:
         stream,
         admin,
         meta,
+        assistant,
     ):
         api.include_router(module.router)
     api.include_router(auth.me_router)

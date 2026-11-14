@@ -3,6 +3,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { LogOut, Plus } from "lucide-react";
 import { useState } from "react";
+import { TowerRadio } from "@/components/assistant/tower-radio";
 import { CreateFlight } from "@/components/pilot/create-flight";
 import { DepartureBoard } from "@/components/pilot/departure-board";
 import { Brand } from "@/components/tower/app-shell";
@@ -123,6 +124,7 @@ export default function PilotPage() {
           )}
         </aside>
       </main>
+      <TowerRadio persona="Pilot" />
     </div>
   );
 }

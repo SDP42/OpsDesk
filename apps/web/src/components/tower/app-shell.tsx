@@ -11,6 +11,7 @@ import { cn } from "@/lib/cn";
 import { useLogout } from "@/lib/hooks/use-me";
 import { useTowerStream } from "@/lib/hooks/use-tower-stream";
 import { useTowerCalls } from "@/lib/stores/tower-calls";
+import { TowerRadio } from "@/components/assistant/tower-radio";
 import { FirstFlight, startTour } from "@/components/onboarding/first-flight";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { HangarGlyph, RadarGlyph, StripGlyph, TowerGlyph } from "@/components/ui/glyphs";
@@ -199,6 +200,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
       </div>
       <CommandPalette role={me.role} />
       <FirstFlight me={me} />
+      <TowerRadio persona={PERSONA[me.role] ?? "controller"} />
     </div>
   );
 }

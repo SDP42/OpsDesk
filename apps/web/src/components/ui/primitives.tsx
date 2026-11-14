@@ -1,7 +1,7 @@
 "use client";
 
 /** shadcn-style primitives on Radix UI (MIT), restyled for the Daylight Tower system. */
-import NumberFlow from "@number-flow/react";
+import NumberFlow, { type Format } from "@number-flow/react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
@@ -30,7 +30,7 @@ export function Sign({ tone, className, ...rest }: React.HTMLAttributes<HTMLSpan
 }
 
 /* Animated numbers ------------------------------------------------------ */
-export function Num({ value, className, format }: { value: number; className?: string; format?: Intl.NumberFormatOptions }) {
+export function Num({ value, className, format }: { value: number; className?: string; format?: Format }) {
   return <NumberFlow value={value} className={cn("tabular", className)} format={format} />;
 }
 

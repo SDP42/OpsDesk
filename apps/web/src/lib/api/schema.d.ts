@@ -585,6 +585,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/me/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Preferences
+         * @description Switch between the demo airspace and live data, and mark onboarding complete.
+         */
+        patch: operations["preferences_api_me_preferences_patch"];
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -1038,6 +1058,16 @@ export interface components {
             /** Availability */
             availability: string;
             agency: components["schemas"]["AgencyBrief"] | null;
+            /**
+             * Data Mode
+             * @default demo
+             */
+            data_mode: string;
+            /**
+             * Onboarded
+             * @default false
+             */
+            onboarded: boolean;
         };
         /** Ok */
         Ok: {
@@ -1142,6 +1172,13 @@ export interface components {
             updated_at: string;
             /** Resolved At */
             resolved_at: string | null;
+        };
+        /** PreferencesIn */
+        PreferencesIn: {
+            /** Data Mode */
+            data_mode?: ("demo" | "live") | null;
+            /** Onboarded */
+            onboarded?: boolean | null;
         };
         /** PresetIn */
         PresetIn: {
@@ -2611,6 +2648,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_MeOut_"];
+                };
+            };
+        };
+    };
+    preferences_api_me_preferences_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreferencesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_MeOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

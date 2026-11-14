@@ -45,6 +45,14 @@ export default function TowerOverview() {
     },
   });
 
+  const chaos = useMutation({
+    mutationFn: async () => unwrap(await api.POST("/api/admin/chaos", { params: { query: { count: 40 } } })),
+    onSuccess: (d) => {
+      push({ callsign: "CHAOS MODE", message: `${d.created ?? 0} FLIGHTS INJECTED · PALM CRESCENT OVERBOOKING`, tone: "alarm" });
+      void qc.invalidateQueries({ queryKey: ["tickets"] });
+      void qc.invalidateQueries({ queryKey: ["overview"] });
+    },
+  });
   const o = overview.data;
   const isLead = me.data?.role === "lead";
 
@@ -76,8 +84,13 @@ export default function TowerOverview() {
               </button>
             ))}
           </div>
-          <button className="btn btn-alarm" disabled title="Chaos Mode lands in Phase 4 (use `make chaos` meanwhile)">
-            <Zap size={14} strokeWidth={1.5} /> Chaos mode
+          <button
+            className="btn btn-alarm"
+            disabled={!isLead || chaos.isPending}
+            title={isLead ? "Inject 40 overbooking flights from many agencies and watch live routing" : "Only the Airport Director can run Chaos Mode"}
+            onClick={() => chaos.mutate()}
+          >
+            <Zap size={14} strokeWidth={1.5} /> {chaos.isPending ? "Injecting…" : "Chaos mode"}
           </button>
         </div>
       </div>

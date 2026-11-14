@@ -175,7 +175,14 @@ DEMO_ACCOUNTS = {
     "agent": f"priya.nair@{DOMAIN}",
     "escalation_manager": f"rahul.kapoor@{DOMAIN}",
     "lead": f"meera.iyer@{DOMAIN}",
+    "supplier": f"partner.atlas@{DOMAIN}",
 }
+
+# Supplier partner logins (external organisations): (supplier index, name, email-local, callsign)
+SUPPLIER_USERS = [
+    (0, "Nadia Rahman (Atlas Bedbank)", "partner.atlas", "SUP-ATLAS"),
+    (1, "Karim Aziz (Crescent Rooms DMC)", "partner.crescent", "SUP-CRESCENT"),
+]
 JOURNEY_ACCOUNTS = {
     "dubai_pilot": f"pilot.dun@{DOMAIN}",
     "uae_controller": f"omar.haddad@{DOMAIN}",

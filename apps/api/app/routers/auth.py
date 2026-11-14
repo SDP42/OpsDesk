@@ -105,6 +105,7 @@ async def demo_accounts(
         ("agent", "Controller", "/tower"),
         ("escalation_manager", "Tower Chief", "/tower/escalations"),
         ("lead", "Airport Director", "/tower"),
+        ("supplier", "Supplier Partner", "/partner"),
     ]
     settings = get_settings()
     # One-click demo login outside production only; the password lives in settings, not code.

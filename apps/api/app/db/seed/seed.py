@@ -221,6 +221,29 @@ class World:
             created_at=self.now,
         )
         self.users.append(self.lead)
+        for idx, name, local, callsign in fx.SUPPLIER_USERS:
+            self.users.append(
+                dict(
+                    id=new_id(),
+                    name=name,
+                    email=f"{local}@{fx.DOMAIN}",
+                    password_hash=pw,
+                    role="supplier",
+                    callsign=callsign,
+                    region=self.suppliers[idx]["region"],
+                    languages=["en"],
+                    skills=[],
+                    shift_start=None,
+                    shift_end=None,
+                    capacity=0,
+                    availability="online",
+                    rank=1,
+                    agency_id=None,
+                    supplier_id=self.suppliers[idx]["id"],
+                    is_active=True,
+                    created_at=self.now,
+                )
+            )
         names = iter(fx.REQUESTER_FIRST)
         for agency in self.agencies:
             for prefix in ("pilot", "ops"):

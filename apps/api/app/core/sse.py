@@ -16,7 +16,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 
-@dataclass
+@dataclass(eq=False)
 class Subscriber:
     role: str
     agency_id: str | None

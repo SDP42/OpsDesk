@@ -143,7 +143,7 @@ export function SceneCopy({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="relative z-10 max-w-xl">
+    <div className="relative z-10 max-w-xl rounded-[28px] border border-white/60 bg-ink-950/82 p-7 shadow-[var(--shadow-lift)] backdrop-blur-xl sm:p-9">
       <SceneTag n={n} problem={problem}>
         {eyebrow}
       </SceneTag>

@@ -74,16 +74,16 @@ export function Hero() {
               <source src="/video/hero.mp4" type="video/mp4" />
             </video>
           )}
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-ink-950)_0%,color-mix(in_oklab,var(--color-ink-950)_94%,transparent)_34%,color-mix(in_oklab,var(--color-ink-950)_30%,transparent)_60%,transparent_85%)] max-lg:bg-ink-950/80" />
+          <div className="absolute inset-0 bg-ink-950/10" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink-950 to-transparent" />
         </div>
         <SceneGrid
           copy={
-            <div>
+            <div className="rounded-[32px] border border-white/60 bg-ink-950/82 p-8 shadow-[var(--shadow-lift)] backdrop-blur-xl sm:p-10">
               <div className="hero-fade">
                 <SceneTag n={1}>OpsDesk for TBO</SceneTag>
               </div>
-              <h1 className="display mt-7 text-[clamp(3.6rem,8.4vw,8.8rem)]">
+              <h1 className="display mt-7 text-[clamp(3.4rem,7vw,7.4rem)]">
                 {words("Every ticket")}
                 <br />
                 {words("is a")}

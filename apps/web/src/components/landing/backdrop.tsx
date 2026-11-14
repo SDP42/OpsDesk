@@ -31,18 +31,14 @@ export function SceneBackdrop({
       <FrameScrubber sequence={sequence} reverse={reverse} className="absolute inset-0 scale-[1.04]" tint="none" />
       {/* Grade: lift shadows toward paper so the footage sits in the light system */}
       <div className="absolute inset-0 bg-[#f4f1ea] mix-blend-soft-light opacity-40" />
-      {side === "right" ? (
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-ink-950)_0%,color-mix(in_oklab,var(--color-ink-950)_92%,transparent)_36%,color-mix(in_oklab,var(--color-ink-950)_25%,transparent)_62%,transparent_80%)] max-lg:bg-[linear-gradient(180deg,var(--color-ink-950)_0%,color-mix(in_oklab,var(--color-ink-950)_85%,transparent)_55%,transparent_100%)]" />
-      ) : (
-        <div className="absolute inset-0 bg-ink-950/70" />
-      )}
+      {/* Footage fills the whole screen; only a light veil so ink type on glass panels stays crisp. */}
+      <div className={side === "full" ? "absolute inset-0 bg-ink-950/45" : "absolute inset-0 bg-ink-950/10"} />
       <div className="absolute inset-x-0 top-0 h-[14%] bg-gradient-to-b from-ink-950 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-[14%] bg-gradient-to-t from-ink-950 to-transparent" />
 
       {/* Motion graphics HUD */}
       <div className="absolute inset-0 hidden lg:block">
-        <div className="absolute inset-y-0 left-[48%] w-px bg-gradient-to-b from-transparent via-white/40 to-transparent" />
-        <div className="absolute inset-x-[48%] right-0 h-px animate-[scan_5s_linear_infinite] bg-gradient-to-r from-transparent via-taxi to-transparent opacity-80 motion-reduce:hidden" />
+                <div className="absolute inset-x-0 h-px animate-[scan_5s_linear_infinite] bg-gradient-to-r from-transparent via-taxi to-transparent opacity-80 motion-reduce:hidden" />
         <div className="absolute size-24 -translate-1/2 transition-[left,top] duration-500 ease-out" style={{ left: `${tx}%`, top: `${ty}%` }}>
           <span className="absolute inset-0 rounded-full border border-white/70" />
           <span className="absolute inset-4 animate-sweep rounded-full border-t-2 border-taxi" />

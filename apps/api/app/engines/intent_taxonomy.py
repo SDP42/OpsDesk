@@ -167,7 +167,7 @@ _HOTELS = [
     "Kensington Lodge",
 ]
 _CITIES = ["Dubai", "Mumbai", "London", "Singapore", "Goa", "Bali", "Abu Dhabi", "Phuket"]
-_SUPPLIERS = ["HotelBeds", "Expedia TAAP", "WebBeds", "DOTW", "the hotel", "the supplier"]
+_SUPPLIERS = ["Atlas Bedbank", "Crescent Rooms", "Meridian Wholesale", "Oriel Hotels", "the hotel", "the supplier"]
 _DAYS = ["2", "3", "5", "7", "10", "14", "21"]
 
 _TEMPLATES: dict[str, list[str]] = {

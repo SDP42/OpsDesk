@@ -37,10 +37,24 @@ SOURCES = [
      "Panorama from the window of an airplane at dusk"),
     ("radar", "radar.mp4", 28009, "radar-at-the-edge-of-an-airport-28009",
      "Radar at the edge of an airport"),
+    # One full-bleed scroll-scrubbed backdrop per landing scene (Problems 1-6).
+    ("gate", "gate.mp4", 23269, "angry-passengers-in-the-airplane-boarding-gates-23269",
+     "Angry passengers in the airplane boarding gates"),
+    ("city", "city.mp4", 42342, "aerial-shot-of-a-city-at-night-42342", "Aerial shot of a city at night"),
+    ("taxi", "taxi.mp4", 27993, "busy-runway-in-the-evening-27993", "Busy runway in the evening"),
+    ("sunrise", "sunrise.mp4", 27989, "airplane-taking-off-from-an-airport-at-sunrise-27989",
+     "Airplane taking off from an airport at sunrise"),
+    ("cockpit", "cockpit.mp4", 6753, "cockpit-view-of-pilot-landing-commercial-plane-6753",
+     "Cockpit view of pilot landing commercial plane"),
+    ("clouds", "clouds.mp4", 17999, "plane-flying-through-clouds-17999", "Plane flying through clouds"),
+    ("baggage", "baggage.mp4", 27752, "baggage-claim-inside-a-modern-airport-27752",
+     "Baggage claim inside a modern airport"),
+    ("checkin", "checkin.mp4", 23976, "checking-in-at-the-airport-counter-23976",
+     "Checking in at the airport counter"),
 ]
 
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) OpsDeskMedia/1.0"
-MAX_FRAMES = 140
+MAX_FRAMES = 110
 
 
 def log(msg: str) -> None:
@@ -82,7 +96,7 @@ def probe_duration(path: Path) -> float:
 
 
 def download(clip_id: int, dest: Path) -> bool:
-    for quality in (1080, 720):
+    for quality in (720, 1080):
         url = f"https://assets.mixkit.co/videos/{clip_id}/{clip_id}-{quality}.mp4"
         try:
             req = urllib.request.Request(url, headers={"User-Agent": UA})
@@ -192,7 +206,9 @@ def main() -> None:
     manifest: dict[str, object] = {"sequences": []}
     if "hero" in available:
         build_hero(available["hero"])
-    for name, role in (("a", "seqA"), ("b", "seqB"), ("radar", "radar")):
+    for name, role in (("a", "seqA"), ("b", "seqB"), ("radar", "radar"), ("gate", "gate"), ("city", "city"),
+                       ("taxi", "taxi"), ("sunrise", "sunrise"), ("cockpit", "cockpit"), ("clouds", "clouds"),
+                       ("baggage", "baggage"), ("checkin", "checkin")):
         if role in available:
             manifest["sequences"].append(build_sequence(name, available[role]))  # type: ignore[union-attr]
     if not available:

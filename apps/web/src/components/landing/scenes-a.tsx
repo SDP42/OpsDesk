@@ -1,22 +1,25 @@
 "use client";
 
-/** Scenes 2-5 of the scroll story (Problems 1, 2 and 4). */
+/** Scenes 2-5 (Problems 1, 2 and 4), all on the shared SceneGrid. */
 import { clsx } from "clsx";
 import { useState } from "react";
 import { FrameScrubber } from "./frame-scrubber";
-import { Scene, SceneTag, useSceneProgress } from "./scene";
+import { Scene, SceneCopy, SceneGrid, useSceneProgress } from "./scene";
+import { WindowFrame } from "./window-frame";
 
 const ease = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 const seg = (p: number, a: number, b: number) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 
-function Copy({ n, problem, eyebrow, title, children }: { n: number; problem?: string; eyebrow: string; title: React.ReactNode; children?: React.ReactNode }) {
+/** Transparent bay in the visual column where the persistent WebGL canvas draws. */
+export function InstrumentBay({ caption, children }: { caption: string; children?: React.ReactNode }) {
   return (
-    <div className="relative z-10 max-w-xl">
-      <SceneTag n={n} problem={problem}>
-        {eyebrow}
-      </SceneTag>
-      <h2 className="mt-5 font-serif text-[clamp(2.6rem,6vw,5.5rem)] leading-[0.95]">{title}</h2>
-      {children && <div className="mt-6 text-lg text-text/80">{children}</div>}
+    <div data-reveal="frame" className="relative mx-auto aspect-square w-full max-w-[540px]">
+      <div className="absolute inset-0 rounded-[28px] border border-dashed border-text/20" />
+      {["top-3 left-3 border-t border-l", "top-3 right-3 border-t border-r", "bottom-3 left-3 border-b border-l", "bottom-3 right-3 border-b border-r"].map((c) => (
+        <span key={c} className={`absolute size-4 border-text/60 ${c}`} />
+      ))}
+      <span className="sign sign-dark absolute top-5 left-1/2 -translate-x-1/2">{caption}</span>
+      {children}
     </div>
   );
 }
@@ -25,46 +28,47 @@ function Copy({ n, problem, eyebrow, title, children }: { n: number; problem?: s
 
 function DriftingBlips() {
   const { progress, rich } = useSceneProgress();
-  const p = rich ? ease(progress) : 0.6;
+  const p = rich ? ease(seg(progress, 0.1, 0.9)) : 0.6;
   const blips = [
-    { id: "OD-24811", day: "Mon", x: -1, y: -0.6 },
-    { id: "OD-24817", day: "Wed", x: 1, y: -0.2 },
-    { id: "OD-24823", day: "Fri", x: 0.1, y: 1 },
+    { id: "OD-24811", day: "Mon", x: -1, y: -0.7 },
+    { id: "OD-24817", day: "Wed", x: 0.9, y: -0.1 },
+    { id: "OD-24823", day: "Fri", x: -0.2, y: 0.85 },
   ];
   return (
-    <div className="relative h-[46vh] w-full max-w-lg">
+    <div className="absolute inset-0">
       {blips.map((b, i) => (
-        <div
-          key={b.id}
-          className="absolute top-1/2 left-1/2"
-          style={{ transform: `translate(calc(-50% + ${b.x * p * 34}vmin), calc(-50% + ${b.y * p * 16}vmin))` }}
-        >
-          <span className="absolute -top-3 -left-3 size-6 animate-blip rounded-full border border-alarm" style={{ animationDelay: `${i * 0.5}s` }} />
-          <span className="block size-3 rounded-full bg-alarm shadow-[0_0_16px_var(--color-alarm)]" />
-          <span className="absolute top-4 left-4 font-mono text-[12px] whitespace-nowrap text-text">
-            {b.id} <span className="text-text-dim">· refund · {b.day}</span>
+        <div key={b.id} className="absolute top-1/2 left-1/2" style={{ transform: `translate(calc(-50% + ${b.x * p * 30}%), calc(-50% + ${b.y * p * 140}px))` }}>
+          <span className="absolute -top-3 -left-3 size-6 animate-blip rounded-full border-2 border-taxi" style={{ animationDelay: `${i * 0.5}s` }} />
+          <span className="block size-3 rounded-full bg-taxi shadow-[0_0_18px_var(--color-taxi)]" />
+          <span className="absolute top-4 left-4 rounded-md bg-white/90 px-2 py-0.5 font-mono text-[11px] whitespace-nowrap text-night shadow">
+            {b.id} · refund · {b.day}
           </span>
         </div>
       ))}
-      <p className="micro absolute bottom-0 left-0" style={{ opacity: p }}>
-        3 tickets · 0 links · 3 agents · 1 angry agency
-      </p>
     </div>
   );
 }
 
 export function FlyingBlind() {
   return (
-    <Scene index={2} length={200} label="Flying blind" wipe>
-      <FrameScrubber sequence="a" className="absolute inset-0" />
-      <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/70 to-ink-950/20" />
-      <div className="relative mx-auto grid h-full max-w-7xl items-center gap-10 px-5 sm:px-10 lg:grid-cols-2">
-        <Copy n={2} problem="1" eyebrow="Flying blind" title={<>Same refund. Three tickets. <em className="text-alarm">Zero memory.</em></>}>
-          An agency asks about the same refund three times. Today each contact is a brand-new problem, picked up by a different agent who
-          has never seen the last two.
-        </Copy>
-        <DriftingBlips />
-      </div>
+    <Scene index={2} id="scene-2" length={170} label="Flying blind">
+      <SceneGrid
+        copy={
+          <SceneCopy n={2} problem="1" eyebrow="Flying blind" title={<>Same refund. Three tickets. <em className="text-alarm">Zero memory.</em></>}>
+            An agency asks about the same refund three times. Today every contact is a brand-new problem, picked up by a different agent
+            who has never seen the last two.
+            <p className="mt-6 font-mono text-[13px] text-text">3 tickets · 0 links · 3 agents · 1 frustrated agency</p>
+          </SceneCopy>
+        }
+        visual={
+          <div className="mx-auto max-w-[440px]">
+            <WindowFrame caption={<span className="sign">Seat 2A · departure delayed</span>}>
+              <FrameScrubber sequence="a" className="absolute inset-0" tint="none" />
+              <DriftingBlips />
+            </WindowFrame>
+          </div>
+        }
+      />
     </Scene>
   );
 }
@@ -75,36 +79,30 @@ export function ConstellationScene() {
   const { progress, rich } = useSceneProgress();
   const [mode, setMode] = useState<"tboh" | "agency" | "intent">("tboh");
   const p = rich ? seg(progress, 0.1, 0.6) : 1;
-  const counter = (p * 0.2).toFixed(2);
   return (
-    <Scene index={3} length={200} label="Constellation">
-      <div className="relative mx-auto grid h-full max-w-7xl items-center px-5 sm:px-10 lg:grid-cols-2">
-        <div>
-          <Copy n={3} problem="1" eyebrow="Constellation" title={<>One booking. Every conversation. <em className="text-ice">One picture.</em></>}>
-            OpsDesk links flights by TBOH, by agency and intent, and by what the words mean. The controller sees the history before
-            the agency has to explain it again.
-          </Copy>
-          <div className="mt-8 flex gap-2" role="radiogroup" aria-label="Link by">
-            {(["tboh", "agency", "intent"] as const).map((m) => (
-              <button
-                key={m}
-                role="radio"
-                aria-checked={mode === m}
-                onClick={() => setMode(m)}
-                className={clsx("btn", mode === m && "!border-ice text-ice")}
-              >
-                {m === "tboh" ? "TBOH" : m === "agency" ? "Agency + intent" : "Similar text"}
-              </button>
-            ))}
-          </div>
-          <p className="mt-8 font-mono text-3xl text-signal tabular">
-            {Math.round(p * 3)} prior contacts found in {counter} s
-          </p>
-          <p className="micro mt-2">
-            {mode === "tboh" ? "link strength 1.00 · same booking TBOH-88213" : mode === "agency" ? "link strength 0.80 · same agency + Refund > Delay within 30 days" : "link strength 0.50-0.70 · TF-IDF cosine ≥ 0.35"}
-          </p>
-        </div>
-      </div>
+    <Scene index={3} length={160} label="Constellation">
+      <SceneGrid
+        copy={
+          <SceneCopy n={3} problem="1" eyebrow="Constellation" title={<>One booking. Every conversation. <em className="text-ice">One picture.</em></>}>
+            OpsDesk links flights by TBOH, by agency and intent, and by what the words mean, so the controller sees the history before
+            the agency explains it again.
+            <div className="mt-7 flex flex-wrap gap-2" role="radiogroup" aria-label="Link by">
+              {(["tboh", "agency", "intent"] as const).map((m) => (
+                <button key={m} role="radio" aria-checked={mode === m} onClick={() => setMode(m)} className={clsx("btn", mode === m && "!border-night !bg-night !text-taxi")}>
+                  {m === "tboh" ? "TBOH" : m === "agency" ? "Agency + intent" : "Similar text"}
+                </button>
+              ))}
+            </div>
+            <p className="display mt-8 text-5xl text-text">
+              {Math.round(p * 3)} prior contacts <span className="text-text-dim">in</span> {(p * 0.2).toFixed(2)}s
+            </p>
+            <p className="micro mt-2">
+              {mode === "tboh" ? "strength 1.00 · same booking TBOH-88213" : mode === "agency" ? "strength 0.80 · same agency + Refund > Delay, 30 days" : "strength 0.50-0.70 · TF-IDF cosine ≥ 0.35"}
+            </p>
+          </SceneCopy>
+        }
+        visual={<InstrumentBay caption="Constellation · TBOH-88213" />}
+      />
     </Scene>
   );
 }
@@ -120,78 +118,99 @@ const PRESETS = [
 
 export function VectoringScene() {
   const { progress, rich } = useSceneProgress();
-  const idx = rich ? Math.min(3, Math.floor(progress * 4)) : 0;
+  const idx = rich ? Math.min(3, Math.floor(seg(progress, 0.05, 0.95) * 4)) : 0;
   const preset = PRESETS[idx]!;
   const total = preset.parts.reduce((a, [, v]) => a + v, 0);
   return (
-    <Scene index={4} length={250} label="Vectoring">
-      <div className="relative mx-auto grid h-full max-w-7xl items-center gap-10 px-5 sm:px-10 lg:grid-cols-2">
-        <Copy n={4} problem="2" eyebrow="Vectoring" title={<>Vectored, <em className="text-signal">not queued.</em></>}>
-          Every assignment comes with a reason. Region, shift window, priority, agency rank and availability are scored in the open,
-          so a lead can see why Omar won and why Priya did not.
-        </Copy>
-        <div className="hud w-full max-w-md justify-self-end p-5">
-          <span className="hud-tr" aria-hidden />
-          <span className="hud-bl" aria-hidden />
-          <div className="flex items-center justify-between">
-            <span className="micro">OD-24817 · Dubai · P1 · preset</span>
-            <span className="font-mono text-[12px] text-signal">{preset.name}</span>
-          </div>
-          <p className="mt-3 font-serif text-3xl">{preset.winner}</p>
-          <div className="mt-4 flex flex-col gap-2">
-            {preset.parts.map(([label, v]) => (
-              <div key={label} className="grid grid-cols-[130px_1fr_40px] items-center gap-2">
-                <span className="truncate font-mono text-[11px] text-text-dim">{label}</span>
-                <span className="h-2 bg-ink-950">
-                  <span className="block h-full bg-signal transition-[width] duration-500" style={{ width: `${(v / 80) * 100}%` }} />
-                </span>
-                <span className="text-right font-mono text-[11px] tabular">+{v}</span>
+    <Scene index={4} length={220} label="Vectoring">
+      <SceneGrid
+        copy={
+          <SceneCopy n={4} problem="2" eyebrow="Vectoring" title={<>Vectored, <em className="text-beacon">not queued.</em></>}>
+            Every assignment comes with a reason. Region, shift window, priority, agency rank and availability are scored in the open,
+            so a lead can see why Omar won and why Priya did not.
+            <div data-reveal className="hud mt-8 max-w-md p-5">
+              <span className="hud-tr" aria-hidden />
+              <span className="hud-bl" aria-hidden />
+              <div className="flex items-center justify-between">
+                <span className="micro">OD-24817 · Dubai · P1</span>
+                <span className="sign">{preset.name}</span>
               </div>
-            ))}
-          </div>
-          <p className="mt-4 border-t border-line pt-3 font-mono text-[11px] text-text-dim">
-            total {total} · {PRESETS.map((p, i) => (i === idx ? `[${p.name}]` : p.name)).join(" · ")}
-          </p>
-        </div>
-      </div>
+              <p className="display mt-3 text-3xl text-text">{preset.winner}</p>
+              <div className="mt-4 flex flex-col gap-2">
+                {preset.parts.map(([label, v]) => (
+                  <div key={label} className="grid grid-cols-[130px_1fr_40px] items-center gap-2">
+                    <span className="truncate font-mono text-[11px] text-text-dim">{label}</span>
+                    <span className="h-2 overflow-hidden rounded-full bg-ink-700">
+                      <span className="block h-full rounded-full bg-night transition-[width] duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]" style={{ width: `${(v / 80) * 100}%` }} />
+                    </span>
+                    <span className="text-right font-mono text-[11px] text-text tabular">+{v}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 border-t border-line pt-3 font-mono text-[11px]">total {total}</p>
+            </div>
+          </SceneCopy>
+        }
+        visual={<InstrumentBay caption="Mumbai · Dubai · London · Singapore" />}
+      />
     </Scene>
   );
 }
 
 /* ---------------------------------------------------------------- 5 */
 
+function FuelRing({ fuel, color }: { fuel: number; color: string }) {
+  const r = 120;
+  const c = 2 * Math.PI * r;
+  return (
+    <svg viewBox="0 0 300 300" className="absolute inset-0 m-auto h-[70%] w-[70%] -rotate-[225deg] drop-shadow-[0_0_24px_rgba(0,0,0,0.5)]" aria-hidden>
+      <circle cx="150" cy="150" r={r} fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="16" strokeDasharray={`${c * 0.75} ${c}`} />
+      <circle cx="150" cy="150" r={r} fill="none" stroke={color} strokeWidth="16" strokeLinecap="round" strokeDasharray={`${c * 0.75 * fuel} ${c}`} style={{ transition: "stroke 400ms" }} />
+    </svg>
+  );
+}
+
 export function WheelsUpScene() {
   const { progress, rich } = useSceneProgress();
-  const p = rich ? progress : 0.7;
-  const fuel = Math.max(0, 1 - p);
-  const hours = (9 * fuel).toFixed(1);
-  const state = fuel > 0.4 ? "ON COURSE" : fuel > 0.15 ? "AT RISK" : "CRITICAL";
-  const color = fuel > 0.4 ? "var(--color-signal)" : fuel > 0.15 ? "var(--color-amber)" : "var(--color-alarm)";
+  const p = rich ? seg(progress, 0.05, 0.95) : 0.7;
+  const fuel = Math.max(0.02, 1 - p);
+  const state = fuel > 0.4 ? "On course" : fuel > 0.15 ? "At risk" : "Critical";
+  const color = fuel > 0.4 ? "var(--color-signal)" : fuel > 0.15 ? "var(--color-taxi)" : "var(--color-alarm)";
   const fired = p > 0.9;
   return (
-    <Scene index={5} length={200} label="Wheels-up clock" wipe>
-      <FrameScrubber sequence="b" className="absolute inset-0" tint="dawn" />
-      <div className="absolute inset-0 transition-colors duration-700" style={{ background: `linear-gradient(90deg, #05080d 20%, color-mix(in oklab, ${color} 18%, transparent))`, mixBlendMode: "multiply" }} />
-      <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/60 to-transparent" />
-      <div className="relative mx-auto grid h-full max-w-7xl items-center px-5 sm:px-10 lg:grid-cols-2">
-        <div>
-          <Copy n={5} problem="4" eyebrow="Wheels-up" title={<>The clock that knows when the <em style={{ color }}>guest lands.</em></>}>
-            SLAs count down to check-in and the last cancellation date, not a generic timer. When fuel runs low, escalation to the
-            Tower Chief is one click and changes the owner and the queue.
-          </Copy>
-          <div className="mt-8 flex items-baseline gap-4 font-mono">
-            <span className="text-5xl tabular" style={{ color }}>
-              T-{hours}h
-            </span>
-            <span className="micro" style={{ color }}>
-              {state}
-            </span>
+    <Scene index={5} length={190} label="Wheels-up clock">
+      <SceneGrid
+        copy={
+          <SceneCopy n={5} problem="4" eyebrow="Wheels-up" title={<>The clock that knows when the <em className="text-critical">guest lands.</em></>}>
+            SLAs count down to check-in and the last cancellation date, not a generic timer. When fuel runs low, escalation to the Tower
+            Chief is one click and changes the owner and the queue.
+            <div className="mt-8 flex items-baseline gap-4">
+              <span className="font-mono text-5xl text-text tabular">T-{(9 * fuel).toFixed(1)}h</span>
+              <span className="sign" style={{ background: color, color: fuel > 0.15 && fuel <= 0.4 ? "var(--color-night)" : "white" }}>
+                {state}
+              </span>
+            </div>
+            <p className={clsx("mt-4 font-mono text-sm text-alarm transition-all duration-500", fired ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0")}>
+              OD-24819 ESCALATED &gt; TOWER CHIEF · owner and queue changed
+            </p>
+          </SceneCopy>
+        }
+        visual={
+          <div className="mx-auto max-w-[440px]">
+            <WindowFrame caption={<span className="sign sign-dark">Night → dawn → check-in</span>}>
+              <FrameScrubber sequence="b" className="absolute inset-0" tint="none" />
+              <div className="absolute inset-0 transition-colors duration-700" style={{ background: `color-mix(in oklab, ${color} ${Math.round(p * 30)}%, transparent)`, mixBlendMode: "multiply" }} />
+              <FuelRing fuel={fuel} color={color} />
+              <div className="absolute inset-0 grid place-items-center">
+                <div className="text-center text-white">
+                  <p className="micro !text-white/70">Fuel</p>
+                  <p className="font-mono text-5xl tabular">{Math.round(fuel * 100)}%</p>
+                </div>
+              </div>
+            </WindowFrame>
           </div>
-          <p className={clsx("mt-4 font-mono text-sm transition-opacity duration-500", fired ? "text-alarm opacity-100" : "opacity-0")}>
-            OD-24819 ESCALATED &gt; TOWER CHIEF · owner and queue changed
-          </p>
-        </div>
-      </div>
+        }
+      />
     </Scene>
   );
 }

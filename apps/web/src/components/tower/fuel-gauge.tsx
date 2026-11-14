@@ -21,9 +21,6 @@ export function FuelGauge({
   const [remaining, setRemaining] = useState(sla.remaining_seconds);
   useEffect(() => {
     setRemaining(sla.remaining_seconds);
-    if (!sla.due_at || ["met", "breached"].includes(sla.state) === false) {
-      /* live countdown below */
-    }
     const due = sla.due_at ? new Date(sla.due_at).getTime() : null;
     if (!due) return;
     const t = setInterval(() => setRemaining((due - Date.now()) / 1000), 1000);

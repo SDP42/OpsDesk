@@ -38,14 +38,25 @@ def _rate_limit(ip: str) -> None:
 
 
 def _me(user: User) -> MeOut:
-    return MeOut(id=user.id, name=user.name, email=user.email, role=user.role,
-                 callsign=user.callsign, region=user.region, availability=user.availability,
-                 agency=agency_brief(user.agency) if user.agency else None)
+    return MeOut(
+        id=user.id,
+        name=user.name,
+        email=user.email,
+        role=user.role,
+        callsign=user.callsign,
+        region=user.region,
+        availability=user.availability,
+        agency=agency_brief(user.agency) if user.agency else None,
+    )
 
 
 @router.post("/login", response_model=Envelope[MeOut])
-async def login(body: LoginIn, request: Request, response: Response,
-                session: AsyncSession = Depends(get_session)) -> Envelope[MeOut]:
+async def login(
+    body: LoginIn,
+    request: Request,
+    response: Response,
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[MeOut]:
     ip = request.client.host if request.client else "unknown"
     _rate_limit(ip)
     user = await session.scalar(select(User).where(func.lower(User.email) == body.email.lower()))
@@ -53,11 +64,23 @@ async def login(body: LoginIn, request: Request, response: Response,
         raise AppError(401, "invalid_credentials", "Callsign or password is incorrect")
     settings = get_settings()
     token = create_access_token(user.id, user.role, {"agency_id": user.agency_id})
-    response.set_cookie(settings.session_cookie_name, token, httponly=True, samesite="lax",
-                        secure=settings.cookie_secure, max_age=settings.jwt_expires_minutes * 60,
-                        path="/")
-    audit(session, Principal(user.id, user.name, user.role, user.agency_id, user.region),
-          "auth.login", "user", user.id, ip=ip)
+    response.set_cookie(
+        settings.session_cookie_name,
+        token,
+        httponly=True,
+        samesite="lax",
+        secure=settings.cookie_secure,
+        max_age=settings.jwt_expires_minutes * 60,
+        path="/",
+    )
+    audit(
+        session,
+        Principal(user.id, user.name, user.role, user.agency_id, user.region),
+        "auth.login",
+        "user",
+        user.id,
+        ip=ip,
+    )
     await session.commit()
     return Envelope(data=_me(user))
 
@@ -69,7 +92,9 @@ async def logout(response: Response) -> Envelope[Ok]:
 
 
 @router.get("/demo-accounts", response_model=Envelope[list[DemoAccount]])
-async def demo_accounts(session: AsyncSession = Depends(get_session)) -> Envelope[list[DemoAccount]]:
+async def demo_accounts(
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[list[DemoAccount]]:
     """The four callsign cards on /login (demo-only; emails come from the seed)."""
     personas = [
         ("requester", "Pilot", "/pilot"),
@@ -79,17 +104,30 @@ async def demo_accounts(session: AsyncSession = Depends(get_session)) -> Envelop
     ]
     out: list[DemoAccount] = []
     for role, persona, home in personas:
-        user = await session.scalar(select(User).where(User.role == role, User.callsign.is_not(None))
-                                    .order_by(User.callsign).limit(1))
+        user = await session.scalar(
+            select(User)
+            .where(User.role == role, User.callsign.is_not(None))
+            .order_by(User.callsign)
+            .limit(1)
+        )
         if user:
-            out.append(DemoAccount(role=role, persona=persona, name=user.name, email=user.email,
-                                   region=user.region, home=home))
+            out.append(
+                DemoAccount(
+                    role=role,
+                    persona=persona,
+                    name=user.name,
+                    email=user.email,
+                    region=user.region,
+                    home=home,
+                )
+            )
     return Envelope(data=out)
 
 
 @me_router.get("/me", response_model=Envelope[MeOut])
-async def me(principal: Principal = Depends(require_any),
-             session: AsyncSession = Depends(get_session)) -> Envelope[MeOut]:
+async def me(
+    principal: Principal = Depends(require_any), session: AsyncSession = Depends(get_session)
+) -> Envelope[MeOut]:
     user = await session.get(User, principal.id)
     assert user is not None
     return Envelope(data=_me(user))

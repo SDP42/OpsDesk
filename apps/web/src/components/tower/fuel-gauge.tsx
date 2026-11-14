@@ -90,7 +90,7 @@ export function FuelGauge({
           <span className="micro" style={{ color }}>
             {SLA_LABEL[sla.state] ?? sla.state}
           </span>
-          <span className="font-mono text-xl tabular" style={{ fontSize: size * 0.13 }}>
+          <span className="tabular font-mono text-xl" style={{ fontSize: size * 0.13 }}>
             {sla.state === "met" ? "LANDED" : `${remaining < 0 ? "+" : ""}${duration(remaining)}`}
           </span>
           <span className="micro">{Math.round(fuel * 100)}% fuel</span>
@@ -104,10 +104,17 @@ export function FuelGauge({
 export function FuelBar({ fuel, state }: { fuel: number; state: string }) {
   const color = SLA_COLOR[state] ?? "var(--color-signal)";
   return (
-    <div className="relative h-full w-1 shrink-0 overflow-hidden bg-ink-700" aria-hidden>
+    <div className="bg-ink-700 relative h-full w-1 shrink-0 overflow-hidden" aria-hidden>
       <div
-        className={clsx("absolute bottom-0 left-0 w-full", (state === "critical" || state === "breached") && "animate-pulse-alarm")}
-        style={{ height: `${Math.max(4, fuel * 100)}%`, background: color, transition: "height 600ms var(--ease-tower)" }}
+        className={clsx(
+          "absolute bottom-0 left-0 w-full",
+          (state === "critical" || state === "breached") && "animate-pulse-alarm",
+        )}
+        style={{
+          height: `${Math.max(4, fuel * 100)}%`,
+          background: color,
+          transition: "height 600ms var(--ease-tower)",
+        }}
       />
     </div>
   );

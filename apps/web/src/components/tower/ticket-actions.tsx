@@ -34,7 +34,12 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
 
   const status = useMutation({
     mutationFn: async (s: string) =>
-      unwrap(await api.PATCH("/api/tickets/{ticket_id}", { params: { path: { ticket_id: ticket.id } }, body: { status: s as "open" } })),
+      unwrap(
+        await api.PATCH("/api/tickets/{ticket_id}", {
+          params: { path: { ticket_id: ticket.id } },
+          body: { status: s as "open" },
+        }),
+      ),
     onSuccess: (t) => {
       push({ callsign: t.number, message: `STATUS > ${t.status.toUpperCase()}`, tone: "signal" });
       refresh();
@@ -44,11 +49,20 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
 
   const escalate = useMutation({
     mutationFn: async () =>
-      unwrap(await api.POST("/api/tickets/{ticket_id}/escalate", { params: { path: { ticket_id: ticket.id } }, body: { reason } })),
+      unwrap(
+        await api.POST("/api/tickets/{ticket_id}/escalate", {
+          params: { path: { ticket_id: ticket.id } },
+          body: { reason },
+        }),
+      ),
     onSuccess: (t) => {
       setEscalating(false);
       setReason("");
-      push({ callsign: t.number, message: `ESCALATED > TOWER CHIEF ${t.owner?.name ?? ""}`, tone: "alarm" });
+      push({
+        callsign: t.number,
+        message: `ESCALATED > TOWER CHIEF ${t.owner?.name ?? ""}`,
+        tone: "alarm",
+      });
       refresh();
     },
     onError,
@@ -71,11 +85,16 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
     onSuccess: (t) => {
       setDiff(null);
       setReassignTo("");
-      push({ callsign: t.number, message: `HANDED OFF > ${t.owner?.callsign ?? t.owner?.name ?? ""}`, tone: "ice" });
+      push({
+        callsign: t.number,
+        message: `HANDED OFF > ${t.owner?.callsign ?? t.owner?.name ?? ""}`,
+        tone: "ice",
+      });
       refresh();
     },
     onError: (e) => {
-      if (e instanceof ApiError && e.code === "handoff_confirmation_required") setDiff(e.details as HandoffDiff);
+      if (e instanceof ApiError && e.code === "handoff_confirmation_required")
+        setDiff(e.details as HandoffDiff);
       else onError(e);
     },
   });
@@ -99,12 +118,27 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap gap-2">
         {(NEXT[ticket.status] ?? []).map((s) => (
-          <button key={s} className="btn" disabled={status.isPending} onClick={() => status.mutate(s)}>
-            {s === "resolved" ? "Land (resolve)" : s === "closed" ? "Close at gate" : s === "pending" ? "Hold" : "Reopen"}
+          <button
+            key={s}
+            className="btn"
+            disabled={status.isPending}
+            onClick={() => status.mutate(s)}
+          >
+            {s === "resolved"
+              ? "Land (resolve)"
+              : s === "closed"
+                ? "Close at gate"
+                : s === "pending"
+                  ? "Hold"
+                  : "Reopen"}
           </button>
         ))}
         {canEscalate && (
-          <button className="btn btn-alarm" onClick={() => setEscalating((v) => !v)} aria-expanded={escalating}>
+          <button
+            className="btn btn-alarm"
+            onClick={() => setEscalating((v) => !v)}
+            aria-expanded={escalating}
+          >
             Escalate <kbd className="opacity-60">E</kbd>
           </button>
         )}
@@ -122,7 +156,9 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
               escalate.mutate();
             }}
           >
-            <label className="micro" htmlFor="esc-reason">Reason for the Tower Chief (required)</label>
+            <label className="micro" htmlFor="esc-reason">
+              Reason for the Tower Chief (required)
+            </label>
             <textarea
               id="esc-reason"
               autoFocus
@@ -133,7 +169,10 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
               onChange={(e) => setReason(e.target.value)}
               placeholder="Check-in in 9 hours and the hotel has no record…"
             />
-            <button className="btn btn-alarm self-start" disabled={reason.trim().length < 5 || escalate.isPending}>
+            <button
+              className="btn btn-alarm self-start"
+              disabled={reason.trim().length < 5 || escalate.isPending}
+            >
               Send to Tower Chief
             </button>
           </motion.form>
@@ -159,7 +198,8 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
               ?.filter((c) => c.id !== ticket.owner?.id)
               .map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.callsign ?? ""} {c.name} · {c.region ?? c.role} · {c.open_tickets} open{c.on_shift ? "" : " · off shift"}
+                  {c.callsign ?? ""} {c.name} · {c.region ?? c.role} · {c.open_tickets} open
+                  {c.on_shift ? "" : " · off shift"}
                 </option>
               ))}
           </select>
@@ -169,7 +209,11 @@ export function TicketActions({ ticket, role }: { ticket: Ticket; role: string }
         </form>
       )}
 
-      {err && <p role="alert" className="font-mono text-xs text-alarm">{err}</p>}
+      {err && (
+        <p role="alert" className="text-alarm font-mono text-xs">
+          {err}
+        </p>
+      )}
 
       <AnimatePresence>
         {diff && (
@@ -199,7 +243,7 @@ export function HandoffDiffModal({
 }) {
   return (
     <motion.div
-      className="fixed inset-0 z-[80] grid place-items-center bg-ink-950/75 p-4 backdrop-blur-sm"
+      className="bg-ink-950/75 fixed inset-0 z-[80] grid place-items-center p-4 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -219,8 +263,9 @@ export function HandoffDiffModal({
         <h3 id="handoff-title" className="mt-1 font-serif text-3xl">
           Frequencies survive the transfer
         </h3>
-        <p className="mt-2 text-sm text-text-dim">
-          {diff.from_owner?.name ?? "Triage"} → <span className="text-text">{diff.to_owner.name}</span>. External parties and locked
+        <p className="text-text-dim mt-2 text-sm">
+          {diff.from_owner?.name ?? "Triage"} →{" "}
+          <span className="text-text">{diff.to_owner.name}</span>. External parties and locked
           recipients stay on every open Frequency.
         </p>
         {(
@@ -235,9 +280,16 @@ export function HandoffDiffModal({
               {label} · {list.length}
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {list.length === 0 && <span className="text-xs text-text-dim">none</span>}
+              {list.length === 0 && <span className="text-text-dim text-xs">none</span>}
               {list.map((r) => (
-                <FrequencyChip key={`${r.frequency_id}-${r.email}`} name={r.name} email={r.email} partyType={r.party_type} locked={r.locked} handoff={state} />
+                <FrequencyChip
+                  key={`${r.frequency_id}-${r.email}`}
+                  name={r.name}
+                  email={r.email}
+                  partyType={r.party_type}
+                  locked={r.locked}
+                  handoff={state}
+                />
               ))}
             </div>
           </div>
@@ -246,7 +298,12 @@ export function HandoffDiffModal({
           <button className="btn" onClick={onCancel}>
             Cancel
           </button>
-          <button className="btn btn-signal" onClick={onConfirm} disabled={busy} data-testid="confirm-handoff">
+          <button
+            className="btn btn-signal"
+            onClick={onConfirm}
+            disabled={busy}
+            data-testid="confirm-handoff"
+          >
             Confirm handoff
           </button>
         </div>

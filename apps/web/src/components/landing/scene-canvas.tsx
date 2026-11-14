@@ -48,7 +48,7 @@ function Constellation() {
   const nodes = useMemo(() => {
     const pts: THREE.Vector3[] = [];
     let s = 3;
-    const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647) - 0.5;
+    const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647 - 0.5;
     for (let i = 0; i < 22; i++) pts.push(new THREE.Vector3(rnd() * 4, rnd() * 2.6, rnd() * 2.2));
     pts[0] = new THREE.Vector3(0, 0, 0.4);
     return pts;
@@ -93,7 +93,11 @@ function Constellation() {
 function latLon(lat: number, lon: number, r: number) {
   const phi = ((90 - lat) * Math.PI) / 180;
   const theta = ((lon + 180) * Math.PI) / 180;
-  return new THREE.Vector3(-r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta));
+  return new THREE.Vector3(
+    -r * Math.sin(phi) * Math.cos(theta),
+    r * Math.cos(phi),
+    r * Math.sin(phi) * Math.sin(theta),
+  );
 }
 
 const CITIES = {
@@ -132,7 +136,12 @@ function Globe() {
     return pairs.map(([a, b]) => {
       const va = latLon(CITIES[a][0], CITIES[a][1], R);
       const vb = latLon(CITIES[b][0], CITIES[b][1], R);
-      const mid = va.clone().add(vb).multiplyScalar(0.5).normalize().multiplyScalar(R * 1.35);
+      const mid = va
+        .clone()
+        .add(vb)
+        .multiplyScalar(0.5)
+        .normalize()
+        .multiplyScalar(R * 1.35);
       return new THREE.QuadraticBezierCurve3(va, mid, vb);
     });
   }, []);
@@ -230,8 +239,15 @@ export default function SceneCanvas() {
   const [dpr, setDpr] = useState(1.5);
   // Confined to the right visual column so 3D never sits on top of copy.
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-y-0 right-0 z-[2] hidden w-1/2 lg:block">
-      <Canvas dpr={[1, Math.min(dpr, 1.75)]} camera={{ position: [0, 0, 5.2], fov: 45 }} gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}>
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-y-0 right-0 z-[2] hidden w-1/2 lg:block"
+    >
+      <Canvas
+        dpr={[1, Math.min(dpr, 1.75)]}
+        camera={{ position: [0, 0, 5.2], fov: 45 }}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      >
         <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(1.75)} />
         <Constellation />
         <Globe />

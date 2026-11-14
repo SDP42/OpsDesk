@@ -29,7 +29,7 @@ export function TowerCalls() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             onClick={() => dismiss(c.id)}
             className={clsx(
-              "hud pointer-events-auto !bg-night px-4 py-3 text-left font-mono text-[12px] tracking-wider uppercase",
+              "hud !bg-night pointer-events-auto px-4 py-3 text-left font-mono text-[12px] tracking-wider uppercase",
               tone[c.tone],
             )}
           >

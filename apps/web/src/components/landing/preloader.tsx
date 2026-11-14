@@ -28,7 +28,9 @@ export function Preloader() {
       setPct(35);
       const store = await getStore("a");
       if (store) {
-        const off = store.onProgress((r) => setPct((p) => Math.max(p, Math.round(35 + Math.min(1, r / (24 / store.seq.count)) * 60))));
+        const off = store.onProgress((r) =>
+          setPct((p) => Math.max(p, Math.round(35 + Math.min(1, r / (24 / store.seq.count)) * 60))),
+        );
         await store.load(caps.rich ? 24 : 1);
         off();
       }
@@ -67,16 +69,31 @@ export function Preloader() {
 
   if (gone) return null;
   return (
-    <div ref={root} className="fixed inset-0 z-[90] grid place-items-center bg-ink-950" role="status" aria-live="polite">
+    <div
+      ref={root}
+      className="bg-ink-950 fixed inset-0 z-[90] grid place-items-center"
+      role="status"
+      aria-live="polite"
+    >
       <div className="relative grid size-56 place-items-center">
         {[0, 18, 36].map((i) => (
-          <div key={i} className="absolute rounded-full border border-line" style={{ inset: `${i}%` }} />
+          <div
+            key={i}
+            className="border-line absolute rounded-full border"
+            style={{ inset: `${i}%` }}
+          />
         ))}
         <div
-          className="absolute inset-0 animate-sweep rounded-full"
-          style={{ background: "conic-gradient(from 0deg, transparent 0 300deg, color-mix(in oklab, var(--color-beacon) 40%, transparent) 360deg)", animationDuration: "1.6s" }}
+          className="animate-sweep absolute inset-0 rounded-full"
+          style={{
+            background:
+              "conic-gradient(from 0deg, transparent 0 300deg, color-mix(in oklab, var(--color-beacon) 40%, transparent) 360deg)",
+            animationDuration: "1.6s",
+          }}
         />
-        <span className="relative font-mono text-3xl text-night tabular">{String(pct).padStart(3, "0")}%</span>
+        <span className="text-night tabular relative font-mono text-3xl">
+          {String(pct).padStart(3, "0")}%
+        </span>
       </div>
       <p className="sign sign-dark absolute bottom-[22%]">Establishing contact</p>
     </div>

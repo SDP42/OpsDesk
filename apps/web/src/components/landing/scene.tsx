@@ -14,7 +14,10 @@ import { detectCaps, useLanding } from "@/lib/landing/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ProgressCtx = createContext<{ progress: number; rich: boolean }>({ progress: 0, rich: false });
+const ProgressCtx = createContext<{ progress: number; rich: boolean }>({
+  progress: 0,
+  rich: false,
+});
 export const useSceneProgress = () => useContext(ProgressCtx);
 
 export function Scene({
@@ -101,14 +104,29 @@ export function Scene({
         className={cn("relative", className)}
         style={{ height: pinned ? `${length}vh` : undefined }}
       >
-        <div className={cn(pinned ? "sticky top-0 h-dvh overflow-hidden" : "relative min-h-dvh py-24", stageClassName)}>{children}</div>
+        <div
+          className={cn(
+            pinned ? "sticky top-0 h-dvh overflow-hidden" : "relative min-h-dvh py-24",
+            stageClassName,
+          )}
+        >
+          {children}
+        </div>
       </section>
     </ProgressCtx.Provider>
   );
 }
 
 /** The shared two-column grid every scene uses. */
-export function SceneGrid({ copy, visual, flip = false }: { copy: React.ReactNode; visual?: React.ReactNode; flip?: boolean }) {
+export function SceneGrid({
+  copy,
+  visual,
+  flip = false,
+}: {
+  copy: React.ReactNode;
+  visual?: React.ReactNode;
+  flip?: boolean;
+}) {
   return (
     <div className="relative z-[3] mx-auto grid h-full w-full max-w-[1320px] items-center gap-10 px-5 pt-20 pb-10 sm:px-10 lg:grid-cols-12 lg:gap-16">
       <div className={cn("lg:col-span-6", flip && "lg:order-2")}>{copy}</div>
@@ -118,12 +136,24 @@ export function SceneGrid({ copy, visual, flip = false }: { copy: React.ReactNod
 }
 
 /** Scene header: index, problem number and an eyebrow, styled as wayfinding signs. */
-export function SceneTag({ n, problem, children }: { n: number; problem?: string; children: React.ReactNode }) {
+export function SceneTag({
+  n,
+  problem,
+  children,
+}: {
+  n: number;
+  problem?: string;
+  children: React.ReactNode;
+}) {
   return (
     <p data-reveal className="flex flex-wrap items-center gap-2">
       <span className="sign sign-dark">{String(n).padStart(2, "0")}</span>
       <span className="sign">{children}</span>
-      {problem && <span className="sign !bg-transparent !text-text-dim ring-1 ring-line">Problem {problem}</span>}
+      {problem && (
+        <span className="sign !text-text-dim ring-line !bg-transparent ring-1">
+          Problem {problem}
+        </span>
+      )}
     </p>
   );
 }
@@ -143,7 +173,7 @@ export function SceneCopy({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="relative z-10 max-w-xl rounded-[28px] border border-white/60 bg-ink-950/82 p-7 shadow-[var(--shadow-lift)] backdrop-blur-xl sm:p-9">
+    <div className="bg-ink-950/82 relative z-10 max-w-xl rounded-[28px] border border-white/60 p-7 shadow-[var(--shadow-lift)] backdrop-blur-xl sm:p-9">
       <SceneTag n={n} problem={problem}>
         {eyebrow}
       </SceneTag>
@@ -151,7 +181,7 @@ export function SceneCopy({
         {title}
       </h2>
       {children && (
-        <div data-reveal className="mt-6 text-lg leading-relaxed text-text-dim">
+        <div data-reveal className="text-text-dim mt-6 text-lg leading-relaxed">
           {children}
         </div>
       )}

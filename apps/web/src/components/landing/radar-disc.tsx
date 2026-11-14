@@ -63,7 +63,7 @@ export interface Blip {
 
 export function defaultBlips(count = 26, seed = 7): Blip[] {
   let s = seed;
-  const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
   const palette = ["#6BFFC9", "#6BFFC9", "#6BFFC9", "#FFB020", "#FF7A45", "#FF4D5E"];
   return Array.from({ length: count }, () => ({
     angle: rnd() * Math.PI * 2,
@@ -119,7 +119,11 @@ export function RadarDisc({
         const flare = Math.exp(-diff * 1.8);
         const pulse = 1 + 0.25 * Math.sin(u.uTime.value * 3 + i);
         const s = (b.size ?? 0.02) * radius * (0.7 + flare * 1.6) * pulse * op;
-        dummy.position.set(Math.cos(b.angle) * b.radius * radius, Math.sin(b.angle) * b.radius * radius, 0.002);
+        dummy.position.set(
+          Math.cos(b.angle) * b.radius * radius,
+          Math.sin(b.angle) * b.radius * radius,
+          0.002,
+        );
         dummy.scale.setScalar(Math.max(s, 0.0001));
         dummy.updateMatrix();
         inst.current!.setMatrixAt(i, dummy.matrix);
@@ -132,7 +136,14 @@ export function RadarDisc({
     <group>
       <mesh>
         <circleGeometry args={[radius, 96]} />
-        <shaderMaterial ref={mat} vertexShader={vertex} fragmentShader={fragment} uniforms={uniforms} transparent depthWrite={false} />
+        <shaderMaterial
+          ref={mat}
+          vertexShader={vertex}
+          fragmentShader={fragment}
+          uniforms={uniforms}
+          transparent
+          depthWrite={false}
+        />
       </mesh>
       <instancedMesh ref={inst} args={[undefined, undefined, list.length]}>
         <circleGeometry args={[1, 16]} />

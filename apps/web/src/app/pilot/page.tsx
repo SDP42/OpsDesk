@@ -26,7 +26,9 @@ export default function PilotPage() {
     queryKey: ["tickets", "pilot"],
     initialPageParam: undefined as string | undefined,
     queryFn: async ({ pageParam }) => {
-      const r = await api.GET("/api/tickets", { params: { query: { limit: 30, cursor: pageParam } } });
+      const r = await api.GET("/api/tickets", {
+        params: { query: { limit: 30, cursor: pageParam } },
+      });
       if (!r.data) throw new Error("Could not load your flights");
       return r.data as unknown as { data: PilotTicket[]; meta: { next_cursor: string | null } };
     },
@@ -46,7 +48,7 @@ export default function PilotPage() {
 
   return (
     <div className="relative z-10 min-h-dvh">
-      <header className="flex items-center justify-between border-b border-line px-4 py-3 sm:px-8">
+      <header className="border-line flex items-center justify-between border-b px-4 py-3 sm:px-8">
         <Brand />
         <div className="flex items-center gap-4">
           <div className="text-right leading-tight">
@@ -82,9 +84,15 @@ export default function PilotPage() {
             {board.isLoading ? (
               <LoadingStrips rows={5} />
             ) : board.error ? (
-              <ErrorState message={(board.error as Error).message} onRetry={() => board.refetch()} />
+              <ErrorState
+                message={(board.error as Error).message}
+                onRetry={() => board.refetch()}
+              />
             ) : tickets.length === 0 ? (
-              <EmptyState title="No departures" body="File your first flight and track it here in real time." />
+              <EmptyState
+                title="No departures"
+                body="File your first flight and track it here in real time."
+              />
             ) : (
               <>
                 <DepartureBoard
@@ -132,10 +140,12 @@ export default function PilotPage() {
 function PilotFlight({ id }: { id: string }) {
   const q = useQuery({
     queryKey: ["ticket", id],
-    queryFn: async () => unwrap(await api.GET("/api/tickets/{ticket_id}", { params: { path: { ticket_id: id } } })),
+    queryFn: async () =>
+      unwrap(await api.GET("/api/tickets/{ticket_id}", { params: { path: { ticket_id: id } } })),
   });
   if (q.isLoading) return <div className="skeleton h-96" />;
-  if (q.error) return <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />;
+  if (q.error)
+    return <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />;
   const d = q.data as PilotTicketDetail;
   const t = d.ticket;
   return (
@@ -148,7 +158,9 @@ function PilotFlight({ id }: { id: string }) {
         </div>
         <div>
           <dt className="micro">ETA to resolution</dt>
-          <dd className="mt-0.5 font-mono">{t.status === "resolved" || t.status === "closed" ? "Landed" : clock(t.eta)}</dd>
+          <dd className="mt-0.5 font-mono">
+            {t.status === "resolved" || t.status === "closed" ? "Landed" : clock(t.eta)}
+          </dd>
         </div>
         <div>
           <dt className="micro">Controller</dt>

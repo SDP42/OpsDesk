@@ -32,23 +32,35 @@ export default function TowerOverview() {
   const radar = useQuery({
     queryKey: ["tickets", "radar"],
     queryFn: async () => {
-      const r = await api.GET("/api/tickets", { params: { query: { view: "open", limit: 200, sort: "sla_asc" } } });
+      const r = await api.GET("/api/tickets", {
+        params: { query: { view: "open", limit: 200, sort: "sla_asc" } },
+      });
       return (r.data as unknown as { data: Ticket[] } | undefined)?.data ?? [];
     },
     refetchInterval: 60_000,
   });
   const setPreset = useMutation({
-    mutationFn: async (preset: string) => unwrap(await api.PUT("/api/routing/preset", { body: { preset } })),
+    mutationFn: async (preset: string) =>
+      unwrap(await api.PUT("/api/routing/preset", { body: { preset } })),
     onSuccess: (d) => {
       void qc.invalidateQueries({ queryKey: ["overview"] });
-      push({ callsign: "VECTORING", message: `PRESET > ${d.preset.replace("_", " ").toUpperCase()}`, tone: "ice" });
+      push({
+        callsign: "VECTORING",
+        message: `PRESET > ${d.preset.replace("_", " ").toUpperCase()}`,
+        tone: "ice",
+      });
     },
   });
 
   const chaos = useMutation({
-    mutationFn: async () => unwrap(await api.POST("/api/admin/chaos", { params: { query: { count: 40 } } })),
+    mutationFn: async () =>
+      unwrap(await api.POST("/api/admin/chaos", { params: { query: { count: 40 } } })),
     onSuccess: (d) => {
-      push({ callsign: "CHAOS MODE", message: `${d.created ?? 0} FLIGHTS INJECTED · PALM CRESCENT OVERBOOKING`, tone: "alarm" });
+      push({
+        callsign: "CHAOS MODE",
+        message: `${d.created ?? 0} FLIGHTS INJECTED · PALM CRESCENT OVERBOOKING`,
+        tone: "alarm",
+      });
       void qc.invalidateQueries({ queryKey: ["tickets"] });
       void qc.invalidateQueries({ queryKey: ["overview"] });
     },
@@ -66,18 +78,24 @@ export default function TowerOverview() {
           </h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex border border-line" role="radiogroup" aria-label="Routing preset">
+          <div className="border-line flex border" role="radiogroup" aria-label="Routing preset">
             {PRESETS.map((p) => (
               <button
                 key={p.id}
                 role="radio"
                 aria-checked={o?.preset === p.id}
                 disabled={!isLead || setPreset.isPending}
-                title={isLead ? `Route new flights with ${p.label}` : "Only the Airport Director can switch presets"}
+                title={
+                  isLead
+                    ? `Route new flights with ${p.label}`
+                    : "Only the Airport Director can switch presets"
+                }
                 onClick={() => setPreset.mutate(p.id)}
                 className={clsx(
                   "px-3 py-2 font-mono text-[11px] tracking-wider uppercase transition-colors",
-                  o?.preset === p.id ? "bg-signal text-ink-950" : "text-text-dim hover:text-text disabled:hover:text-text-dim",
+                  o?.preset === p.id
+                    ? "bg-signal text-ink-950"
+                    : "text-text-dim hover:text-text disabled:hover:text-text-dim",
                 )}
               >
                 {p.label}
@@ -87,7 +105,11 @@ export default function TowerOverview() {
           <button
             className="btn btn-alarm"
             disabled={!isLead || chaos.isPending}
-            title={isLead ? "Inject 40 overbooking flights from many agencies and watch live routing" : "Only the Airport Director can run Chaos Mode"}
+            title={
+              isLead
+                ? "Inject 40 overbooking flights from many agencies and watch live routing"
+                : "Only the Airport Director can run Chaos Mode"
+            }
             onClick={() => chaos.mutate()}
           >
             <Zap size={14} strokeWidth={1.5} /> {chaos.isPending ? "Injecting…" : "Chaos mode"}
@@ -96,13 +118,28 @@ export default function TowerOverview() {
       </div>
 
       {overview.error ? (
-        <ErrorState message={(overview.error as Error).message} onRetry={() => overview.refetch()} />
+        <ErrorState
+          message={(overview.error as Error).message}
+          onRetry={() => overview.refetch()}
+        />
       ) : (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <Tile label={<Term k="flight">Open flights</Term>} value={o?.open} />
-          <Tile label={<Term k="triage">Unassigned (triage)</Term>} value={o?.unassigned} tone="amber" />
-          <Tile label={<Term k="tower chief">With Tower Chief</Term>} value={o?.escalated} tone="alarm" />
-          <Tile label={<Term k="sla">Breached (overdue)</Term>} value={o?.by_sla?.breached ?? (o ? 0 : undefined)} tone="alarm" />
+          <Tile
+            label={<Term k="triage">Unassigned (triage)</Term>}
+            value={o?.unassigned}
+            tone="amber"
+          />
+          <Tile
+            label={<Term k="tower chief">With Tower Chief</Term>}
+            value={o?.escalated}
+            tone="alarm"
+          />
+          <Tile
+            label={<Term k="sla">Breached (overdue)</Term>}
+            value={o?.by_sla?.breached ?? (o ? 0 : undefined)}
+            tone="alarm"
+          />
         </div>
       )}
 
@@ -115,9 +152,12 @@ export default function TowerOverview() {
           )}
           <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2">
             {Object.entries(REGION_LABEL).map(([code, label]) => (
-              <div key={code} className="flex items-center justify-between border-b border-line/60 pb-1">
+              <div
+                key={code}
+                className="border-line/60 flex items-center justify-between border-b pb-1"
+              >
                 <span className="micro">{label}</span>
-                <span className="font-mono text-sm tabular">{o?.by_region?.[code] ?? 0}</span>
+                <span className="tabular font-mono text-sm">{o?.by_region?.[code] ?? 0}</span>
               </div>
             ))}
           </div>
@@ -133,7 +173,12 @@ export default function TowerOverview() {
 
         <Hud title="SLA risk board · lowest fuel first" bodyClassName="p-3">
           <StripList
-            query={{ view: "open", sort: "sla_asc", sla_state: ["breached", "critical", "at_risk"], limit: 12 }}
+            query={{
+              view: "open",
+              sort: "sla_asc",
+              sla_state: ["breached", "critical", "at_risk"],
+              limit: 12,
+            }}
             emptyTitle="All flights on course"
             emptyBody="Nothing is at risk right now. The board fills as check-in or LCD approaches."
           />
@@ -143,7 +188,15 @@ export default function TowerOverview() {
   );
 }
 
-function Tile({ label, value, tone = "signal" }: { label: React.ReactNode; value?: number; tone?: "signal" | "amber" | "alarm" }) {
+function Tile({
+  label,
+  value,
+  tone = "signal",
+}: {
+  label: React.ReactNode;
+  value?: number;
+  tone?: "signal" | "amber" | "alarm";
+}) {
   const color = { signal: "text-signal", amber: "text-amber", alarm: "text-alarm" }[tone];
   return (
     <div className="hud px-4 py-3">
@@ -153,7 +206,7 @@ function Tile({ label, value, tone = "signal" }: { label: React.ReactNode; value
       {value === undefined ? (
         <div className="skeleton mt-2 h-9 w-16" />
       ) : (
-        <p className={clsx("mt-1 font-mono text-4xl tabular", color)}>{value}</p>
+        <p className={clsx("tabular mt-1 font-mono text-4xl", color)}>{value}</p>
       )}
     </div>
   );

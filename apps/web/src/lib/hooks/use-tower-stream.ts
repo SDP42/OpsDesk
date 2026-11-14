@@ -52,12 +52,24 @@ export function useTowerStream(enabled = true) {
       }
       const number = String(data.number ?? "");
       if (name === "ticket.created") {
-        push({ callsign: number, message: `VECTORED > ${String(data.owner ?? "TRIAGE")}`, tone: "signal" });
+        push({
+          callsign: number,
+          message: `VECTORED > ${String(data.owner ?? "TRIAGE")}`,
+          tone: "signal",
+        });
       } else if (name === "escalation") {
-        push({ callsign: number, message: `ESCALATED > TOWER CHIEF ${String(data.to ?? "")}`, tone: "alarm" });
+        push({
+          callsign: number,
+          message: `ESCALATED > TOWER CHIEF ${String(data.to ?? "")}`,
+          tone: "alarm",
+        });
       } else if (name === "guardian") {
         push({ callsign: number, message: "THIRD CONTACT · PRIORITY RAISED", tone: "amber" });
-      } else if (name === "ticket.updated" && data.change === "sla" && data.sla_state === "breached") {
+      } else if (
+        name === "ticket.updated" &&
+        data.change === "sla" &&
+        data.sla_state === "breached"
+      ) {
         push({ callsign: number, message: "WHEELS-UP CLOCK BREACHED", tone: "alarm" });
       }
       if (name !== "hello" && name !== "sla.tick") invalidate();
@@ -72,7 +84,14 @@ export function useTowerStream(enabled = true) {
         source?.close();
         retry = setTimeout(connect, 3000);
       };
-      for (const name of ["hello", "ticket.created", "ticket.updated", "sla.tick", "escalation", "guardian"]) {
+      for (const name of [
+        "hello",
+        "ticket.created",
+        "ticket.updated",
+        "sla.tick",
+        "escalation",
+        "guardian",
+      ]) {
         source.addEventListener(name, handle(name) as EventListener);
       }
     };

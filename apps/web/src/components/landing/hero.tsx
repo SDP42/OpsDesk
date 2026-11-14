@@ -39,10 +39,35 @@ export function Hero() {
   useEffect(() => {
     if (!ready || !root.current || detectCaps().reduced) return;
     const ctx = gsap.context(() => {
-      gsap.from(".hero-word", { yPercent: 115, duration: 1.1, ease: "power4.out", stagger: 0.07, delay: 0.25 });
-      gsap.from(".hero-fade", { opacity: 0, y: 18, duration: 0.9, ease: "power3.out", stagger: 0.08, delay: 0.7 });
-      gsap.from(".hero-window", { opacity: 0, y: 50, rotate: 2, scale: 0.94, duration: 1.4, ease: "power3.out", delay: 0.35 });
-      gsap.to(".hero-window", { yPercent: -8, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true } });
+      gsap.from(".hero-word", {
+        yPercent: 115,
+        duration: 1.1,
+        ease: "power4.out",
+        stagger: 0.07,
+        delay: 0.25,
+      });
+      gsap.from(".hero-fade", {
+        opacity: 0,
+        y: 18,
+        duration: 0.9,
+        ease: "power3.out",
+        stagger: 0.08,
+        delay: 0.7,
+      });
+      gsap.from(".hero-window", {
+        opacity: 0,
+        y: 50,
+        rotate: 2,
+        scale: 0.94,
+        duration: 1.4,
+        ease: "power3.out",
+        delay: 0.35,
+      });
+      gsap.to(".hero-window", {
+        yPercent: -8,
+        ease: "none",
+        scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
+      });
     }, root);
     return () => ctx.revert();
   }, [ready]);
@@ -59,7 +84,12 @@ export function Hero() {
       <div ref={root} className="relative flex min-h-dvh flex-col">
         <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/video/hero-poster.webp" alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+          <img
+            src="/video/hero-poster.webp"
+            alt=""
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
           {useVideo && (
             <video
               className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000"
@@ -74,12 +104,12 @@ export function Hero() {
               <source src="/video/hero.mp4" type="video/mp4" />
             </video>
           )}
-          <div className="absolute inset-0 bg-ink-950/10" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink-950 to-transparent" />
+          <div className="bg-ink-950/10 absolute inset-0" />
+          <div className="from-ink-950 absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t to-transparent" />
         </div>
         <SceneGrid
           copy={
-            <div className="rounded-[32px] border border-white/60 bg-ink-950/82 p-8 shadow-[var(--shadow-lift)] backdrop-blur-xl sm:p-10">
+            <div className="bg-ink-950/82 rounded-[32px] border border-white/60 p-8 shadow-[var(--shadow-lift)] backdrop-blur-xl sm:p-10">
               <div className="hero-fade">
                 <SceneTag n={1}>OpsDesk for TBO</SceneTag>
               </div>
@@ -89,9 +119,10 @@ export function Hero() {
                 {words("is a")}
                 {words("flight.", "italic text-beacon")}
               </h1>
-              <p className="hero-fade mt-7 max-w-lg text-xl leading-relaxed text-text-dim">
-                Stop treating them like paperwork. OpsDesk is the control tower for TBO&apos;s agency operations: linked history,
-                explainable routing and SLAs that count down to the guest&apos;s check-in.
+              <p className="hero-fade text-text-dim mt-7 max-w-lg text-xl leading-relaxed">
+                Stop treating them like paperwork. OpsDesk is the control tower for TBO&apos;s
+                agency operations: linked history, explainable routing and SLAs that count down to
+                the guest&apos;s check-in.
               </p>
               <div className="hero-fade mt-9 flex flex-wrap items-center gap-3">
                 <Magnetic>
@@ -105,11 +136,11 @@ export function Hero() {
                   </a>
                 </Magnetic>
               </div>
-              <dl className="hero-fade mt-8 grid max-w-lg grid-cols-3 gap-4 border-t border-line pt-5">
+              <dl className="hero-fade border-line mt-8 grid max-w-lg grid-cols-3 gap-4 border-t pt-5">
                 {STATS.map(([v, l]) => (
                   <div key={l}>
                     <dt className="display text-3xl">{v}</dt>
-                    <dd className="mt-1 text-[12px] leading-snug text-text-dim">{l}</dd>
+                    <dd className="text-text-dim mt-1 text-[12px] leading-snug">{l}</dd>
                   </div>
                 ))}
               </dl>
@@ -117,30 +148,32 @@ export function Hero() {
           }
           visual={
             <div className="hero-window relative hidden h-[60vh] lg:block">
-              <div className="absolute top-[8%] right-[6%] w-72 animate-float rounded-2xl border border-white/30 bg-white/90 p-4 shadow-[var(--shadow-lift)] backdrop-blur">
+              <div className="animate-float absolute top-[8%] right-[6%] w-72 rounded-2xl border border-white/30 bg-white/90 p-4 shadow-[var(--shadow-lift)] backdrop-blur">
                 <p className="flex items-center justify-between font-mono text-[12px]">
                   <span className="font-semibold">OD-24817</span>
                   <span className="sign !py-0 !text-[10px]">Vectored</span>
                 </p>
-                <p className="mt-2 font-mono text-[11px] leading-relaxed text-text-dim">Region match UAE (+40) · P1 urgency (+30) · on shift (+15) · lowest load (+8)</p>
-                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-ink-700">
-                  <div className="h-full w-[88%] rounded-full bg-night" />
+                <p className="text-text-dim mt-2 font-mono text-[11px] leading-relaxed">
+                  Region match UAE (+40) · P1 urgency (+30) · on shift (+15) · lowest load (+8)
+                </p>
+                <div className="bg-ink-700 mt-3 h-1.5 overflow-hidden rounded-full">
+                  <div className="bg-night h-full w-[88%] rounded-full" />
                 </div>
               </div>
-              <div className="absolute top-[44%] left-[4%] animate-float rounded-2xl border border-white/30 bg-white/90 p-4 shadow-[var(--shadow-lift)] backdrop-blur [animation-delay:-2s]">
+              <div className="animate-float absolute top-[44%] left-[4%] rounded-2xl border border-white/30 bg-white/90 p-4 shadow-[var(--shadow-lift)] backdrop-blur [animation-delay:-2s]">
                 <p className="micro">Wheels-up · TBOH-90009</p>
-                <p className="mt-1 font-mono text-3xl text-critical tabular">T-9h 04m</p>
-                <p className="micro mt-1 !text-critical">Critical · escalation proposed</p>
+                <p className="text-critical tabular mt-1 font-mono text-3xl">T-9h 04m</p>
+                <p className="micro !text-critical mt-1">Critical · escalation proposed</p>
               </div>
-              <div className="absolute right-[10%] bottom-[6%] animate-float rounded-2xl bg-night p-4 text-white shadow-[var(--shadow-lift)] [animation-delay:-4s]">
+              <div className="animate-float bg-night absolute right-[10%] bottom-[6%] rounded-2xl p-4 text-white shadow-[var(--shadow-lift)] [animation-delay:-4s]">
                 <p className="micro !text-white/60">Third-contact guardian</p>
-                <p className="mt-1 font-mono text-sm text-taxi">3 flights linked on TBOH-88213</p>
+                <p className="text-taxi mt-1 font-mono text-sm">3 flights linked on TBOH-88213</p>
               </div>
             </div>
           }
         />
-        <div className="relative z-[3] mt-auto overflow-hidden border-y border-night bg-taxi py-3">
-          <div className="flex w-max animate-[ticker_45s_linear_infinite] gap-10 font-mono text-[12px] font-semibold tracking-wider text-night uppercase motion-reduce:animate-none">
+        <div className="border-night bg-taxi relative z-[3] mt-auto overflow-hidden border-y py-3">
+          <div className="text-night flex w-max animate-[ticker_45s_linear_infinite] gap-10 font-mono text-[12px] font-semibold tracking-wider uppercase motion-reduce:animate-none">
             {[...TICKER, ...TICKER].map((t, i) => (
               <span key={i} className="whitespace-nowrap">
                 ✈ {t}

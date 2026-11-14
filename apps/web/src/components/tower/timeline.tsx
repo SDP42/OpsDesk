@@ -90,22 +90,27 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
             className="flex-1 accent-[var(--color-signal)]"
             aria-label="Replay timeline"
           />
-          <span className="font-mono text-[11px] text-text-dim tabular">
+          <span className="text-text-dim tabular font-mono text-[11px]">
             {Math.min(upTo, events.length)}/{events.length}
           </span>
         </label>
       )}
-      <ol className="relative flex flex-col gap-3 border-l border-line pl-4">
+      <ol className="border-line relative flex flex-col gap-3 border-l pl-4">
         {shown.map((e) => {
           const s = summary(e);
           return (
             <li key={e.id} className="relative">
-              <span className={clsx("absolute top-1.5 -left-[21px] size-2 rounded-full", TONE[e.type] ?? "bg-text-dim")} />
+              <span
+                className={clsx(
+                  "absolute top-1.5 -left-[21px] size-2 rounded-full",
+                  TONE[e.type] ?? "bg-text-dim",
+                )}
+              />
               <div className="flex items-baseline justify-between gap-3">
                 <span className="text-[13px]">{LABEL[e.type] ?? e.type}</span>
                 <span className="micro shrink-0">{clock(e.at)}</span>
               </div>
-              {s && <p className="mt-0.5 font-mono text-[11px] break-words text-text-dim">{s}</p>}
+              {s && <p className="text-text-dim mt-0.5 font-mono text-[11px] break-words">{s}</p>}
               {e.actor && <p className="micro mt-0.5">by {e.actor.callsign ?? e.actor.name}</p>}
             </li>
           );

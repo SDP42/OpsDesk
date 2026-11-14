@@ -62,13 +62,28 @@ export function CommandPalette({ role }: { role: string }) {
     const out: Command[] = [];
     if (/^OD-?\d{3,}$/.test(q)) {
       const n = q.startsWith("OD-") ? q : `OD-${q.slice(2)}`;
-      out.push({ id: "jump", label: `Jump to flight ${n}`, hint: "callsign", run: () => go(`/tower/t/${n}`) });
+      out.push({
+        id: "jump",
+        label: `Jump to flight ${n}`,
+        hint: "callsign",
+        run: () => go(`/tower/t/${n}`),
+      });
     } else if (/^\d{4,6}$/.test(q)) {
-      out.push({ id: "jump", label: `Jump to flight OD-${q}`, hint: "callsign", run: () => go(`/tower/t/OD-${q}`) });
+      out.push({
+        id: "jump",
+        label: `Jump to flight OD-${q}`,
+        hint: "callsign",
+        run: () => go(`/tower/t/OD-${q}`),
+      });
     }
     if (/^TBOH-?\d{3,}$/.test(q)) {
       const t = q.startsWith("TBOH-") ? q : `TBOH-${q.slice(4)}`;
-      out.push({ id: "tboh", label: `Flights on booking ${t}`, hint: "TBOH", run: () => go(`/tower/queue?tboh=${t}`) });
+      out.push({
+        id: "tboh",
+        label: `Flights on booking ${t}`,
+        hint: "TBOH",
+        run: () => go(`/tower/queue?tboh=${t}`),
+      });
     }
     const nav: Command[] =
       role === "requester"
@@ -76,10 +91,28 @@ export function CommandPalette({ role }: { role: string }) {
         : [
             { id: "tower", label: "Tower overview", hint: "go", run: () => go("/tower") },
             { id: "queue", label: "My queue", hint: "go", run: () => go("/tower/queue") },
-            { id: "triage", label: "Triage (unassigned)", hint: "go", run: () => go("/tower/triage") },
-            { id: "esc", label: "Escalation queue", hint: "go", run: () => go("/tower/escalations") },
+            {
+              id: "triage",
+              label: "Triage (unassigned)",
+              hint: "go",
+              run: () => go("/tower/triage"),
+            },
+            {
+              id: "esc",
+              label: "Escalation queue",
+              hint: "go",
+              run: () => go("/tower/escalations"),
+            },
           ];
-    nav.push({ id: "sound", label: "Toggle radar ping sound", hint: "action", run: () => { toggleSound(); setOpen(false); } });
+    nav.push({
+      id: "sound",
+      label: "Toggle radar ping sound",
+      hint: "action",
+      run: () => {
+        toggleSound();
+        setOpen(false);
+      },
+    });
     nav.push({ id: "home", label: "Landing page", hint: "go", run: () => go("/") });
     const filtered = nav.filter((c) => !q || c.label.toUpperCase().includes(q));
     return [...out, ...filtered];
@@ -101,7 +134,7 @@ export function CommandPalette({ role }: { role: string }) {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[70] flex items-start justify-center bg-ink-950/70 px-4 pt-[14vh] backdrop-blur-sm"
+          className="bg-ink-950/70 fixed inset-0 z-[70] flex items-start justify-center px-4 pt-[14vh] backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -119,8 +152,8 @@ export function CommandPalette({ role }: { role: string }) {
           >
             <span className="hud-tr" aria-hidden />
             <span className="hud-bl" aria-hidden />
-            <div className="flex items-center gap-3 border-b border-line px-4">
-              <span className="font-mono text-signal">›</span>
+            <div className="border-line flex items-center gap-3 border-b px-4">
+              <span className="text-signal font-mono">›</span>
               <input
                 ref={inputRef}
                 value={query}
@@ -130,7 +163,7 @@ export function CommandPalette({ role }: { role: string }) {
                 }}
                 onKeyDown={onInputKey}
                 placeholder="Callsign, TBOH or command…"
-                className="h-12 flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-text-dim"
+                className="placeholder:text-text-dim h-12 flex-1 bg-transparent font-mono text-sm outline-none"
                 aria-label="Command"
               />
               <kbd className="micro">esc</kbd>
@@ -151,7 +184,11 @@ export function CommandPalette({ role }: { role: string }) {
                   </button>
                 </li>
               ))}
-              {commands.length === 0 && <li className="px-4 py-6 text-center text-sm text-text-dim">No match on this frequency.</li>}
+              {commands.length === 0 && (
+                <li className="text-text-dim px-4 py-6 text-center text-sm">
+                  No match on this frequency.
+                </li>
+              )}
             </ul>
           </motion.div>
         </motion.div>

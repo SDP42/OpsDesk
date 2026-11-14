@@ -18,7 +18,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     const tick = (time: number) => lenis?.raf(time * 1000);
 
     if (caps.rich) {
-      lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 3), smoothWheel: true });
+      lenis = new Lenis({
+        duration: 1.15,
+        easing: (t) => 1 - Math.pow(1 - t, 3),
+        smoothWheel: true,
+      });
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);

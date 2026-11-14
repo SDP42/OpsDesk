@@ -52,7 +52,8 @@ export function StripList({
     if (!keyboard) return;
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
-      if (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || e.metaKey || e.ctrlKey) return;
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || e.metaKey || e.ctrlKey)
+        return;
       if (e.key === "j" || e.key === "k") {
         e.preventDefault();
         setActive((i) => {
@@ -69,7 +70,8 @@ export function StripList({
   }, [keyboard, tickets, active, router]);
 
   if (q.isLoading) return <LoadingStrips />;
-  if (q.error) return <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />;
+  if (q.error)
+    return <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />;
   if (tickets.length === 0) return <EmptyState title={emptyTitle} body={emptyBody} />;
 
   return (
@@ -86,7 +88,11 @@ export function StripList({
         />
       ))}
       {q.hasNextPage && (
-        <button className="btn mx-auto mt-2" onClick={() => q.fetchNextPage()} disabled={q.isFetchingNextPage}>
+        <button
+          className="btn mx-auto mt-2"
+          onClick={() => q.fetchNextPage()}
+          disabled={q.isFetchingNextPage}
+        >
           {q.isFetchingNextPage ? "Receiving…" : "Load more flights"}
         </button>
       )}

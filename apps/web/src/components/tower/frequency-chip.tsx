@@ -30,7 +30,7 @@ export function FrequencyChip({
         "inline-flex items-center gap-1.5 border px-2 py-1 font-mono text-[11px]",
         PARTY[partyType as keyof typeof PARTY] ?? "border-line text-text-dim",
         handoff === "dropped" && "line-through opacity-60",
-        handoff === "added" && "ring-1 ring-signal",
+        handoff === "added" && "ring-signal ring-1",
       )}
     >
       {locked && <Lock size={11} strokeWidth={1.5} aria-label="locked" />}

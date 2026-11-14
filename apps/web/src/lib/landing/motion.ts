@@ -12,7 +12,8 @@ export interface MotionCaps {
 }
 
 export function detectCaps(): MotionCaps {
-  if (typeof window === "undefined") return { rich: false, reduced: false, mobile: false, saveData: false };
+  if (typeof window === "undefined")
+    return { rich: false, reduced: false, mobile: false, saveData: false };
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const mobile = window.matchMedia("(max-width: 767px), (pointer: coarse)").matches;
   const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;

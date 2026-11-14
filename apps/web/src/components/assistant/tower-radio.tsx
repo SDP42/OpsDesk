@@ -22,7 +22,19 @@ interface Msg {
   answer?: Answer;
 }
 
-const PREFERRED = [/natural/i, /neural/i, /enhanced/i, /premium/i, /google uk english female/i, /google us english/i, /samantha/i, /serena/i, /daniel/i, /karen/i, /moira/i];
+const PREFERRED = [
+  /natural/i,
+  /neural/i,
+  /enhanced/i,
+  /premium/i,
+  /google uk english female/i,
+  /google us english/i,
+  /samantha/i,
+  /serena/i,
+  /daniel/i,
+  /karen/i,
+  /moira/i,
+];
 
 function pickVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
   const en = voices.filter((v) => v.lang.toLowerCase().startsWith("en"));
@@ -39,7 +51,11 @@ type Recognition = {
   continuous: boolean;
   start: () => void;
   stop: () => void;
-  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }> }) => void) | null;
+  onresult:
+    | ((e: {
+        results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }>;
+      }) => void)
+    | null;
   onend: (() => void) | null;
   onerror: (() => void) | null;
 };
@@ -94,7 +110,11 @@ export function TowerRadio({ persona }: { persona: string }) {
       setMsgs((m) => [...m, { id: ++seq.current, who: "tower", text: answer.answer, answer }]);
       if (vars.channel === "voice" || speakOn) speak(answer.speak);
     },
-    onError: () => setMsgs((m) => [...m, { id: ++seq.current, who: "tower", text: "Lost contact with the tower. Try again." }]),
+    onError: () =>
+      setMsgs((m) => [
+        ...m,
+        { id: ++seq.current, who: "tower", text: "Lost contact with the tower. Try again." },
+      ]),
   });
 
   const send = (question: string, channel: "text" | "voice" = "text") => {
@@ -110,10 +130,20 @@ export function TowerRadio({ persona }: { persona: string }) {
   }, [msgs, ask.isPending]);
 
   const toggleMic = () => {
-    const W = window as unknown as { SpeechRecognition?: new () => Recognition; webkitSpeechRecognition?: new () => Recognition };
+    const W = window as unknown as {
+      SpeechRecognition?: new () => Recognition;
+      webkitSpeechRecognition?: new () => Recognition;
+    };
     const Ctor = W.SpeechRecognition ?? W.webkitSpeechRecognition;
     if (!Ctor) {
-      setMsgs((m) => [...m, { id: ++seq.current, who: "tower", text: "Voice input is not supported in this browser. Chrome, Edge and Safari support it." }]);
+      setMsgs((m) => [
+        ...m,
+        {
+          id: ++seq.current,
+          who: "tower",
+          text: "Voice input is not supported in this browser. Chrome, Edge and Safari support it.",
+        },
+      ]);
       return;
     }
     if (listening) {
@@ -152,13 +182,13 @@ export function TowerRadio({ persona }: { persona: string }) {
         onClick={() => setOpen((o) => !o)}
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.96 }}
-        className="fixed right-5 bottom-5 z-[65] flex items-center gap-2.5 rounded-full bg-night py-3 pr-5 pl-3 text-white shadow-[var(--shadow-lift)]"
+        className="bg-night fixed right-5 bottom-5 z-[65] flex items-center gap-2.5 rounded-full py-3 pr-5 pl-3 text-white shadow-[var(--shadow-lift)]"
         aria-expanded={open}
         aria-label="Open Tower Radio assistant"
       >
-        <span className="relative grid size-8 place-items-center rounded-full bg-taxi text-night">
+        <span className="bg-taxi text-night relative grid size-8 place-items-center rounded-full">
           <Radio size={16} />
-          <span className="absolute inset-0 animate-blip rounded-full border-2 border-taxi" />
+          <span className="animate-blip border-taxi absolute inset-0 rounded-full border-2" />
         </span>
         <span className="font-mono text-[12px] tracking-wider uppercase">Tower Radio</span>
       </motion.button>
@@ -172,15 +202,21 @@ export function TowerRadio({ persona }: { persona: string }) {
             transition={{ type: "spring", stiffness: 320, damping: 30 }}
             role="dialog"
             aria-label="Tower Radio"
-            className="fixed right-5 bottom-24 z-[66] flex h-[min(620px,calc(100dvh-8rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[24px] border border-line bg-ink-900 shadow-[var(--shadow-lift)]"
+            className="border-line bg-ink-900 fixed right-5 bottom-24 z-[66] flex h-[min(620px,calc(100dvh-8rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[24px] border shadow-[var(--shadow-lift)]"
           >
-            <header className="flex items-center justify-between bg-night px-5 py-4 text-white">
+            <header className="bg-night flex items-center justify-between px-5 py-4 text-white">
               <div>
-                <p className="font-mono text-[11px] tracking-[0.14em] text-taxi uppercase">Tower Radio · 118.40</p>
+                <p className="text-taxi font-mono text-[11px] tracking-[0.14em] uppercase">
+                  Tower Radio · 118.40
+                </p>
                 <p className="display mt-0.5 text-2xl">Ask the tower anything</p>
                 <p className="text-[12px] text-white/60">Answers tuned for the {persona}</p>
               </div>
-              <button onClick={() => setOpen(false)} aria-label="Close" className="rounded-full p-1.5 text-white/70 hover:bg-white/10">
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close"
+                className="rounded-full p-1.5 text-white/70 hover:bg-white/10"
+              >
                 <X size={16} />
               </button>
             </header>
@@ -188,10 +224,16 @@ export function TowerRadio({ persona }: { persona: string }) {
             <div ref={scroller} className="flex-1 space-y-3 overflow-y-auto p-4">
               {msgs.length === 0 && (
                 <div>
-                  <p className="text-sm text-text-dim">Type or hold the mic and speak. Try one of these:</p>
+                  <p className="text-text-dim text-sm">
+                    Type or hold the mic and speak. Try one of these:
+                  </p>
                   <div className="mt-3 flex flex-col gap-2">
                     {(suggestions.data ?? []).map((s) => (
-                      <button key={s} onClick={() => send(s)} className="rounded-xl border border-line bg-ink-800 px-3 py-2 text-left text-sm transition hover:border-night">
+                      <button
+                        key={s}
+                        onClick={() => send(s)}
+                        className="border-line bg-ink-800 hover:border-night rounded-xl border px-3 py-2 text-left text-sm transition"
+                      >
                         {s}
                       </button>
                     ))}
@@ -199,40 +241,74 @@ export function TowerRadio({ persona }: { persona: string }) {
                 </div>
               )}
               {msgs.map((m) => (
-                <motion.div key={m.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={cn("flex", m.who === "me" ? "justify-end" : "justify-start")}>
-                  <div className={cn("max-w-[88%] rounded-2xl px-4 py-2.5 text-[14px] leading-relaxed", m.who === "me" ? "bg-night text-white" : "border border-line bg-ink-800")}>
+                <motion.div
+                  key={m.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={cn("flex", m.who === "me" ? "justify-end" : "justify-start")}
+                >
+                  <div
+                    className={cn(
+                      "max-w-[88%] rounded-2xl px-4 py-2.5 text-[14px] leading-relaxed",
+                      m.who === "me" ? "bg-night text-white" : "border-line bg-ink-800 border",
+                    )}
+                  >
                     {m.text}
                     {m.answer?.cards && m.answer.cards.length > 0 && (
                       <div className="mt-2.5 flex flex-col gap-1.5">
                         {m.answer.cards.slice(0, 4).map((c) => (
-                          <Link key={c.number} href={c.href} className="flex items-center gap-2 rounded-lg border border-line bg-ink-900 px-2.5 py-1.5 hover:border-night">
-                            <span className="h-6 w-1 rounded-full" style={{ background: SLA_COLOR[c.sla_state] ?? "var(--color-line)" }} />
+                          <Link
+                            key={c.number}
+                            href={c.href}
+                            className="border-line bg-ink-900 hover:border-night flex items-center gap-2 rounded-lg border px-2.5 py-1.5"
+                          >
+                            <span
+                              className="h-6 w-1 rounded-full"
+                              style={{ background: SLA_COLOR[c.sla_state] ?? "var(--color-line)" }}
+                            />
                             <span className="min-w-0">
-                              <span className="block font-mono text-[12px] font-semibold">{c.number}</span>
-                              <span className="block truncate text-[12px] text-text-dim">{c.title}</span>
+                              <span className="block font-mono text-[12px] font-semibold">
+                                {c.number}
+                              </span>
+                              <span className="text-text-dim block truncate text-[12px]">
+                                {c.title}
+                              </span>
                             </span>
                           </Link>
                         ))}
                       </div>
                     )}
-                    {m.answer && <p className="mt-2 font-mono text-[10px] text-text-dim">understood: {m.answer.understood}</p>}
+                    {m.answer && (
+                      <p className="text-text-dim mt-2 font-mono text-[10px]">
+                        understood: {m.answer.understood}
+                      </p>
+                    )}
                   </div>
                 </motion.div>
               ))}
               {ask.isPending && (
-                <div className="flex items-center gap-2 text-sm text-text-dim">
+                <div className="text-text-dim flex items-center gap-2 text-sm">
                   <Loader2 size={14} className="animate-spin" /> Tower is checking…
                 </div>
               )}
             </div>
 
-            <div className="border-t border-line p-3">
+            <div className="border-line border-t p-3">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <button onClick={() => setSpeakOn((s) => !s)} className="flex items-center gap-1.5 font-mono text-[10px] tracking-wider text-text-dim uppercase hover:text-text">
-                  {speakOn ? <Volume2 size={12} /> : <VolumeX size={12} />} Voice replies {speakOn ? "on" : "off"}
+                <button
+                  onClick={() => setSpeakOn((s) => !s)}
+                  className="text-text-dim hover:text-text flex items-center gap-1.5 font-mono text-[10px] tracking-wider uppercase"
+                >
+                  {speakOn ? <Volume2 size={12} /> : <VolumeX size={12} />} Voice replies{" "}
+                  {speakOn ? "on" : "off"}
                 </button>
                 {voices.length > 0 && (
-                  <select value={voiceName} onChange={(e) => setVoiceName(e.target.value)} className="max-w-[55%] truncate rounded-md border border-line bg-ink-800 px-1.5 py-0.5 font-mono text-[10px]" aria-label="Voice">
+                  <select
+                    value={voiceName}
+                    onChange={(e) => setVoiceName(e.target.value)}
+                    className="border-line bg-ink-800 max-w-[55%] truncate rounded-md border px-1.5 py-0.5 font-mono text-[10px]"
+                    aria-label="Voice"
+                  >
                     {voices
                       .filter((v) => v.lang.toLowerCase().startsWith("en"))
                       .map((v) => (
@@ -254,13 +330,30 @@ export function TowerRadio({ persona }: { persona: string }) {
                   type="button"
                   onClick={toggleMic}
                   aria-label={listening ? "Stop listening" : "Speak to the tower"}
-                  className={cn("relative grid size-10 shrink-0 place-items-center rounded-full transition", listening ? "bg-alarm text-white" : "bg-taxi text-night hover:brightness-95")}
+                  className={cn(
+                    "relative grid size-10 shrink-0 place-items-center rounded-full transition",
+                    listening ? "bg-alarm text-white" : "bg-taxi text-night hover:brightness-95",
+                  )}
                 >
-                  {listening && <span className="absolute inset-0 animate-blip rounded-full border-2 border-alarm" />}
+                  {listening && (
+                    <span className="animate-blip border-alarm absolute inset-0 rounded-full border-2" />
+                  )}
                   {listening ? <MicOff size={16} /> : <Mic size={16} />}
                 </button>
-                <input value={input} onChange={(e) => setInput(e.target.value)} placeholder={listening ? "Listening…" : "Ask about a flight, booking or your queue"} className="field !rounded-full !py-2.5" aria-label="Question" />
-                <button className="grid size-10 shrink-0 place-items-center rounded-full bg-night text-white disabled:opacity-40" disabled={!input.trim() || ask.isPending} aria-label="Send">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={
+                    listening ? "Listening…" : "Ask about a flight, booking or your queue"
+                  }
+                  className="field !rounded-full !py-2.5"
+                  aria-label="Question"
+                />
+                <button
+                  className="bg-night grid size-10 shrink-0 place-items-center rounded-full text-white disabled:opacity-40"
+                  disabled={!input.trim() || ask.isPending}
+                  aria-label="Send"
+                >
                   <Send size={15} />
                 </button>
               </form>

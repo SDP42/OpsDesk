@@ -22,7 +22,9 @@ export function CrosshairCursor() {
     const move = (e: PointerEvent) => {
       x = e.clientX;
       y = e.clientY;
-      const el = (e.target as HTMLElement | null)?.closest("a, button, [role=button], input, select, textarea, [data-magnetic]");
+      const el = (e.target as HTMLElement | null)?.closest(
+        "a, button, [role=button], input, select, textarea, [data-magnetic]",
+      );
       target = el ? 2.2 : 1;
     };
     const loop = () => {
@@ -30,7 +32,8 @@ export function CrosshairCursor() {
       ry += (y - ry) * 0.16;
       scale += (target - scale) * 0.18;
       if (dot.current) dot.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      if (ring.current) ring.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) scale(${scale})`;
+      if (ring.current)
+        ring.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) scale(${scale})`;
       raf = requestAnimationFrame(loop);
     };
     window.addEventListener("pointermove", move, { passive: true });
@@ -43,19 +46,31 @@ export function CrosshairCursor() {
   }, []);
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[100] hidden [@media(pointer:fine)]:block">
-      <div ref={ring} className="absolute -top-5 -left-5 size-10 rounded-full border border-night/40 transition-[border-color]" />
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 z-[100] hidden [@media(pointer:fine)]:block"
+    >
+      <div
+        ref={ring}
+        className="border-night/40 absolute -top-5 -left-5 size-10 rounded-full border transition-[border-color]"
+      />
       <div ref={dot} className="absolute -top-3 -left-3 size-6">
-        <span className="absolute top-1/2 left-0 h-px w-full bg-beacon" />
-        <span className="absolute top-0 left-1/2 h-full w-px bg-beacon" />
-        <span className="absolute top-1/2 left-1/2 size-1 -translate-1/2 rounded-full bg-white ring-1 ring-beacon" />
+        <span className="bg-beacon absolute top-1/2 left-0 h-px w-full" />
+        <span className="bg-beacon absolute top-0 left-1/2 h-full w-px" />
+        <span className="ring-beacon absolute top-1/2 left-1/2 size-1 -translate-1/2 rounded-full bg-white ring-1" />
       </div>
     </div>
   );
 }
 
 /** Magnetic button wrapper: the child drifts toward the pointer while hovered. */
-export function Magnetic({ children, strength = 0.25 }: { children: React.ReactNode; strength?: number }) {
+export function Magnetic({
+  children,
+  strength = 0.25,
+}: {
+  children: React.ReactNode;
+  strength?: number;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   return (
     <span

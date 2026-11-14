@@ -55,7 +55,8 @@ export class FrameStore {
     const rest = order.slice(first);
     await Promise.all(eager.map((i) => this.fetch(i)));
     void (async () => {
-      for (let k = 0; k < rest.length; k += 6) await Promise.all(rest.slice(k, k + 6).map((i) => this.fetch(i)));
+      for (let k = 0; k < rest.length; k += 6)
+        await Promise.all(rest.slice(k, k + 6).map((i) => this.fetch(i)));
     })();
   }
 

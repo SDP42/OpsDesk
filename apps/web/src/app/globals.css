@@ -132,8 +132,16 @@ body {
 }
 .night-ops-backdrop::before {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-line) 70%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-line) 70%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at 50% 0%, black 10%, transparent 75%);
   opacity: 0.55;
@@ -226,7 +234,12 @@ body {
 
   .skeleton {
     border-radius: 12px;
-    background: linear-gradient(100deg, var(--color-ink-700) 30%, #f7f4ec 50%, var(--color-ink-700) 70%);
+    background: linear-gradient(
+      100deg,
+      var(--color-ink-700) 30%,
+      #f7f4ec 50%,
+      var(--color-ink-700) 70%
+    );
     background-size: 200% 100%;
     animation: var(--animate-shimmer);
   }
@@ -357,8 +370,18 @@ body {
 /* Radar-sweep wipe for scene entrances (rotating conic-gradient mask). */
 .radar-wipe {
   --sweep: 360deg;
-  mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
-  -webkit-mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
+  mask-image: conic-gradient(
+    from -90deg at 50% 50%,
+    black 0deg,
+    black var(--sweep),
+    transparent var(--sweep)
+  );
+  -webkit-mask-image: conic-gradient(
+    from -90deg at 50% 50%,
+    black 0deg,
+    black var(--sweep),
+    transparent var(--sweep)
+  );
 }
 
 @keyframes ticker {

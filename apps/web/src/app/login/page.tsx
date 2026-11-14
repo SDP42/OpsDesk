@@ -7,17 +7,43 @@ import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Brand } from "@/components/tower/app-shell";
-import { FrequencyGlyph, HangarGlyph, RadarGlyph, StripGlyph, TowerGlyph } from "@/components/ui/glyphs";
+import {
+  FrequencyGlyph,
+  HangarGlyph,
+  RadarGlyph,
+  StripGlyph,
+  TowerGlyph,
+} from "@/components/ui/glyphs";
 import { ErrorState } from "@/components/ui/states";
 import { api, ApiError, unwrap, type DemoAccount } from "@/lib/api/client";
 import { homeFor } from "@/lib/hooks/use-me";
 
 const CARD: Record<string, { glyph: React.ReactNode; blurb: string; tone: string }> = {
-  requester: { glyph: <StripGlyph size={22} />, blurb: "Agency user. Tracks own flights on the departures board.", tone: "text-ice" },
-  agent: { glyph: <RadarGlyph size={22} />, blurb: "Works the queue with history, links and a routing reason.", tone: "text-signal" },
-  escalation_manager: { glyph: <TowerGlyph size={22} />, blurb: "Receives escalations directly. Check-in and LCD urgency.", tone: "text-alarm" },
-  lead: { glyph: <HangarGlyph size={22} />, blurb: "Queue health, SLA risk, insights and uncapped exports.", tone: "text-amber" },
-  supplier: { glyph: <FrequencyGlyph size={22} />, blurb: "External partner. Replies to TBO's side conversations about bookings.", tone: "text-beacon" },
+  requester: {
+    glyph: <StripGlyph size={22} />,
+    blurb: "Agency user. Tracks own flights on the departures board.",
+    tone: "text-ice",
+  },
+  agent: {
+    glyph: <RadarGlyph size={22} />,
+    blurb: "Works the queue with history, links and a routing reason.",
+    tone: "text-signal",
+  },
+  escalation_manager: {
+    glyph: <TowerGlyph size={22} />,
+    blurb: "Receives escalations directly. Check-in and LCD urgency.",
+    tone: "text-alarm",
+  },
+  lead: {
+    glyph: <HangarGlyph size={22} />,
+    blurb: "Queue health, SLA risk, insights and uncapped exports.",
+    tone: "text-amber",
+  },
+  supplier: {
+    glyph: <FrequencyGlyph size={22} />,
+    blurb: "External partner. Replies to TBO's side conversations about bookings.",
+    tone: "text-beacon",
+  },
 };
 
 export default function LoginPage() {
@@ -36,7 +62,10 @@ export default function LoginPage() {
       qc.setQueryData(["me"], me);
       const go = () => router.push(homeFor(me.role));
       const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
-      if (doc.startViewTransition && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (
+        doc.startViewTransition &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
         doc.startViewTransition(go);
       } else go();
     },
@@ -53,13 +82,24 @@ export default function LoginPage() {
   return (
     <div className="relative z-10 min-h-dvh overflow-hidden">
       {/* Radar-sweep entrance */}
-      <div aria-hidden className="pointer-events-none absolute top-1/2 left-1/2 size-[140vmax] -translate-x-1/2 -translate-y-1/2">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 left-1/2 size-[140vmax] -translate-x-1/2 -translate-y-1/2"
+      >
         <div
-          className="absolute inset-0 animate-sweep rounded-full opacity-40"
-          style={{ background: "conic-gradient(from 0deg, transparent 0 320deg, color-mix(in oklab, var(--color-signal) 18%, transparent) 360deg)", animationDuration: "7s" }}
+          className="animate-sweep absolute inset-0 rounded-full opacity-40"
+          style={{
+            background:
+              "conic-gradient(from 0deg, transparent 0 320deg, color-mix(in oklab, var(--color-signal) 18%, transparent) 360deg)",
+            animationDuration: "7s",
+          }}
         />
         {[18, 32, 46].map((r) => (
-          <div key={r} className="absolute rounded-full border border-line/50" style={{ inset: `${r}%` }} />
+          <div
+            key={r}
+            className="border-line/50 absolute rounded-full border"
+            style={{ inset: `${r}%` }}
+          />
         ))}
       </div>
 
@@ -70,22 +110,32 @@ export default function LoginPage() {
         </header>
 
         <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-[1fr_1.35fr] lg:items-end">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+          >
             <p className="micro text-signal">Establishing contact</p>
             <h1 className="mt-3 font-serif text-5xl leading-[0.95] sm:text-7xl">
               Choose your <em className="text-signal">callsign</em>.
             </h1>
-            <p className="mt-5 max-w-md text-text-dim">
-              Five seats in the tower, including an external supplier partner. Pick a persona to sign in with the seeded demo account, or enter credentials below.
+            <p className="text-text-dim mt-5 max-w-md">
+              Five seats in the tower, including an external supplier partner. Pick a persona to
+              sign in with the seeded demo account, or enter credentials below.
             </p>
           </motion.div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             {accounts.isLoading &&
-              Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton h-40 border border-line" />)}
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="skeleton border-line h-40 border" />
+              ))}
             {accounts.error && (
               <div className="sm:col-span-2">
-                <ErrorState message="Run `make seed` and `make dev`, then retry." onRetry={() => accounts.refetch()} />
+                <ErrorState
+                  message="Run `make seed` and `make dev`, then retry."
+                  onRetry={() => accounts.refetch()}
+                />
               </div>
             )}
             {accounts.data?.map((a, i) => {
@@ -100,22 +150,28 @@ export default function LoginPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 + i * 0.08, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-                  className="hud group flex min-h-40 flex-col p-5 text-left transition-colors hover:bg-ink-800"
+                  className="hud group hover:bg-ink-800 flex min-h-40 flex-col p-5 text-left transition-colors"
                 >
                   <span className="hud-tr" aria-hidden />
                   <span className="hud-bl" aria-hidden />
                   <div className="flex items-center justify-between">
                     <span className={clsx(card.tone)}>{card.glyph}</span>
                     {busy ? (
-                      <Loader2 size={16} className="animate-spin text-signal" />
+                      <Loader2 size={16} className="text-signal animate-spin" />
                     ) : (
-                      <ArrowRight size={16} strokeWidth={1.5} className="text-text-dim transition-transform group-hover:translate-x-1 group-hover:text-signal" />
+                      <ArrowRight
+                        size={16}
+                        strokeWidth={1.5}
+                        className="text-text-dim group-hover:text-signal transition-transform group-hover:translate-x-1"
+                      />
                     )}
                   </div>
                   <span className="mt-4 font-serif text-3xl">{a.persona}</span>
                   <span className="micro mt-1">{a.name}</span>
-                  <span className="mt-3 text-[13px] text-text-dim">{card.blurb}</span>
-                  <span className="mt-auto pt-3 font-mono text-[11px] text-text-dim/80">{a.email}</span>
+                  <span className="text-text-dim mt-3 text-[13px]">{card.blurb}</span>
+                  <span className="text-text-dim/80 mt-auto pt-3 font-mono text-[11px]">
+                    {a.email}
+                  </span>
                 </motion.button>
               );
             })}
@@ -133,17 +189,31 @@ export default function LoginPage() {
           <span className="hud-bl" aria-hidden />
           <label className="flex flex-col gap-1">
             <span className="micro">Email</span>
-            <input className="field" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input
+              className="field"
+              type="email"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </label>
           <label className="flex flex-col gap-1">
             <span className="micro">Password</span>
-            <input className="field" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input
+              className="field"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </label>
           <button className="btn btn-signal self-end" disabled={login.isPending}>
             {login.isPending ? <Loader2 size={14} className="animate-spin" /> : "Cleared to enter"}
           </button>
           {login.error && (
-            <p role="alert" className="font-mono text-xs text-alarm sm:col-span-3">
+            <p role="alert" className="text-alarm font-mono text-xs sm:col-span-3">
               {(login.error as ApiError).message}
             </p>
           )}

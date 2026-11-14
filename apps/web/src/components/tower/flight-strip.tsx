@@ -31,7 +31,7 @@ export const FlightStrip = forwardRef<
       onFocus={onFocus}
       data-testid="flight-strip"
       className={clsx(
-        "group relative flex min-h-[68px] items-stretch border bg-ink-800/80 transition-colors duration-150 outline-none",
+        "group bg-ink-800/80 relative flex min-h-[68px] items-stretch border transition-colors duration-150 outline-none",
         active ? "border-ice" : "border-line hover:border-signal/50",
         fresh && "animate-flash",
       )}
@@ -39,13 +39,20 @@ export const FlightStrip = forwardRef<
       <FuelBar fuel={t.sla.fuel} state={t.sla.state} />
       <div className="grid flex-1 grid-cols-[minmax(92px,auto)_1fr] gap-x-4 px-3 py-2 md:grid-cols-[110px_1fr_150px_120px_110px]">
         <div className="flex flex-col justify-center">
-          <span className="font-mono text-[15px] font-semibold tracking-wide text-text">{t.number}</span>
-          <span className={clsx("mt-1 w-fit border px-1.5 font-mono text-[10px]", PRIORITY_TONE[t.priority])}>
+          <span className="text-text font-mono text-[15px] font-semibold tracking-wide">
+            {t.number}
+          </span>
+          <span
+            className={clsx(
+              "mt-1 w-fit border px-1.5 font-mono text-[10px]",
+              PRIORITY_TONE[t.priority],
+            )}
+          >
             {t.priority}
           </span>
         </div>
         <div className="flex min-w-0 flex-col justify-center">
-          <span className="truncate text-[14px] text-text">{t.title}</span>
+          <span className="text-text truncate text-[14px]">{t.title}</span>
           <span className="micro mt-1 truncate">
             {t.agency.name} · {t.agency.city}
             {t.tboh ? ` · ${t.tboh}` : ""}
@@ -53,7 +60,7 @@ export const FlightStrip = forwardRef<
         </div>
         <div className="hidden flex-col justify-center md:flex">
           {t.intent ? (
-            <span className="w-fit max-w-full truncate border border-line px-2 py-0.5 font-mono text-[11px] text-ice">
+            <span className="border-line text-ice w-fit max-w-full truncate border px-2 py-0.5 font-mono text-[11px]">
               {t.intent.label}
             </span>
           ) : (
@@ -65,25 +72,29 @@ export const FlightStrip = forwardRef<
         </div>
         <div className="hidden flex-col justify-center md:flex">
           <span className="micro">check-in</span>
-          <span className="font-mono text-[13px] tabular">{tMinus(t.check_in)}</span>
+          <span className="tabular font-mono text-[13px]">{tMinus(t.check_in)}</span>
         </div>
         <div className="hidden flex-col items-end justify-center md:flex">
           <span className="micro" style={{ color: slaColor }}>
             {SLA_LABEL[t.sla.state]}
           </span>
-          <span className="font-mono text-[11px] text-text-dim">{STATUS_LABEL[t.status] ?? t.status}</span>
+          <span className="text-text-dim font-mono text-[11px]">
+            {STATUS_LABEL[t.status] ?? t.status}
+          </span>
         </div>
       </div>
       {t.link_count > 0 && (
         <span
           title={`${t.link_count} linked flights`}
-          className="absolute top-1.5 right-2 flex items-center gap-1 font-mono text-[10px] text-text-dim opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100"
+          className="text-text-dim absolute top-1.5 right-2 flex items-center gap-1 font-mono text-[10px] opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100"
         >
           <ConstellationGlyph size={12} /> {t.link_count}
         </span>
       )}
       {t.guardian_flag && (
-        <span className="absolute right-2 bottom-1.5 font-mono text-[10px] text-amber">3RD CONTACT</span>
+        <span className="text-amber absolute right-2 bottom-1.5 font-mono text-[10px]">
+          3RD CONTACT
+        </span>
       )}
     </Link>
   );

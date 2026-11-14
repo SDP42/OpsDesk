@@ -35,7 +35,12 @@ export function RadarScope({ tickets, size = 420 }: { tickets: Ticket[]; size?: 
 
   return (
     <div className="relative mx-auto aspect-square w-full" style={{ maxWidth: size }}>
-      <svg viewBox={`0 0 ${size} ${size}`} className="h-full w-full" role="img" aria-label={`Radar with ${tickets.length} open flights`}>
+      <svg
+        viewBox={`0 0 ${size} ${size}`}
+        className="h-full w-full"
+        role="img"
+        aria-label={`Radar with ${tickets.length} open flights`}
+      >
         <defs>
           <radialGradient id="scope" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#0d1c22" />
@@ -48,14 +53,28 @@ export function RadarScope({ tickets, size = 420 }: { tickets: Ticket[]; size?: 
         </defs>
         <circle cx={c} cy={c} r={R} fill="url(#scope)" stroke="var(--color-line)" />
         {[0.25, 0.5, 0.75].map((f) => (
-          <circle key={f} cx={c} cy={c} r={R * f} fill="none" stroke="var(--color-line)" strokeDasharray="2 4" />
+          <circle
+            key={f}
+            cx={c}
+            cy={c}
+            r={R * f}
+            fill="none"
+            stroke="var(--color-line)"
+            strokeDasharray="2 4"
+          />
         ))}
         {SECTORS.map((s, i) => {
-          const a = ((i * 90) * Math.PI) / 180 - Math.PI / 2;
+          const a = (i * 90 * Math.PI) / 180 - Math.PI / 2;
           const la = ((i * 90 + 45) * Math.PI) / 180 - Math.PI / 2;
           return (
             <g key={s}>
-              <line x1={c} y1={c} x2={c + Math.cos(a) * R} y2={c + Math.sin(a) * R} stroke="var(--color-line)" />
+              <line
+                x1={c}
+                y1={c}
+                x2={c + Math.cos(a) * R}
+                y2={c + Math.sin(a) * R}
+                stroke="var(--color-line)"
+              />
               <text
                 x={c + Math.cos(la) * (R + 2) * 0.93}
                 y={c + Math.sin(la) * (R + 2) * 0.93}
@@ -69,17 +88,40 @@ export function RadarScope({ tickets, size = 420 }: { tickets: Ticket[]; size?: 
             </g>
           );
         })}
-        <g className="origin-center animate-sweep motion-reduce:hidden" style={{ transformOrigin: `${c}px ${c}px`, transformBox: "view-box" }}>
-          <path d={`M ${c} ${c} L ${c} ${c - R} A ${R} ${R} 0 0 1 ${c + R * Math.sin(Math.PI / 5)} ${c - R * Math.cos(Math.PI / 5)} Z`} fill="url(#sweepGrad)" opacity="0.7" />
+        <g
+          className="animate-sweep origin-center motion-reduce:hidden"
+          style={{ transformOrigin: `${c}px ${c}px`, transformBox: "view-box" }}
+        >
+          <path
+            d={`M ${c} ${c} L ${c} ${c - R} A ${R} ${R} 0 0 1 ${c + R * Math.sin(Math.PI / 5)} ${c - R * Math.cos(Math.PI / 5)} Z`}
+            fill="url(#sweepGrad)"
+            opacity="0.7"
+          />
           <line x1={c} y1={c} x2={c} y2={c - R} stroke="var(--color-signal)" strokeWidth="1.2" />
         </g>
         {blips.map(({ t, x, y, h }) => {
           const color = SLA_COLOR[t.sla.state] ?? "var(--color-signal)";
           const hot = t.sla.state === "breached" || t.sla.state === "critical";
           return (
-            <Link key={t.id} href={`/tower/t/${t.number}`} aria-label={`${t.number} ${t.sla.state}`}>
+            <Link
+              key={t.id}
+              href={`/tower/t/${t.number}`}
+              aria-label={`${t.number} ${t.sla.state}`}
+            >
               {hot && (
-                <circle cx={x} cy={y} r={4} fill="none" stroke={color} className="animate-blip" style={{ transformOrigin: `${x}px ${y}px`, transformBox: "view-box", animationDelay: `${(h % 20) / 10}s` }} />
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={4}
+                  fill="none"
+                  stroke={color}
+                  className="animate-blip"
+                  style={{
+                    transformOrigin: `${x}px ${y}px`,
+                    transformBox: "view-box",
+                    animationDelay: `${(h % 20) / 10}s`,
+                  }}
+                />
               )}
               <circle cx={x} cy={y} r={t.priority === "P1" ? 3.6 : 2.6} fill={color}>
                 <title>{`${t.number} · ${t.agency.name} · ${t.sla.state}`}</title>

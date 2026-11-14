@@ -9,7 +9,11 @@ function Queue() {
   return tboh ? (
     <QueuePage
       eyebrow={`Flight path ${tboh}`}
-      title={<>Every flight on <em>{tboh}</em></>}
+      title={
+        <>
+          Every flight on <em>{tboh}</em>
+        </>
+      }
       query={{ view: "all", tboh }}
       emptyTitle="No flights on this booking"
       emptyBody="Nothing has been filed against this TBOH yet."
@@ -17,7 +21,11 @@ function Queue() {
   ) : (
     <QueuePage
       eyebrow="My queue"
-      title={<>Your <em>flights</em>, lowest fuel first</>}
+      title={
+        <>
+          Your <em>flights</em>, lowest fuel first
+        </>
+      }
       query={{ view: "mine", sort: "sla_asc" }}
       emptyTitle="Queue clear"
       emptyBody="No flights are assigned to you. Triage holds anything unassigned."

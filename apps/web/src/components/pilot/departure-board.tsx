@@ -22,7 +22,9 @@ export function SplitFlap({ text, className }: { text: string; className?: strin
       setShown(
         target
           .split("")
-          .map((ch, i) => (frame > i * 0.6 + 6 ? ch : CHARS[Math.floor(Math.random() * CHARS.length)]))
+          .map((ch, i) =>
+            frame > i * 0.6 + 6 ? ch : CHARS[Math.floor(Math.random() * CHARS.length)],
+          )
           .join(""),
       );
       if (frame > target.length * 0.6 + 8) clearInterval(id);
@@ -35,7 +37,7 @@ export function SplitFlap({ text, className }: { text: string; className?: strin
         <span
           key={i}
           aria-hidden
-          className="relative inline-grid min-w-[0.78em] place-items-center bg-ink-950 px-[1px] text-center leading-[1.5] after:absolute after:inset-x-0 after:top-1/2 after:h-px after:bg-ink-800"
+          className="bg-ink-950 after:bg-ink-800 relative inline-grid min-w-[0.78em] place-items-center px-[1px] text-center leading-[1.5] after:absolute after:inset-x-0 after:top-1/2 after:h-px"
         >
           {ch === " " ? " " : ch}
         </span>
@@ -83,22 +85,22 @@ export function DepartureBoard({
               onKeyDown={(e) => e.key === "Enter" && onSelect(t.id)}
               data-testid="departure-row"
               className={clsx(
-                "cursor-pointer bg-ink-800/80 outline-none transition-colors hover:bg-ink-700 focus-visible:ring-1 focus-visible:ring-ice",
-                selected === t.id && "ring-1 ring-signal",
+                "bg-ink-800/80 hover:bg-ink-700 focus-visible:ring-ice cursor-pointer transition-colors outline-none focus-visible:ring-1",
+                selected === t.id && "ring-signal ring-1",
               )}
             >
               <td className="px-3 py-2.5">
-                <SplitFlap text={t.number} className="text-[15px] text-amber" />
+                <SplitFlap text={t.number} className="text-amber text-[15px]" />
               </td>
               <td className="max-w-[320px] px-3 py-2.5">
                 <p className="truncate text-sm">{t.title}</p>
                 <p className="micro mt-0.5">{t.intent?.label ?? "Classifying"}</p>
               </td>
-              <td className="px-3 py-2.5 font-mono text-[12px] text-text-dim">{t.tboh ?? "—"}</td>
+              <td className="text-text-dim px-3 py-2.5 font-mono text-[12px]">{t.tboh ?? "—"}</td>
               <td className={clsx("px-3 py-2.5", STATUS_TONE[t.status])}>
                 <SplitFlap text={STATUS_LABEL[t.status] ?? t.status} className="text-[12px]" />
               </td>
-              <td className="px-3 py-2.5 font-mono text-[12px] tabular">
+              <td className="tabular px-3 py-2.5 font-mono text-[12px]">
                 {t.status === "resolved" || t.status === "closed" ? "LANDED" : clock(t.eta)}
               </td>
             </tr>

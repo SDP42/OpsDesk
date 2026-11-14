@@ -25,17 +25,37 @@ const signVariants = cva("sign", {
   defaultVariants: { tone: "yellow" },
 });
 
-export function Sign({ tone, className, ...rest }: React.HTMLAttributes<HTMLSpanElement> & VariantProps<typeof signVariants>) {
+export function Sign({
+  tone,
+  className,
+  ...rest
+}: React.HTMLAttributes<HTMLSpanElement> & VariantProps<typeof signVariants>) {
   return <span className={cn(signVariants({ tone }), className)} {...rest} />;
 }
 
 /* Animated numbers ------------------------------------------------------ */
-export function Num({ value, className, format }: { value: number; className?: string; format?: Format }) {
+export function Num({
+  value,
+  className,
+  format,
+}: {
+  value: number;
+  className?: string;
+  format?: Format;
+}) {
   return <NumberFlow value={value} className={cn("tabular", className)} format={format} />;
 }
 
 /* Tooltip --------------------------------------------------------------- */
-export function Tip({ label, children, side = "top" }: { label: React.ReactNode; children: React.ReactNode; side?: "top" | "bottom" | "left" | "right" }) {
+export function Tip({
+  label,
+  children,
+  side = "top",
+}: {
+  label: React.ReactNode;
+  children: React.ReactNode;
+  side?: "top" | "bottom" | "left" | "right";
+}) {
   return (
     <TooltipPrimitive.Provider delayDuration={150}>
       <TooltipPrimitive.Root>
@@ -44,7 +64,7 @@ export function Tip({ label, children, side = "top" }: { label: React.ReactNode;
           <TooltipPrimitive.Content
             side={side}
             sideOffset={6}
-            className="z-[90] max-w-xs rounded-lg bg-night px-2.5 py-1.5 font-mono text-[11px] text-white shadow-lg data-[state=delayed-open]:animate-in"
+            className="bg-night data-[state=delayed-open]:animate-in z-[90] max-w-xs rounded-lg px-2.5 py-1.5 font-mono text-[11px] text-white shadow-lg"
           >
             {label}
             <TooltipPrimitive.Arrow className="fill-night" />
@@ -56,16 +76,26 @@ export function Tip({ label, children, side = "top" }: { label: React.ReactNode;
 }
 
 /* Switch ---------------------------------------------------------------- */
-export function Toggle({ checked, onCheckedChange, label, id }: { checked: boolean; onCheckedChange: (v: boolean) => void; label: string; id: string }) {
+export function Toggle({
+  checked,
+  onCheckedChange,
+  label,
+  id,
+}: {
+  checked: boolean;
+  onCheckedChange: (v: boolean) => void;
+  label: string;
+  id: string;
+}) {
   return (
     <SwitchPrimitive.Root
       id={id}
       aria-label={label}
       checked={checked}
       onCheckedChange={onCheckedChange}
-      className="relative h-6 w-11 shrink-0 rounded-full bg-ink-700 transition-colors data-[state=checked]:bg-night"
+      className="bg-ink-700 data-[state=checked]:bg-night relative h-6 w-11 shrink-0 rounded-full transition-colors"
     >
-      <SwitchPrimitive.Thumb className="block size-5 translate-x-0.5 rounded-full bg-white shadow transition-transform data-[state=checked]:translate-x-[22px] data-[state=checked]:bg-taxi" />
+      <SwitchPrimitive.Thumb className="data-[state=checked]:bg-taxi block size-5 translate-x-0.5 rounded-full bg-white shadow transition-transform data-[state=checked]:translate-x-[22px]" />
     </SwitchPrimitive.Root>
   );
 }
@@ -91,7 +121,7 @@ export function Modal({
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-[80] bg-night/40 backdrop-blur-sm" />
+        <DialogPrimitive.Overlay className="bg-night/40 fixed inset-0 z-[80] backdrop-blur-sm" />
         <DialogPrimitive.Content
           className={cn(
             "hud fixed top-1/2 left-1/2 z-[81] max-h-[90dvh] w-[min(640px,calc(100vw-2rem))] -translate-1/2 overflow-y-auto p-7 !shadow-[var(--shadow-lift)] outline-none",
@@ -101,10 +131,17 @@ export function Modal({
           <span className="hud-tr" aria-hidden />
           <span className="hud-bl" aria-hidden />
           <DialogPrimitive.Title className="display text-4xl">{title}</DialogPrimitive.Title>
-          {description && <DialogPrimitive.Description className="mt-2 text-sm text-text-dim">{description}</DialogPrimitive.Description>}
+          {description && (
+            <DialogPrimitive.Description className="text-text-dim mt-2 text-sm">
+              {description}
+            </DialogPrimitive.Description>
+          )}
           <div className="mt-5">{children}</div>
           {!hideClose && (
-            <DialogPrimitive.Close className="absolute top-5 right-5 rounded-full p-1.5 text-text-dim hover:bg-ink-700 hover:text-text" aria-label="Close">
+            <DialogPrimitive.Close
+              className="text-text-dim hover:bg-ink-700 hover:text-text absolute top-5 right-5 rounded-full p-1.5"
+              aria-label="Close"
+            >
               <X size={16} />
             </DialogPrimitive.Close>
           )}

@@ -55,7 +55,13 @@ export function FrameScrubber({
               c.height = h;
             }
             const s = Math.max(w / img.width, h / img.height);
-            ctx.drawImage(img, (w - img.width * s) / 2, (h - img.height * s) / 2, img.width * s, img.height * s);
+            ctx.drawImage(
+              img,
+              (w - img.width * s) / 2,
+              (h - img.height * s) / 2,
+              img.width * s,
+              img.height * s,
+            );
             current = idx;
           }
         }
@@ -73,7 +79,11 @@ export function FrameScrubber({
       if (cancelled) return;
       if (caps.rich) {
         st = ScrollTrigger.create({
-          trigger: trigger?.current ?? canvas.current?.closest("section") ?? canvas.current?.parentElement ?? undefined,
+          trigger:
+            trigger?.current ??
+            canvas.current?.closest("section") ??
+            canvas.current?.parentElement ??
+            undefined,
           start: "top top",
           end: "bottom bottom",
           scrub: true,
@@ -108,7 +118,12 @@ export function FrameScrubber({
     <div className={className} aria-hidden>
       {blur && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={blur} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl" style={{ filter }} />
+        <img
+          src={blur}
+          alt=""
+          className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl"
+          style={{ filter }}
+        />
       )}
       <canvas ref={canvas} className="absolute inset-0 h-full w-full" style={{ filter }} />
     </div>

@@ -1,0 +1,75 @@
+[project]
+name = "opsdesk-api"
+version = "0.1.0"
+description = "OpsDesk Control Tower API: travel-ops ticketing for TBO, themed as an air-traffic control tower."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+  "email-validator>=2.2",
+  "sqlalchemy[asyncio]>=2.0.36",
+  "aiosqlite>=0.20",
+  "asyncpg>=0.30",
+  "alembic>=1.14",
+  "pyjwt>=2.10",
+  "argon2-cffi>=23.1",
+  "sse-starlette>=2.1",
+  "apscheduler>=3.10,<4",
+  "scikit-learn>=1.5",
+  "numpy>=2.0",
+  "joblib>=1.4",
+  "structlog>=24.4",
+  "networkx>=3.4",
+  "dateparser>=1.2",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "httpx>=0.28",
+  "ruff>=0.8",
+  "mypy>=1.13",
+  "pre-commit>=4.0",
+  "types-dateparser",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["app/db/migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "RUF"]
+ignore = ["B008", "RUF012"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+strict = false
+warn_unused_ignores = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+exclude = ["app/db/migrations/"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false

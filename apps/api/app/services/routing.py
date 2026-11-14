@@ -29,7 +29,7 @@ async def open_counts(session: AsyncSession) -> dict[str, int]:
         .where(Ticket.status.in_(OPEN_STATUSES), Ticket.owner_id.is_not(None))
         .group_by(Ticket.owner_id)
     )
-    return {owner: count for owner, count in rows.all()}
+    return {str(owner): int(count) for owner, count in rows.all()}
 
 
 async def load_controllers(

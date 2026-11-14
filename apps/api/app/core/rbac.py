@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
+from typing import Any
 
 from fastapi import Depends, Request
 from sqlalchemy import Select
@@ -86,7 +87,7 @@ require_any = require_roles(*ALL_ROLES)
 # --- Row-level policies ------------------------------------------------------
 
 
-def scope_tickets(stmt: Select[tuple[Ticket]], principal: Principal) -> Select[tuple[Ticket]]:
+def scope_tickets(stmt: Select[Any], principal: Principal) -> Select[Any]:
     """Requesters only ever see their own agency's tickets."""
     if principal.is_requester:
         return stmt.where(Ticket.agency_id == (principal.agency_id or "__none__"))

@@ -20,7 +20,7 @@ from zoneinfo import ZoneInfo
 
 from alembic import command
 from alembic.config import Config
-from sqlalchemy import insert
+from sqlalchemy import insert, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import API_ROOT, REGION_TIMEZONES, SLA_BASE_MINUTES, get_settings
@@ -135,8 +135,8 @@ class World:
                     created_at=self.now,
                 )
             )
-        for _name, region, kind in fx.QUEUES:
-            self.queue_ids[region or kind] = new_id()
+        for _name, q_region, q_kind in fx.QUEUES:
+            self.queue_ids[q_region or q_kind] = new_id()
         for code, _, _ in fx.THEMES:
             self.theme_ids[code] = new_id()
         for parent in PARENTS:
@@ -888,7 +888,7 @@ async def write_world(world: World, session: AsyncSession, light: bool) -> None:
             )
         )
         await session.execute(
-            m.Agency.__table__.update()
+            update(m.Agency)
             .where(m.Agency.id == agency["id"])
             .values(turbulence_score=result.score)
         )

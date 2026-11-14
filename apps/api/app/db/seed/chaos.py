@@ -43,7 +43,7 @@ async def run(api: str, count: int) -> None:
             body = {
                 "title": rng.choice(LINES).format(hotel=HOTEL)[:200],
                 "description": f"Chaos #{i + 1}: {rng.choice(LINES).format(hotel=HOTEL)}. "
-                               "Supplier not answering the phone.",
+                "Supplier not answering the phone.",
                 "priority": rng.choice(["P1", "P2", "P2", "P3"]),
             }
             r = await clients[email].post("/api/tickets", json=body)

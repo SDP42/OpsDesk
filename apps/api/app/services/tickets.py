@@ -282,6 +282,7 @@ async def create_ticket(
 
     text = f"{data.title}. {data.description}"
     suggestion = intent_service.suggest(text)
+    confidence: float | None
     if data.intent_code:
         intent = await intent_by_code(session, data.intent_code)
         if intent is None:

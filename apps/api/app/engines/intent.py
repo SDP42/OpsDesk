@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import TypeAlias
 
 import joblib
 import numpy as np
@@ -21,7 +22,7 @@ from sklearn.pipeline import FeatureUnion, Pipeline
 from app.core.config import INTENT_NEEDS_HUMAN_BELOW
 from app.engines.intent_taxonomy import generate_corpus, label_of
 
-IntentModel = Pipeline
+IntentModel: TypeAlias = Pipeline  # noqa: UP040 (runtime alias used as a value)
 
 
 class IntentCandidate(BaseModel):

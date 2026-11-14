@@ -5,7 +5,7 @@ import { clsx } from "clsx";
 import { useTowerCalls } from "@/lib/stores/tower-calls";
 
 const tone = {
-  signal: "border-signal/50 text-signal",
+  signal: "border-signal/50 text-taxi",
   amber: "border-amber/50 text-amber",
   alarm: "border-alarm/60 text-alarm",
   ice: "border-ice/50 text-ice",
@@ -16,7 +16,7 @@ export function TowerCalls() {
   return (
     <div
       aria-live="polite"
-      className="pointer-events-none fixed right-4 bottom-4 z-[60] flex w-[min(420px,calc(100vw-2rem))] flex-col gap-2"
+      className="pointer-events-none fixed top-20 right-4 z-[60] flex w-[min(420px,calc(100vw-2rem))] flex-col gap-2"
     >
       <AnimatePresence initial={false}>
         {calls.map((c) => (
@@ -29,12 +29,12 @@ export function TowerCalls() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             onClick={() => dismiss(c.id)}
             className={clsx(
-              "hud pointer-events-auto px-4 py-3 text-left font-mono text-[12px] tracking-wider uppercase",
+              "hud pointer-events-auto !bg-night px-4 py-3 text-left font-mono text-[12px] tracking-wider uppercase",
               tone[c.tone],
             )}
           >
             <span className="font-semibold">{c.callsign}</span>{" "}
-            <span className="text-text">{c.message}</span>
+            <span className="text-white">{c.message}</span>
           </motion.button>
         ))}
       </AnimatePresence>

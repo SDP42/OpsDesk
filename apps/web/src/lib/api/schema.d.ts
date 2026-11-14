@@ -208,6 +208,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tickets/{ticket_id}/brief": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Copilot Brief
+         * @description Co-pilot Brief: summary, next best action and a reply draft from linked history.
+         */
+        get: operations["copilot_brief_api_tickets__ticket_id__brief_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tickets/{ticket_id}/comments": {
         parameters: {
             query?: never;
@@ -479,6 +499,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/chaos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chaos
+         * @description Chaos Mode: inject a burst of overbooking flights from many agencies to show live routing.
+         */
+        post: operations["chaos_api_admin_chaos_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/bookings/{tboh}": {
         parameters: {
             query?: never;
@@ -614,6 +654,77 @@ export interface paths {
         };
         /** Suggestions */
         get: operations["suggestions_api_assistant_suggestions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/partner/channels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Channels */
+        get: operations["channels_api_partner_channels_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/partner/channels/{channel_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Channel */
+        get: operations["channel_api_partner_channels__channel_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/partner/channels/{channel_id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reply */
+        post: operations["reply_api_partner_channels__channel_id__messages_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/partner/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Stats
+         * @description Supplier reliability: median minutes from a TBO message to this supplier's reply.
+         */
+        get: operations["stats_api_partner_stats_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -791,6 +902,68 @@ export interface components {
                 [key: string]: string;
             }[];
         };
+        /** Brief */
+        Brief: {
+            /** Headline */
+            headline: string;
+            /** Lines */
+            lines: components["schemas"]["BriefLine"][];
+            /** Next Action */
+            next_action: string;
+            /** Reply Draft */
+            reply_draft: string;
+        };
+        /** BriefLine */
+        BriefLine: {
+            /** Label */
+            label: string;
+            /** Text */
+            text: string;
+            /** Why */
+            why: string;
+        };
+        /** Channel */
+        Channel: {
+            /** Id */
+            id: string;
+            /** Subject */
+            subject: string;
+            /** Status */
+            status: string;
+            /** Ticket Number */
+            ticket_number: string;
+            /** Hotel */
+            hotel: string | null;
+            /** Check In */
+            check_in: string | null;
+            /** Tboh */
+            tboh: string | null;
+            /** Awaiting Reply */
+            awaiting_reply: boolean;
+            /** Last At */
+            last_at: string | null;
+            /**
+             * Messages
+             * @default []
+             */
+            messages: components["schemas"]["ChannelMessage"][];
+        };
+        /** ChannelMessage */
+        ChannelMessage: {
+            /** Id */
+            id: string;
+            /** Sender Type */
+            sender_type: string;
+            /** Sender Name */
+            sender_name: string;
+            /** Body */
+            body: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+        };
         /** CommentIn */
         CommentIn: {
             /** Body */
@@ -865,6 +1038,14 @@ export interface components {
         Envelope_BookingOut_: {
             data: components["schemas"]["BookingOut"];
         };
+        /** Envelope[Brief] */
+        Envelope_Brief_: {
+            data: components["schemas"]["Brief"];
+        };
+        /** Envelope[Channel] */
+        Envelope_Channel_: {
+            data: components["schemas"]["Channel"];
+        };
         /** Envelope[CommentOut] */
         Envelope_CommentOut_: {
             data: components["schemas"]["CommentOut"];
@@ -892,6 +1073,10 @@ export interface components {
         /** Envelope[OverviewOut] */
         Envelope_OverviewOut_: {
             data: components["schemas"]["OverviewOut"];
+        };
+        /** Envelope[PartnerStats] */
+        Envelope_PartnerStats_: {
+            data: components["schemas"]["PartnerStats"];
         };
         /** Envelope[PilotTicketDetailOut] */
         Envelope_PilotTicketDetailOut_: {
@@ -921,10 +1106,22 @@ export interface components {
         Envelope_TrendOut_: {
             data: components["schemas"]["TrendOut"];
         };
+        /** Envelope[dict[str, int]] */
+        Envelope_dict_str__int__: {
+            /** Data */
+            data: {
+                [key: string]: number;
+            };
+        };
         /** Envelope[list[AgencyBrief]] */
         Envelope_list_AgencyBrief__: {
             /** Data */
             data: components["schemas"]["AgencyBrief"][];
+        };
+        /** Envelope[list[Channel]] */
+        Envelope_list_Channel__: {
+            /** Data */
+            data: components["schemas"]["Channel"][];
         };
         /** Envelope[list[CommentOut]] */
         Envelope_list_CommentOut__: {
@@ -1237,6 +1434,19 @@ export interface components {
             data: components["schemas"]["TicketOut"][];
             meta: components["schemas"]["PageMeta"];
         };
+        /** PartnerStats */
+        PartnerStats: {
+            /** Supplier */
+            supplier: string;
+            /** Open Channels */
+            open_channels: number;
+            /** Awaiting Reply */
+            awaiting_reply: number;
+            /** Median Response Minutes */
+            median_response_minutes: number | null;
+            /** Reason */
+            reason: string;
+        };
         /** PilotTicketDetailOut */
         PilotTicketDetailOut: {
             ticket: components["schemas"]["PilotTicketOut"];
@@ -1369,6 +1579,11 @@ export interface components {
             added_at: string;
             /** Removed At */
             removed_at: string | null;
+        };
+        /** ReplyIn */
+        ReplyIn: {
+            /** Body */
+            body: string;
         };
         /** RouteIn */
         RouteIn: {
@@ -2087,6 +2302,37 @@ export interface operations {
             };
         };
     };
+    copilot_brief_api_tickets__ticket_id__brief_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Brief_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_comments_api_tickets__ticket_id__comments_get: {
         parameters: {
             query?: never;
@@ -2628,6 +2874,37 @@ export interface operations {
             };
         };
     };
+    chaos_api_admin_chaos_post: {
+        parameters: {
+            query?: {
+                count?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_dict_str__int__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     booking_api_bookings__tboh__get: {
         parameters: {
             query?: never;
@@ -2852,6 +3129,112 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_list_str__"];
+                };
+            };
+        };
+    };
+    channels_api_partner_channels_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_Channel__"];
+                };
+            };
+        };
+    };
+    channel_api_partner_channels__channel_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channel_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Channel_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reply_api_partner_channels__channel_id__messages_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channel_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReplyIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Channel_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    stats_api_partner_stats_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PartnerStats_"];
                 };
             };
         };

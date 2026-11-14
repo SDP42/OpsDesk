@@ -58,6 +58,21 @@ def run(*args: str) -> None:
     subprocess.run([ffmpeg(), "-hide_banner", "-loglevel", "error", "-y", *args], check=True)
 
 
+def has_libwebp() -> bool:
+    out = subprocess.run([ffmpeg(), "-hide_banner", "-encoders"], capture_output=True, text=True)
+    return "libwebp" in out.stdout
+
+
+def png_to_webp(src_dir: Path, dest_dir: Path, quality: int) -> None:
+    """Convert extracted PNG frames to WebP with Pillow (fallback when ffmpeg lacks libwebp)."""
+    from PIL import Image
+
+    for png in sorted(src_dir.glob("*.png")):
+        with Image.open(png) as im:
+            im.convert("RGB").save(dest_dir / (png.stem + ".webp"), "WEBP", quality=quality, method=6)
+        png.unlink()
+
+
 def probe_duration(path: Path) -> float:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
@@ -89,8 +104,13 @@ def build_hero(src: Path) -> None:
         str(VIDEO / "hero.mp4"))
     run("-i", str(src), "-t", "12", "-an", "-vf", "scale=1920:-2,fps=30", "-c:v", "libvpx-vp9",
         "-crf", "36", "-b:v", "0", "-row-mt", "1", str(VIDEO / "hero.webm"))
-    run("-ss", "1", "-i", str(src), "-frames:v", "1", "-vf", "scale=1280:-2", "-c:v", "libwebp",
-        "-quality", "62", str(VIDEO / "hero-poster.webp"))
+    if has_libwebp():
+        run("-ss", "1", "-i", str(src), "-frames:v", "1", "-vf", "scale=1280:-2", "-c:v", "libwebp",
+            "-quality", "62", str(VIDEO / "hero-poster.webp"))
+    else:
+        run("-ss", "1", "-i", str(src), "-frames:v", "1", "-vf", "scale=1280:-2",
+            str(VIDEO / "hero-poster.png"))
+        png_to_webp(VIDEO, VIDEO, 62)
     log(f"hero: mp4 {(VIDEO / 'hero.mp4').stat().st_size / 1e6:.1f} MB, poster "
         f"{(VIDEO / 'hero-poster.webp').stat().st_size / 1e3:.0f} KB")
 
@@ -102,8 +122,13 @@ def build_sequence(name: str, src: Path) -> dict[str, object]:
     out.mkdir(parents=True)
     duration = min(probe_duration(src), 14.0)
     fps = max(4.0, min(12.0, MAX_FRAMES / duration))
-    run("-t", f"{duration:.2f}", "-i", str(src), "-vf", f"fps={fps:.3f},scale=1280:-2",
-        "-c:v", "libwebp", "-quality", "60", str(out / "f_%04d.webp"))
+    if has_libwebp():
+        run("-t", f"{duration:.2f}", "-i", str(src), "-vf", f"fps={fps:.3f},scale=1280:-2",
+            "-c:v", "libwebp", "-quality", "60", str(out / "f_%04d.webp"))
+    else:
+        run("-t", f"{duration:.2f}", "-i", str(src), "-vf", f"fps={fps:.3f},scale=1280:-2",
+            str(out / "f_%04d.png"))
+        png_to_webp(out, out, 58)
     files = sorted(out.glob("f_*.webp"))
     from PIL import Image
 
@@ -130,7 +155,7 @@ def palette(paths: list[Path]) -> dict[str, object]:
     for p in paths:
         with Image.open(p) as im:
             small = im.convert("RGB").resize((64, 36))
-            pixels.extend(small.getdata())  # type: ignore[arg-type]
+            pixels.extend(small.get_flattened_data())  # type: ignore[attr-defined]
     img = Image.new("RGB", (len(pixels), 1))
     img.putdata(pixels)
     quant = img.quantize(colors=6, method=Image.Quantize.MEDIANCUT)

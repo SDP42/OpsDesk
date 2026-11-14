@@ -6,16 +6,15 @@
  * dotted globe with flight arcs (4), fuel-gauge torus (5), theme point cloud (7).
  */
 import { PerformanceMonitor } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { useLanding } from "@/lib/landing/motion";
-import { RadarDisc } from "./radar-disc";
 
-const SIGNAL = new THREE.Color("#6BFFC9");
-const AMBER = new THREE.Color("#FFB020");
-const ALARM = new THREE.Color("#FF4D5E");
-const ICE = new THREE.Color("#7CC4FF");
+const SIGNAL = new THREE.Color("#0C9F6A");
+const AMBER = new THREE.Color("#FF5A1F");
+const ALARM = new THREE.Color("#DF1C47");
+const ICE = new THREE.Color("#2D5BFF");
 
 const damp = THREE.MathUtils.damp;
 
@@ -41,31 +40,6 @@ function setGroupOpacity(group: THREE.Object3D | null, o: number) {
     });
     obj.visible = o > 0.01;
   });
-}
-
-function Radar() {
-  const group = useRef<THREE.Group>(null);
-  const opacity = useSceneOpacity([1, 2]);
-  const { viewport } = useThree();
-  useFrame((_, dt) => {
-    const g = group.current;
-    if (!g) return;
-    const { scene, sceneProgress } = useLanding.getState();
-    const hero = scene === 1;
-    const tx = hero ? viewport.width * 0.3 : -viewport.width * 0.18;
-    const ty = hero ? -viewport.height * 0.18 : 0;
-    const s = hero ? Math.min(viewport.width, viewport.height) * 0.3 : Math.min(viewport.width, viewport.height) * 0.42;
-    g.position.x = damp(g.position.x, tx, 3, dt);
-    g.position.y = damp(g.position.y, ty, 3, dt);
-    g.scale.setScalar(damp(g.scale.x, s, 3, dt));
-    g.rotation.x = damp(g.rotation.x, hero ? -0.55 : -0.25 - sceneProgress * 0.4, 3, dt);
-    g.visible = opacity.current > 0.01;
-  });
-  return (
-    <group ref={group} rotation={[-0.55, 0, 0]}>
-      <RadarDisc opacityRef={opacity} />
-    </group>
-  );
 }
 
 function Constellation() {
@@ -101,7 +75,7 @@ function Constellation() {
     setGroupOpacity(g, opacity.current);
   });
   return (
-    <group ref={group} position={[1.2, 0, 0]}>
+    <group ref={group} position={[0, 0, 0]}>
       <lineSegments geometry={lines}>
         <lineBasicMaterial color={ICE} transparent opacity={0.5} />
       </lineSegments>
@@ -176,9 +150,9 @@ function Globe() {
     setGroupOpacity(g, opacity.current);
   });
   return (
-    <group ref={group} position={[1.3, -0.1, 0]}>
+    <group ref={group} position={[0, -0.05, 0]}>
       <points geometry={dots}>
-        <pointsMaterial size={0.018} color={SIGNAL} transparent opacity={0.55} sizeAttenuation />
+        <pointsMaterial size={0.02} color="#0d1117" transparent opacity={0.5} sizeAttenuation />
       </points>
       {arcs.map((curve, i) => (
         <group key={i}>
@@ -202,44 +176,6 @@ function Globe() {
           <meshBasicMaterial color={ALARM} transparent />
         </mesh>
       ))}
-    </group>
-  );
-}
-
-function FuelTorus() {
-  const group = useRef<THREE.Group>(null);
-  const fuel = useRef<THREE.Mesh>(null);
-  const opacity = useSceneOpacity([5]);
-  const lastLeft = useRef(1);
-  const color = useMemo(() => new THREE.Color(), []);
-  useFrame((state, dt) => {
-    const g = group.current;
-    if (!g || !fuel.current) return;
-    const { sceneProgress } = useLanding.getState();
-    const left = Math.max(0.02, 1 - sceneProgress);
-    if (Math.abs(left - lastLeft.current) > 0.004) {
-      lastLeft.current = left;
-      fuel.current.geometry.dispose();
-      fuel.current.geometry = new THREE.TorusGeometry(1.25, 0.09, 16, 120, Math.PI * 1.5 * left);
-    }
-    color.copy(left > 0.4 ? SIGNAL : left > 0.15 ? AMBER : ALARM);
-    (fuel.current.material as THREE.MeshBasicMaterial).color.copy(color);
-    g.rotation.x = -0.4 + Math.sin(state.clock.elapsedTime * 0.4) * 0.05;
-    g.rotation.y = 0.3;
-    setGroupOpacity(g, opacity.current * (left < 0.15 ? 0.6 + 0.4 * Math.abs(Math.sin(state.clock.elapsedTime * 6)) : 1));
-  });
-  return (
-    <group ref={group} position={[1.4, 0, 0]}>
-      <group rotation={[0, 0, Math.PI * 1.25]}>
-        <mesh>
-          <torusGeometry args={[1.25, 0.06, 16, 120, Math.PI * 1.5]} />
-          <meshBasicMaterial color="#16233A" transparent />
-        </mesh>
-        <mesh ref={fuel}>
-          <torusGeometry args={[1.25, 0.09, 16, 120, Math.PI * 1.5]} />
-          <meshBasicMaterial color={SIGNAL} transparent toneMapped={false} />
-        </mesh>
-      </group>
     </group>
   );
 }
@@ -280,7 +216,7 @@ function ThemeCloud() {
     setGroupOpacity(g, opacity.current);
   });
   return (
-    <group ref={group} position={[1.2, 0, 0]}>
+    <group ref={group} position={[0, 0, 0]}>
       {clusters.map((c, i) => (
         <points key={i} geometry={c.geo}>
           <pointsMaterial size={0.035} color={c.color} transparent sizeAttenuation />
@@ -292,14 +228,13 @@ function ThemeCloud() {
 
 export default function SceneCanvas() {
   const [dpr, setDpr] = useState(1.5);
+  // Confined to the right visual column so 3D never sits on top of copy.
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
-      <Canvas dpr={[1, Math.min(dpr, 1.75)]} camera={{ position: [0, 0, 5], fov: 45 }} gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}>
+    <div aria-hidden className="pointer-events-none fixed inset-y-0 right-0 z-0 hidden w-1/2 lg:block">
+      <Canvas dpr={[1, Math.min(dpr, 1.75)]} camera={{ position: [0, 0, 5.2], fov: 45 }} gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}>
         <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(1.75)} />
-        <Radar />
         <Constellation />
         <Globe />
-        <FuelTorus />
         <ThemeCloud />
       </Canvas>
     </div>

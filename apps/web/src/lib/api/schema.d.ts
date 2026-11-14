@@ -588,6 +588,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/assistant/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask */
+        post: operations["ask_api_assistant_ask_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/assistant/suggestions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Suggestions */
+        get: operations["suggestions_api_assistant_suggestions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me": {
         parameters: {
             query?: never;
@@ -665,6 +699,21 @@ export interface components {
             /** Turbulence Score */
             turbulence_score: number;
         };
+        /** AnswerCard */
+        AnswerCard: {
+            /** Number */
+            number: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /** Sla State */
+            sla_state: string;
+            /** Detail */
+            detail: string;
+            /** Href */
+            href: string;
+        };
         /** ArchiveRunIn */
         ArchiveRunIn: {
             /** Older Than Days */
@@ -682,10 +731,39 @@ export interface components {
             /** Policy */
             policy: string;
         };
+        /** AskIn */
+        AskIn: {
+            /** Question */
+            question: string;
+            /**
+             * Channel
+             * @default text
+             */
+            channel: string;
+        };
         /** AssignIn */
         AssignIn: {
             /** User Id */
             user_id?: string | null;
+        };
+        /** AssistantAnswer */
+        AssistantAnswer: {
+            /** Answer */
+            answer: string;
+            /** Speak */
+            speak: string;
+            /**
+             * Cards
+             * @default []
+             */
+            cards: components["schemas"]["AnswerCard"][];
+            /**
+             * Suggestions
+             * @default []
+             */
+            suggestions: string[];
+            /** Understood */
+            understood: string;
         };
         /** BookingOut */
         BookingOut: {
@@ -778,6 +856,10 @@ export interface components {
         /** Envelope[ArchiveRunOut] */
         Envelope_ArchiveRunOut_: {
             data: components["schemas"]["ArchiveRunOut"];
+        };
+        /** Envelope[AssistantAnswer] */
+        Envelope_AssistantAnswer_: {
+            data: components["schemas"]["AssistantAnswer"];
         };
         /** Envelope[BookingOut] */
         Envelope_BookingOut_: {
@@ -873,6 +955,11 @@ export interface components {
         Envelope_list_LinkOut__: {
             /** Data */
             data: components["schemas"]["LinkOut"][];
+        };
+        /** Envelope[list[str]] */
+        Envelope_list_str__: {
+            /** Data */
+            data: string[];
         };
         /** EscalateIn */
         EscalateIn: {
@@ -2712,6 +2799,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_api_assistant_ask_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AskIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AssistantAnswer_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    suggestions_api_assistant_suggestions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_str__"];
                 };
             };
         };

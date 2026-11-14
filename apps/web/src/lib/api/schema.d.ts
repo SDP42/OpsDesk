@@ -568,6 +568,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/stats/trend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Trend
+         * @description Daily created/resolved/breached counts, intent mix and the most turbulent agencies.
+         */
+        get: operations["trend_api_stats_trend_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/me": {
         parameters: {
             query?: never;
@@ -815,6 +835,10 @@ export interface components {
         Envelope_TicketOut_: {
             data: components["schemas"]["TicketOut"];
         };
+        /** Envelope[TrendOut] */
+        Envelope_TrendOut_: {
+            data: components["schemas"]["TrendOut"];
+        };
         /** Envelope[list[AgencyBrief]] */
         Envelope_list_AgencyBrief__: {
             /** Data */
@@ -993,6 +1017,13 @@ export interface components {
              * @default []
              */
             children: components["schemas"]["IntentNode"][];
+        };
+        /** IntentShare */
+        IntentShare: {
+            /** Parent */
+            parent: string;
+            /** Count */
+            count: number;
         };
         /** LinkOut */
         LinkOut: {
@@ -1489,6 +1520,28 @@ export interface components {
              * Format: date-time
              */
             at: string;
+        };
+        /** TrendOut */
+        TrendOut: {
+            /** Days */
+            days: components["schemas"]["TrendPoint"][];
+            /** Intents */
+            intents: components["schemas"]["IntentShare"][];
+            /** Agencies At Risk */
+            agencies_at_risk: {
+                [key: string]: unknown;
+            }[];
+        };
+        /** TrendPoint */
+        TrendPoint: {
+            /** Day */
+            day: string;
+            /** Created */
+            created: number;
+            /** Resolved */
+            resolved: number;
+            /** Breached */
+            breached: number;
         };
         /** UserBrief */
         UserBrief: {
@@ -2619,6 +2672,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_PresetIn_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    trend_api_stats_trend_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TrendOut_"];
                 };
             };
             /** @description Validation Error */

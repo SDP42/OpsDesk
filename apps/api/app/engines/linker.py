@@ -83,7 +83,9 @@ def _semantic_scores(new: LinkTicket, pool: list[LinkTicket]) -> dict[str, float
     if not any(d.strip() for d in docs):
         return {}
     try:
-        matrix = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), sublinear_tf=True).fit_transform(docs)
+        matrix = TfidfVectorizer(
+            stop_words="english", ngram_range=(1, 2), sublinear_tf=True
+        ).fit_transform(docs)
     except ValueError:  # empty vocabulary
         return {}
     sims = cosine_similarity(matrix[0:1], matrix[1:]).ravel()
@@ -101,33 +103,63 @@ def find_links(new: LinkTicket, history: list[LinkTicket], now: datetime) -> Lin
 
     for t in candidates:
         if new.tboh and t.tboh == new.tboh:
-            offer(LinkProposal(ticket_id=t.id, number=t.number, link_type="tboh", strength=1.0,
-                               reason=f"Same booking {new.tboh}"))
-        elif (new.intent_code and t.agency_id == new.agency_id and t.intent_code == new.intent_code
-              and now - t.created_at <= timedelta(days=LINK_AGENCY_INTENT_DAYS)):
+            offer(
+                LinkProposal(
+                    ticket_id=t.id,
+                    number=t.number,
+                    link_type="tboh",
+                    strength=1.0,
+                    reason=f"Same booking {new.tboh}",
+                )
+            )
+        elif (
+            new.intent_code
+            and t.agency_id == new.agency_id
+            and t.intent_code == new.intent_code
+            and now - t.created_at <= timedelta(days=LINK_AGENCY_INTENT_DAYS)
+        ):
             days = (now - t.created_at).days
-            offer(LinkProposal(ticket_id=t.id, number=t.number, link_type="agency_intent",
-                               strength=0.8,
-                               reason=f"Same agency and intent {new.intent_code} ({days}d ago)"))
+            offer(
+                LinkProposal(
+                    ticket_id=t.id,
+                    number=t.number,
+                    link_type="agency_intent",
+                    strength=0.8,
+                    reason=f"Same agency and intent {new.intent_code} ({days}d ago)",
+                )
+            )
 
     same_agency = [t for t in candidates if t.agency_id == new.agency_id]
     for tid, sim in _semantic_scores(new, same_agency).items():
         if sim >= LINK_SEMANTIC_THRESHOLD:
-            strength = round(0.5 + 0.2 * (sim - LINK_SEMANTIC_THRESHOLD) / (1 - LINK_SEMANTIC_THRESHOLD), 2)
+            strength = round(
+                0.5 + 0.2 * (sim - LINK_SEMANTIC_THRESHOLD) / (1 - LINK_SEMANTIC_THRESHOLD), 2
+            )
             num = next(t.number for t in same_agency if t.id == tid)
-            offer(LinkProposal(ticket_id=tid, number=num, link_type="semantic",
-                               strength=min(strength, 0.7),
-                               reason=f"Similar wording (cosine {sim:.2f})"))
+            offer(
+                LinkProposal(
+                    ticket_id=tid,
+                    number=num,
+                    link_type="semantic",
+                    strength=min(strength, 0.7),
+                    reason=f"Similar wording (cosine {sim:.2f})",
+                )
+            )
 
     links = sorted(best.values(), key=lambda p: (-p.strength, p.number))
     return LinkerResult(links=links, guardian=third_contact_guardian(new, candidates, now))
 
 
-def third_contact_guardian(new: LinkTicket, history: list[LinkTicket], now: datetime) -> GuardianResult:
+def third_contact_guardian(
+    new: LinkTicket, history: list[LinkTicket], now: datetime
+) -> GuardianResult:
     window = now - timedelta(days=GUARDIAN_WINDOW_DAYS)
     matched = [
-        t for t in history
-        if t.created_at >= window and t.agency_id == new.agency_id and (
+        t
+        for t in history
+        if t.created_at >= window
+        and t.agency_id == new.agency_id
+        and (
             (new.tboh is not None and t.tboh == new.tboh)
             or (new.intent_code is not None and t.intent_code == new.intent_code)
         )
@@ -136,10 +168,15 @@ def third_contact_guardian(new: LinkTicket, history: list[LinkTicket], now: date
     triggered = count >= GUARDIAN_CONTACT_THRESHOLD
     on = f"booking {new.tboh}" if new.tboh else f"intent {new.intent_code}"
     ordinal = {1: "1st", 2: "2nd", 3: "3rd"}.get(count, f"{count}th")
-    reason = (f"{ordinal} contact in {GUARDIAN_WINDOW_DAYS} days on {on}"
-              + ("; priority raised and Tower Chief notified" if triggered else ""))
-    return GuardianResult(triggered=triggered, contact_count=count,
-                          matched_ticket_ids=[t.id for t in matched], reason=reason)
+    reason = f"{ordinal} contact in {GUARDIAN_WINDOW_DAYS} days on {on}" + (
+        "; priority raised and Tower Chief notified" if triggered else ""
+    )
+    return GuardianResult(
+        triggered=triggered,
+        contact_count=count,
+        matched_ticket_ids=[t.id for t in matched],
+        reason=reason,
+    )
 
 
 class TurbulenceInput(BaseModel):
@@ -164,8 +201,18 @@ def agency_turbulence(data: TurbulenceInput) -> TurbulenceResult:
     backlog = 2.0 * min(data.open_tickets, 10)
     decay = math.exp(-max(data.days_since_last_contact, 0.0) / 14.0)
     score = round(min(100.0, (repeats + age + esc + backlog) * decay), 1)
-    band = "severe" if score >= 70 else "moderate" if score >= 40 else "light" if score >= 15 else "calm"
-    reason = (f"{data.repeat_contacts_14d} repeat contacts (+{repeats:g}), "
-              f"unresolved age (+{age:.0f}), {data.escalations_30d} escalations (+{esc:g}), "
-              f"backlog (+{backlog:g}), decay x{decay:.2f}")
+    band = (
+        "severe"
+        if score >= 70
+        else "moderate"
+        if score >= 40
+        else "light"
+        if score >= 15
+        else "calm"
+    )
+    reason = (
+        f"{data.repeat_contacts_14d} repeat contacts (+{repeats:g}), "
+        f"unresolved age (+{age:.0f}), {data.escalations_30d} escalations (+{esc:g}), "
+        f"backlog (+{backlog:g}), decay x{decay:.2f}"
+    )
     return TurbulenceResult(score=score, band=band, reason=reason)

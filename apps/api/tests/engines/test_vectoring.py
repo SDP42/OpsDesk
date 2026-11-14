@@ -9,8 +9,16 @@ NOW = datetime(2026, 11, 14, 10, 0, tzinfo=UTC)
 
 
 def ctl(id_: str, region: str, **kw) -> Controller:
-    base = dict(name=id_.title(), shift_start="08:00", shift_end="20:00", rank=2,
-                capacity=20, open_tickets=5, skills=["refund"], availability="online")
+    base = dict(
+        name=id_.title(),
+        shift_start="08:00",
+        shift_end="20:00",
+        rank=2,
+        capacity=20,
+        open_tickets=5,
+        skills=["refund"],
+        availability="online",
+    )
     base.update(kw)
     return Controller(id=id_, region=region, **base)
 

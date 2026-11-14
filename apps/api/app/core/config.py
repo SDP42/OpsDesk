@@ -94,10 +94,38 @@ def get_settings() -> Settings:
 # ---------------------------------------------------------------------------
 
 ROUTING_PRESETS: dict[str, dict[str, float]] = {
-    "balanced": {"region": 1.0, "priority": 1.0, "time": 1.0, "avail": 1.0, "skill": 1.0, "load": 1.0},
-    "urgency_first": {"region": 1.0, "priority": 2.0, "time": 2.0, "avail": 1.0, "skill": 1.0, "load": 1.0},
-    "regional_affinity": {"region": 2.0, "priority": 1.0, "time": 1.0, "avail": 1.0, "skill": 1.0, "load": 1.0},
-    "fairness": {"region": 1.0, "priority": 1.0, "time": 1.0, "avail": 1.0, "skill": 1.0, "load": 2.0},
+    "balanced": {
+        "region": 1.0,
+        "priority": 1.0,
+        "time": 1.0,
+        "avail": 1.0,
+        "skill": 1.0,
+        "load": 1.0,
+    },
+    "urgency_first": {
+        "region": 1.0,
+        "priority": 2.0,
+        "time": 2.0,
+        "avail": 1.0,
+        "skill": 1.0,
+        "load": 1.0,
+    },
+    "regional_affinity": {
+        "region": 2.0,
+        "priority": 1.0,
+        "time": 1.0,
+        "avail": 1.0,
+        "skill": 1.0,
+        "load": 1.0,
+    },
+    "fairness": {
+        "region": 1.0,
+        "priority": 1.0,
+        "time": 1.0,
+        "avail": 1.0,
+        "skill": 1.0,
+        "load": 2.0,
+    },
 }
 
 # Regions that count as "adjacent" for partial region credit.

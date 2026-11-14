@@ -30,16 +30,26 @@ def test_agency_intent_link_within_30_days_only() -> None:
     recent = t("a", 10, intent_code="voucher.not_received")
     stale = t("b", 45, intent_code="voucher.not_received")
     other_agency = t("c", 2, intent_code="voucher.not_received", agency_id="ag2")
-    ids = {link.ticket_id: link for link in find_links(new, [recent, stale, other_agency], NOW).links}
+    ids = {
+        link.ticket_id: link for link in find_links(new, [recent, stale, other_agency], NOW).links
+    }
     assert ids["a"].link_type == "agency_intent" and ids["a"].strength == 0.8
     assert "b" not in ids and "c" not in ids
 
 
 def test_semantic_link_same_agency() -> None:
-    new = t("new", 0, title="Hotel overbooked guest walked to another property",
-            description="The hotel says it is overbooked and walked our guest")
-    similar = t("a", 40, title="Guest walked, hotel overbooked",
-                description="hotel overbooked so guest was walked to another property")
+    new = t(
+        "new",
+        0,
+        title="Hotel overbooked guest walked to another property",
+        description="The hotel says it is overbooked and walked our guest",
+    )
+    similar = t(
+        "a",
+        40,
+        title="Guest walked, hotel overbooked",
+        description="hotel overbooked so guest was walked to another property",
+    )
     unrelated = t("b", 40, title="Visa documents missing", description="passport scan needed")
     links = find_links(new, [similar, unrelated], NOW).links
     assert [lk.ticket_id for lk in links] == ["a"]
@@ -71,11 +81,20 @@ def test_guardian_ignores_contacts_outside_window() -> None:
 
 
 def test_turbulence_rises_and_decays() -> None:
-    hot = agency_turbulence(TurbulenceInput(repeat_contacts_14d=3, escalations_30d=2,
-                                            avg_unresolved_age_hours=48, open_tickets=5))
-    cooled = agency_turbulence(TurbulenceInput(repeat_contacts_14d=3, escalations_30d=2,
-                                               avg_unresolved_age_hours=48, open_tickets=5,
-                                               days_since_last_contact=28))
+    hot = agency_turbulence(
+        TurbulenceInput(
+            repeat_contacts_14d=3, escalations_30d=2, avg_unresolved_age_hours=48, open_tickets=5
+        )
+    )
+    cooled = agency_turbulence(
+        TurbulenceInput(
+            repeat_contacts_14d=3,
+            escalations_30d=2,
+            avg_unresolved_age_hours=48,
+            open_tickets=5,
+            days_since_last_contact=28,
+        )
+    )
     assert hot.score > cooled.score
     assert hot.band in {"moderate", "severe"}
     assert "repeat contacts" in hot.reason

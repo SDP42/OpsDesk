@@ -31,35 +31,141 @@ PARENTS: dict[str, str] = {
 }
 
 SUB_INTENTS: list[IntentDef] = [
-    IntentDef(code="refund.status", label="Refund > Status", keywords=["refund status", "where is refund", "refund update"]),
-    IntentDef(code="refund.delay", label="Refund > Delay", keywords=["refund delayed", "still no refund", "refund pending"]),
-    IntentDef(code="refund.amount_mismatch", label="Refund > Amount mismatch", keywords=["short refund", "wrong refund amount", "partial refund"]),
-    IntentDef(code="cancellation.request", label="Cancellation > Request", keywords=["cancel booking", "please cancel"]),
-    IntentDef(code="cancellation.charges", label="Cancellation > Charges", keywords=["cancellation charges", "cancellation fee", "penalty"]),
-    IntentDef(code="amendment.dates", label="Amendment > Dates", keywords=["change dates", "extend stay", "modify check-in"]),
-    IntentDef(code="amendment.guest_name", label="Amendment > Guest name", keywords=["name change", "guest name correction"]),
-    IntentDef(code="amendment.room_type", label="Amendment > Room type", keywords=["upgrade room", "change room type"]),
-    IntentDef(code="voucher.not_received", label="Voucher > Not received", keywords=["voucher not received", "send voucher"]),
-    IntentDef(code="voucher.confirmation_number", label="Voucher > Confirmation number", keywords=["hotel confirmation number", "HCN missing"]),
-    IntentDef(code="payment.failed", label="Payment > Failed", keywords=["payment failed", "transaction declined"]),
-    IntentDef(code="payment.credit_limit", label="Payment > Credit limit", keywords=["credit limit", "increase limit"]),
-    IntentDef(code="payment.double_charge", label="Payment > Double charge", keywords=["charged twice", "duplicate debit"]),
-    IntentDef(code="rates.mismatch", label="Rates > Mismatch", keywords=["rate mismatch", "price different", "rate discrepancy"]),
-    IntentDef(code="rates.inventory_sync", label="Rates > Inventory sync", keywords=["inventory not updated", "sold out but showing", "allotment"]),
-    IntentDef(code="supplier.confirmation_pending", label="Supplier > Confirmation pending", keywords=["not confirmed", "awaiting supplier"]),
-    IntentDef(code="supplier.overbooking", label="Supplier > Overbooking", keywords=["overbooked", "walked guest", "no room at arrival"]),
-    IntentDef(code="special_request.early_checkin", label="Special request > Early check-in", keywords=["early check-in", "late checkout"]),
-    IntentDef(code="special_request.accessibility", label="Special request > Accessibility", keywords=["wheelchair", "accessible room"]),
-    IntentDef(code="special_request.meal", label="Special request > Meal plan", keywords=["vegetarian", "meal plan", "halal"]),
+    IntentDef(
+        code="refund.status",
+        label="Refund > Status",
+        keywords=["refund status", "where is refund", "refund update"],
+    ),
+    IntentDef(
+        code="refund.delay",
+        label="Refund > Delay",
+        keywords=["refund delayed", "still no refund", "refund pending"],
+    ),
+    IntentDef(
+        code="refund.amount_mismatch",
+        label="Refund > Amount mismatch",
+        keywords=["short refund", "wrong refund amount", "partial refund"],
+    ),
+    IntentDef(
+        code="cancellation.request",
+        label="Cancellation > Request",
+        keywords=["cancel booking", "please cancel"],
+    ),
+    IntentDef(
+        code="cancellation.charges",
+        label="Cancellation > Charges",
+        keywords=["cancellation charges", "cancellation fee", "penalty"],
+    ),
+    IntentDef(
+        code="amendment.dates",
+        label="Amendment > Dates",
+        keywords=["change dates", "extend stay", "modify check-in"],
+    ),
+    IntentDef(
+        code="amendment.guest_name",
+        label="Amendment > Guest name",
+        keywords=["name change", "guest name correction"],
+    ),
+    IntentDef(
+        code="amendment.room_type",
+        label="Amendment > Room type",
+        keywords=["upgrade room", "change room type"],
+    ),
+    IntentDef(
+        code="voucher.not_received",
+        label="Voucher > Not received",
+        keywords=["voucher not received", "send voucher"],
+    ),
+    IntentDef(
+        code="voucher.confirmation_number",
+        label="Voucher > Confirmation number",
+        keywords=["hotel confirmation number", "HCN missing"],
+    ),
+    IntentDef(
+        code="payment.failed",
+        label="Payment > Failed",
+        keywords=["payment failed", "transaction declined"],
+    ),
+    IntentDef(
+        code="payment.credit_limit",
+        label="Payment > Credit limit",
+        keywords=["credit limit", "increase limit"],
+    ),
+    IntentDef(
+        code="payment.double_charge",
+        label="Payment > Double charge",
+        keywords=["charged twice", "duplicate debit"],
+    ),
+    IntentDef(
+        code="rates.mismatch",
+        label="Rates > Mismatch",
+        keywords=["rate mismatch", "price different", "rate discrepancy"],
+    ),
+    IntentDef(
+        code="rates.inventory_sync",
+        label="Rates > Inventory sync",
+        keywords=["inventory not updated", "sold out but showing", "allotment"],
+    ),
+    IntentDef(
+        code="supplier.confirmation_pending",
+        label="Supplier > Confirmation pending",
+        keywords=["not confirmed", "awaiting supplier"],
+    ),
+    IntentDef(
+        code="supplier.overbooking",
+        label="Supplier > Overbooking",
+        keywords=["overbooked", "walked guest", "no room at arrival"],
+    ),
+    IntentDef(
+        code="special_request.early_checkin",
+        label="Special request > Early check-in",
+        keywords=["early check-in", "late checkout"],
+    ),
+    IntentDef(
+        code="special_request.accessibility",
+        label="Special request > Accessibility",
+        keywords=["wheelchair", "accessible room"],
+    ),
+    IntentDef(
+        code="special_request.meal",
+        label="Special request > Meal plan",
+        keywords=["vegetarian", "meal plan", "halal"],
+    ),
     IntentDef(code="visa.status", label="Visa > Status", keywords=["visa status", "visa approval"]),
-    IntentDef(code="visa.documents", label="Visa > Documents", keywords=["passport copy", "documents required"]),
-    IntentDef(code="platform.login", label="Platform > Login", keywords=["cannot login", "password reset", "account locked"]),
-    IntentDef(code="platform.api_error", label="Platform > API error", keywords=["api error", "timeout", "500 error"]),
-    IntentDef(code="platform.search", label="Platform > Search results", keywords=["search not showing", "no results"]),
+    IntentDef(
+        code="visa.documents",
+        label="Visa > Documents",
+        keywords=["passport copy", "documents required"],
+    ),
+    IntentDef(
+        code="platform.login",
+        label="Platform > Login",
+        keywords=["cannot login", "password reset", "account locked"],
+    ),
+    IntentDef(
+        code="platform.api_error",
+        label="Platform > API error",
+        keywords=["api error", "timeout", "500 error"],
+    ),
+    IntentDef(
+        code="platform.search",
+        label="Platform > Search results",
+        keywords=["search not showing", "no results"],
+    ),
 ]
 
-_HOTELS = ["Marina Pearl", "Palm Crescent", "Juhu Shores", "Raffles Quay Suites", "Thames View",
-           "Old Town Inn", "Burj Vista", "Sentosa Bay", "Bandra Heights", "Kensington Lodge"]
+_HOTELS = [
+    "Marina Pearl",
+    "Palm Crescent",
+    "Juhu Shores",
+    "Raffles Quay Suites",
+    "Thames View",
+    "Old Town Inn",
+    "Burj Vista",
+    "Sentosa Bay",
+    "Bandra Heights",
+    "Kensington Lodge",
+]
 _CITIES = ["Dubai", "Mumbai", "London", "Singapore", "Goa", "Bali", "Abu Dhabi", "Phuket"]
 _SUPPLIERS = ["HotelBeds", "Expedia TAAP", "WebBeds", "DOTW", "the hotel", "the supplier"]
 _DAYS = ["2", "3", "5", "7", "10", "14", "21"]

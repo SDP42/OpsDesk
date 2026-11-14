@@ -248,9 +248,7 @@ class Frequency(Base):
     __tablename__ = "frequencies"
 
     id: Mapped[str] = _id()
-    ticket_id: Mapped[str] = mapped_column(
-        ForeignKey("tickets.id", ondelete="CASCADE"), index=True
-    )
+    ticket_id: Mapped[str] = mapped_column(ForeignKey("tickets.id", ondelete="CASCADE"), index=True)
     subject: Mapped[str] = mapped_column(String(200))
     status: Mapped[str] = mapped_column(String(10), default="open")
     created_by: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
@@ -319,9 +317,7 @@ class RoutingDecision(Base):
     __tablename__ = "routing_decisions"
 
     id: Mapped[str] = _id()
-    ticket_id: Mapped[str] = mapped_column(
-        ForeignKey("tickets.id", ondelete="CASCADE"), index=True
-    )
+    ticket_id: Mapped[str] = mapped_column(ForeignKey("tickets.id", ondelete="CASCADE"), index=True)
     chosen_user_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
     queue_id: Mapped[str | None] = mapped_column(ForeignKey("queues.id"))
     scores: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)

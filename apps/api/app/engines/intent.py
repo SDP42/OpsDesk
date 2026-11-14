@@ -37,7 +37,9 @@ class IntentSuggestion(BaseModel):
     reason: str
 
 
-_DELAY = re.compile(r"\b(still|delay(ed)?|pending|waiting|again|third time|since \d+ days|not (yet )?received)\b")
+_DELAY = re.compile(
+    r"\b(still|delay(ed)?|pending|waiting|again|third time|since \d+ days|not (yet )?received)\b"
+)
 _REFUND = re.compile(r"\brefund(s|ed)?\b")
 _TBOH = re.compile(r"\btboh-?\d+", re.IGNORECASE)
 _OVERBOOK = re.compile(r"\boverbook(ed|ing)?\b|\bwalked\b")
@@ -50,14 +52,30 @@ RULES: list[tuple[str, str, str]] = [
 
 
 def build_model() -> IntentModel:
-    features = FeatureUnion([
-        ("word", TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True, min_df=1,
-                                 token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b")),
-        ("char", TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5), sublinear_tf=True,
-                                 min_df=2, max_features=20000)),
-    ])
-    return Pipeline([("features", features),
-                     ("clf", LogisticRegression(max_iter=2000, C=8.0))])
+    features = FeatureUnion(
+        [
+            (
+                "word",
+                TfidfVectorizer(
+                    ngram_range=(1, 2),
+                    sublinear_tf=True,
+                    min_df=1,
+                    token_pattern=r"(?u)\b[a-zA-Z][a-zA-Z]+\b",
+                ),
+            ),
+            (
+                "char",
+                TfidfVectorizer(
+                    analyzer="char_wb",
+                    ngram_range=(3, 5),
+                    sublinear_tf=True,
+                    min_df=2,
+                    max_features=20000,
+                ),
+            ),
+        ]
+    )
+    return Pipeline([("features", features), ("clf", LogisticRegression(max_iter=2000, C=8.0))])
 
 
 def train(corpus: list[tuple[str, str]] | None = None) -> IntentModel:
@@ -96,8 +114,9 @@ def suggest(model: IntentModel, text: str, k: int = 3) -> IntentSuggestion:
     """Top-k intents for ``text`` with confidences, override rule and a reason."""
     text = (text or "").strip()
     if len(text) < 4:
-        return IntentSuggestion(top=[], needs_human=True, rule=None,
-                                reason="Not enough text yet to suggest an intent")
+        return IntentSuggestion(
+            top=[], needs_human=True, rule=None, reason="Not enough text yet to suggest an intent"
+        )
     probs = model.predict_proba([text])[0]
     classes = list(model.classes_)
     order = np.argsort(probs)[::-1]
@@ -110,7 +129,9 @@ def suggest(model: IntentModel, text: str, k: int = 3) -> IntentSuggestion:
         boosted = max(scores.get(target, 0.0), 0.9)
         rest = 1.0 - boosted
         others_total = sum(v for c, v in scores.items() if c != target) or 1.0
-        scores = {c: (boosted if c == target else v / others_total * rest) for c, v in scores.items()}
+        scores = {
+            c: (boosted if c == target else v / others_total * rest) for c, v in scores.items()
+        }
 
     ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)[:k]
     top = [IntentCandidate(code=c, label=label_of(c), confidence=round(v, 3)) for c, v in ranked]

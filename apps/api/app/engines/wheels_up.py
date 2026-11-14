@@ -123,7 +123,15 @@ def compute_sla(data: SlaInput) -> SlaResult:
         f"{elapsed_pct:g}% elapsed -> {state}"
     )
     return SlaResult(
-        due_at=due_at, state=state, elapsed_pct=elapsed_pct, fuel=round(fuel, 3),
-        remaining_seconds=remaining, base_minutes=base, urgency_factor=factor,
-        urgency_driver=driver, holiday_paused=paused, propose_escalation=propose, reason=reason,
+        due_at=due_at,
+        state=state,
+        elapsed_pct=elapsed_pct,
+        fuel=round(fuel, 3),
+        remaining_seconds=remaining,
+        base_minutes=base,
+        urgency_factor=factor,
+        urgency_driver=driver,
+        holiday_paused=paused,
+        propose_escalation=propose,
+        reason=reason,
     )

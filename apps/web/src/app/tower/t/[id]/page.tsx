@@ -7,6 +7,7 @@ import { AlertTriangle, ArrowLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import { use, useState } from "react";
 import { Conversation, Frequencies } from "@/components/tower/conversation";
+import { CopilotBrief } from "@/components/tower/copilot-brief";
 import { FuelGauge } from "@/components/tower/fuel-gauge";
 import { ScoreWaterfall, type RunnerUp, type ScorePart } from "@/components/tower/score-waterfall";
 import { TicketActions } from "@/components/tower/ticket-actions";
@@ -155,10 +156,8 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
                 <Frequencies ticketId={t.id} />
               </Hud>
             )}
-            <Hud title="Co-pilot brief" className="opacity-80">
-              <p className="text-sm text-text-dim">
-                One-click case summary from linked history arrives in Phase 4 (rule-based by default, optional LLM via env).
-              </p>
+            <Hud title="Co-pilot brief">
+              <CopilotBrief ticketId={t.id} />
             </Hud>
           </div>
 

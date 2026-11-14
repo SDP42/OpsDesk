@@ -314,6 +314,7 @@ async def create_ticket(
         lcd=lcd,
         created_at=now,
         updated_at=now,
+        is_demo=actor.data_mode == "demo",
     )
     ticket.agency = agency
     ticket.intent = intent

@@ -454,6 +454,7 @@ class World:
             routing_reason=routing_reason,
             contact_count=1,
             guardian_flag=False,
+            is_demo=True,
             created_at=created_at,
             updated_at=closed_at or resolved_at or created_at,
             resolved_at=resolved_at,

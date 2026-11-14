@@ -39,3 +39,4 @@ class DemoAccount(BaseModel):
     email: str
     region: str | None
     home: str
+    demo_password: str | None = None

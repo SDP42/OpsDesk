@@ -102,6 +102,9 @@ async def demo_accounts(
         ("escalation_manager", "Tower Chief", "/tower/escalations"),
         ("lead", "Airport Director", "/tower"),
     ]
+    settings = get_settings()
+    # One-click demo login outside production only; the password lives in settings, not code.
+    demo_password = settings.demo_password if settings.app_env != "production" else None
     out: list[DemoAccount] = []
     for role, persona, home in personas:
         user = await session.scalar(
@@ -119,6 +122,7 @@ async def demo_accounts(
                     email=user.email,
                     region=user.region,
                     home=home,
+                    demo_password=demo_password,
                 )
             )
     return Envelope(data=out)

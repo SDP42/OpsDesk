@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   applicationName: "OpsDesk Control Tower",
 };
 
-export const viewport: Viewport = { themeColor: "#05080D", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#F4F1EA", colorScheme: "light" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

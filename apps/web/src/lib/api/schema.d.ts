@@ -732,6 +732,8 @@ export interface components {
             region: string | null;
             /** Home */
             home: string;
+            /** Demo Password */
+            demo_password?: string | null;
         };
         /** Envelope[ArchiveRunOut] */
         Envelope_ArchiveRunOut_: {

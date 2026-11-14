@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { detectCaps, useLanding } from "@/lib/landing/motion";
 import { Magnetic } from "./crosshair-cursor";
 import { Scene, SceneGrid, SceneTag } from "./scene";
-import { WindowFrame } from "./window-frame";
 
 const TICKER = [
   "OD-24817 VECTORED > AE-01 · Region match UAE (+40)",
@@ -58,6 +57,26 @@ export function Hero() {
   return (
     <Scene index={1} length={100} label="Every ticket is a flight">
       <div ref={root} className="relative flex min-h-dvh flex-col">
+        <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/video/hero-poster.webp" alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+          {useVideo && (
+            <video
+              className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/video/hero-poster.webp"
+              onCanPlay={(e) => (e.currentTarget.style.opacity = "1")}
+            >
+              <source src="/video/hero.webm" type="video/webm" />
+              <source src="/video/hero.mp4" type="video/mp4" />
+            </video>
+          )}
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--color-ink-950)_0%,color-mix(in_oklab,var(--color-ink-950)_94%,transparent)_34%,color-mix(in_oklab,var(--color-ink-950)_30%,transparent)_60%,transparent_85%)] max-lg:bg-ink-950/80" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink-950 to-transparent" />
+        </div>
         <SceneGrid
           copy={
             <div>
@@ -97,40 +116,30 @@ export function Hero() {
             </div>
           }
           visual={
-            <div className="hero-window relative mx-auto max-w-[460px]">
-              <WindowFrame caption={<span className="sign sign-dark">Gate A1 · Night ops · Live</span>}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/video/hero-poster.webp" alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
-                {useVideo && (
-                  <video
-                    className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    poster="/video/hero-poster.webp"
-                    onCanPlay={(e) => (e.currentTarget.style.opacity = "1")}
-                  >
-                    <source src="/video/hero.webm" type="video/webm" />
-                    <source src="/video/hero.mp4" type="video/mp4" />
-                  </video>
-                )}
-                <div className="absolute inset-x-6 bottom-8 rounded-2xl bg-white/90 p-3 font-mono text-[11px] shadow-lg backdrop-blur">
-                  <p className="flex items-center justify-between">
-                    <span className="font-semibold">OD-24817</span>
-                    <span className="sign !py-0 !text-[10px]">Vectored</span>
-                  </p>
-                  <p className="mt-1 text-text-dim">Region match UAE (+40) · P1 urgency (+30) · on shift (+15)</p>
+            <div className="hero-window relative hidden h-[60vh] lg:block">
+              <div className="absolute top-[8%] right-[6%] w-72 animate-float rounded-2xl border border-white/30 bg-white/90 p-4 shadow-[var(--shadow-lift)] backdrop-blur">
+                <p className="flex items-center justify-between font-mono text-[12px]">
+                  <span className="font-semibold">OD-24817</span>
+                  <span className="sign !py-0 !text-[10px]">Vectored</span>
+                </p>
+                <p className="mt-2 font-mono text-[11px] leading-relaxed text-text-dim">Region match UAE (+40) · P1 urgency (+30) · on shift (+15) · lowest load (+8)</p>
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-ink-700">
+                  <div className="h-full w-[88%] rounded-full bg-night" />
                 </div>
-              </WindowFrame>
-              <div className="absolute top-10 -left-6 hidden animate-float rounded-2xl border border-line bg-white p-3 shadow-[var(--shadow-card)] lg:block">
-                <p className="micro">Wheels-up</p>
-                <p className="font-mono text-xl text-critical">T-9h 04m</p>
+              </div>
+              <div className="absolute top-[44%] left-[4%] animate-float rounded-2xl border border-white/30 bg-white/90 p-4 shadow-[var(--shadow-lift)] backdrop-blur [animation-delay:-2s]">
+                <p className="micro">Wheels-up · TBOH-90009</p>
+                <p className="mt-1 font-mono text-3xl text-critical tabular">T-9h 04m</p>
+                <p className="micro mt-1 !text-critical">Critical · escalation proposed</p>
+              </div>
+              <div className="absolute right-[10%] bottom-[6%] animate-float rounded-2xl bg-night p-4 text-white shadow-[var(--shadow-lift)] [animation-delay:-4s]">
+                <p className="micro !text-white/60">Third-contact guardian</p>
+                <p className="mt-1 font-mono text-sm text-taxi">3 flights linked on TBOH-88213</p>
               </div>
             </div>
           }
         />
-        <div className="mt-auto overflow-hidden border-y border-night bg-taxi py-3">
+        <div className="relative z-[3] mt-auto overflow-hidden border-y border-night bg-taxi py-3">
           <div className="flex w-max animate-[ticker_45s_linear_infinite] gap-10 font-mono text-[12px] font-semibold tracking-wider text-night uppercase motion-reduce:animate-none">
             {[...TICKER, ...TICKER].map((t, i) => (
               <span key={i} className="whitespace-nowrap">

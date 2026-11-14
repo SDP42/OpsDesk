@@ -33,6 +33,7 @@ class Principal:
     role: str
     agency_id: str | None
     region: str | None
+    data_mode: str = "demo"
 
     @property
     def is_staff(self) -> bool:
@@ -61,7 +62,9 @@ async def current_principal(
     user = await session.get(User, claims.get("sub"))
     if user is None or not user.is_active:
         raise AppError(401, "unauthorized", "Session is no longer valid")
-    principal = Principal(user.id, user.name, user.role, user.agency_id, user.region)
+    principal = Principal(
+        user.id, user.name, user.role, user.agency_id, user.region, user.data_mode
+    )
     request.state.principal = principal
     return principal
 
@@ -88,7 +91,8 @@ require_any = require_roles(*ALL_ROLES)
 
 
 def scope_tickets(stmt: Select[Any], principal: Principal) -> Select[Any]:
-    """Requesters only ever see their own agency's tickets."""
+    """Requesters only ever see their own agency's tickets; data mode picks demo vs live flights."""
+    stmt = stmt.where(Ticket.is_demo.is_(principal.data_mode == "demo"))
     if principal.is_requester:
         return stmt.where(Ticket.agency_id == (principal.agency_id or "__none__"))
     return stmt

@@ -26,7 +26,7 @@ from app.db.base import Base, UTCDateTime, new_id, utcnow
 
 # --- Enumerations (stored as strings for portability) ------------------------
 
-ROLES = ("requester", "agent", "escalation_manager", "lead")
+ROLES = ("requester", "agent", "escalation_manager", "lead", "supplier")
 AVAILABILITY = ("online", "busy", "away")
 PRIORITIES = ("P1", "P2", "P3", "P4")
 STATUSES = ("new", "open", "pending", "escalated", "resolved", "closed")
@@ -81,6 +81,9 @@ class User(Base):
     agency_id: Mapped[str | None] = mapped_column(
         ForeignKey("agencies.id", ondelete="SET NULL"), index=True
     )
+    supplier_id: Mapped[str | None] = mapped_column(
+        ForeignKey("suppliers.id", ondelete="SET NULL"), index=True
+    )  # supplier partners only
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     # "demo" shows the seeded demo airspace; "live" shows only real, user-created flights.
     data_mode: Mapped[str] = mapped_column(String(8), default="demo", server_default="demo")

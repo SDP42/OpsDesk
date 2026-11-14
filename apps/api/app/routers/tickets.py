@@ -23,8 +23,10 @@ from app.core.rbac import (
     scope_tickets,
 )
 from app.core.sse import broker
-from app.db.models import Intent, Ticket
+from app.db.models import Comment, Frequency, FrequencyMessage, Intent, Ticket
 from app.db.session import get_session
+from app.engines.copilot import Brief, BriefInput, build_brief
+from app.engines.intent_taxonomy import label_of
 from app.engines.lifecycle import OPEN_STATUSES
 from app.schemas.common import Envelope, Page, PageMeta
 from app.schemas.tickets import (
@@ -392,3 +394,65 @@ async def auto_route(
     await session.commit()
     svc.publish_update(ticket, "routed", {"owner_id": result.chosen_id, "reason": result.reason})
     return Envelope(data=await _reload_out(session, ticket.id))
+
+
+@router.get("/{ticket_id}/brief", response_model=Envelope[Brief])
+async def copilot_brief(
+    ticket_id: str,
+    principal: Principal = Depends(require_roles("agent", EM, LEAD)),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[Brief]:
+    """Co-pilot Brief: summary, next best action and a reply draft from linked history."""
+    ticket = await _get_visible(session, ticket_id, principal)
+    links = await svc.get_links(session, ticket.id)
+    comments = (
+        await session.scalars(
+            select(Comment)
+            .where(Comment.ticket_id == ticket.id)
+            .order_by(Comment.created_at.desc())
+        )
+    ).all()
+    freqs = (
+        await session.scalars(
+            select(Frequency).where(Frequency.ticket_id == ticket.id, Frequency.status == "open")
+        )
+    ).all()
+    supplier_msg = None
+    if freqs:
+        supplier_msg = await session.scalar(
+            select(FrequencyMessage.body)
+            .where(
+                FrequencyMessage.frequency_id.in_([f.id for f in freqs]),
+                FrequencyMessage.sender_type == "supplier",
+            )
+            .order_by(FrequencyMessage.at.desc())
+            .limit(1)
+        )
+    now = svc.utcnow()
+    sla = ticket_out(ticket).sla
+    brief = build_brief(
+        BriefInput(
+            number=ticket.number,
+            title=ticket.title,
+            status=ticket.status,
+            priority=ticket.priority,
+            intent_label=label_of(ticket.intent.code) if ticket.intent else None,
+            sla_state=sla.state,
+            hours_to_checkin=(ticket.check_in - now).total_seconds() / 3600
+            if ticket.check_in
+            else None,
+            contact_count=ticket.contact_count,
+            guardian=ticket.guardian_flag,
+            linked=[
+                {"number": lk.other_number, "status": lk.other_status, "title": lk.other_title}
+                for lk in links
+            ],
+            last_external=next((c.body for c in comments if c.visibility == "external"), None),
+            last_internal=next((c.body for c in comments if c.visibility == "internal"), None),
+            supplier_last_reply=supplier_msg,
+            open_frequencies=len(freqs),
+            escalated=ticket.status == "escalated",
+            now=now,
+        )
+    )
+    return Envelope(data=brief)

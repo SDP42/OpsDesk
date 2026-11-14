@@ -71,7 +71,7 @@ function Constellation() {
     g.rotation.y += dt * 0.12;
     g.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.15;
     const { sceneProgress } = useLanding.getState();
-    g.scale.setScalar(damp(g.scale.x, 0.9 + sceneProgress * 0.35, 3, dt));
+    g.scale.setScalar(damp(g.scale.x, 0.55 + sceneProgress * 0.15, 3, dt));
     setGroupOpacity(g, opacity.current);
   });
   return (
@@ -150,7 +150,7 @@ function Globe() {
     setGroupOpacity(g, opacity.current);
   });
   return (
-    <group ref={group} position={[0, -0.05, 0]}>
+    <group ref={group} position={[0, -0.05, 0]} scale={0.68}>
       <points geometry={dots}>
         <pointsMaterial size={0.02} color="#0d1117" transparent opacity={0.5} sizeAttenuation />
       </points>
@@ -211,7 +211,7 @@ function ThemeCloud() {
     if (!g) return;
     g.rotation.y += dt * 0.08;
     const { sceneProgress } = useLanding.getState();
-    g.scale.setScalar(damp(g.scale.x, 1 + sceneProgress * 0.6, 2, dt));
+    g.scale.setScalar(damp(g.scale.x, 0.62 + sceneProgress * 0.2, 2, dt));
     g.children[2]?.scale.setScalar(1 + 0.15 * Math.sin(state.clock.elapsedTime * 3));
     setGroupOpacity(g, opacity.current);
   });

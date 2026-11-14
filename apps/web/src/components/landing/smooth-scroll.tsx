@@ -31,7 +31,20 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       onUpdate: (self) => set({ progress: self.progress }),
     });
 
+    // Pinned scenes change the page height after mount: keep trigger positions honest.
+    let raf = 0;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+    ro.observe(document.body);
+    const onLoad = () => ScrollTrigger.refresh();
+    window.addEventListener("load", onLoad);
+
     return () => {
+      ro.disconnect();
+      cancelAnimationFrame(raf);
+      window.removeEventListener("load", onLoad);
       page.kill();
       gsap.ticker.remove(tick);
       lenis?.destroy();

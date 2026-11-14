@@ -47,8 +47,8 @@ export function Scene({
     if (!el) return;
     const active = ScrollTrigger.create({
       trigger: el,
-      start: "top 60%",
-      end: "bottom 40%",
+      start: "top 35%",
+      end: "bottom 35%",
       onToggle: (self) => self.isActive && set({ scene: index }),
     });
     const prog = ScrollTrigger.create({
@@ -88,7 +88,7 @@ export function Scene({
       prog.kill();
       ctx?.revert();
     };
-  }, [index, set]);
+  }, [index, set, rich]);
 
   const pinned = rich && length > 100;
   return (

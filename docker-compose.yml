@@ -1,0 +1,15 @@
+# Optional: PostgreSQL for the scale path. SQLite (WAL) is the default for the demo.
+# Then set DATABASE_URL=postgresql+asyncpg://opsdesk:opsdesk@localhost:5432/opsdesk
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: opsdesk
+      POSTGRES_PASSWORD: opsdesk
+      POSTGRES_DB: opsdesk
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

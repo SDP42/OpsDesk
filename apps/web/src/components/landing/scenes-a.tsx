@@ -3,9 +3,8 @@
 /** Scenes 2-5 (Problems 1, 2 and 4), all on the shared SceneGrid. */
 import { clsx } from "clsx";
 import { useState } from "react";
-import { FrameScrubber } from "./frame-scrubber";
 import { Scene, SceneCopy, SceneGrid, useSceneProgress } from "./scene";
-import { WindowFrame } from "./window-frame";
+import { SceneBackdrop } from "./backdrop";
 
 const ease = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 const seg = (p: number, a: number, b: number) => Math.min(1, Math.max(0, (p - a) / (b - a)));
@@ -14,10 +13,6 @@ const seg = (p: number, a: number, b: number) => Math.min(1, Math.max(0, (p - a)
 export function InstrumentBay({ caption, children }: { caption: string; children?: React.ReactNode }) {
   return (
     <div data-reveal="frame" className="relative mx-auto aspect-square w-full max-w-[540px]">
-      <div className="absolute inset-0 rounded-[28px] border border-dashed border-text/20" />
-      {["top-3 left-3 border-t border-l", "top-3 right-3 border-t border-r", "bottom-3 left-3 border-b border-l", "bottom-3 right-3 border-b border-r"].map((c) => (
-        <span key={c} className={`absolute size-4 border-text/60 ${c}`} />
-      ))}
       <span className="sign sign-dark absolute top-5 left-1/2 -translate-x-1/2">{caption}</span>
       {children}
     </div>
@@ -52,6 +47,7 @@ function DriftingBlips() {
 export function FlyingBlind() {
   return (
     <Scene index={2} id="scene-2" length={170} label="Flying blind">
+      <SceneBackdrop sequence="gate" callsign="OD-24811" coords={[19.0896, 72.8656]} />
       <SceneGrid
         copy={
           <SceneCopy n={2} problem="1" eyebrow="Flying blind" title={<>Same refund. Three tickets. <em className="text-alarm">Zero memory.</em></>}>
@@ -61,11 +57,9 @@ export function FlyingBlind() {
           </SceneCopy>
         }
         visual={
-          <div className="mx-auto max-w-[440px]">
-            <WindowFrame caption={<span className="sign">Seat 2A · departure delayed</span>}>
-              <FrameScrubber sequence="a" className="absolute inset-0" tint="none" />
-              <DriftingBlips />
-            </WindowFrame>
+          <div data-reveal="frame" className="relative h-[52vh]">
+            <DriftingBlips />
+            <span className="sign sign-dark absolute bottom-0 left-1/2 -translate-x-1/2">Gate 14 · same refund, third time</span>
           </div>
         }
       />
@@ -81,6 +75,7 @@ export function ConstellationScene() {
   const p = rich ? seg(progress, 0.1, 0.6) : 1;
   return (
     <Scene index={3} length={160} label="Constellation">
+      <SceneBackdrop sequence="city" callsign="TBOH-88213" />
       <SceneGrid
         copy={
           <SceneCopy n={3} problem="1" eyebrow="Constellation" title={<>One booking. Every conversation. <em className="text-ice">One picture.</em></>}>
@@ -123,6 +118,7 @@ export function VectoringScene() {
   const total = preset.parts.reduce((a, [, v]) => a + v, 0);
   return (
     <Scene index={4} length={220} label="Vectoring">
+      <SceneBackdrop sequence="taxi" callsign="AE-01" />
       <SceneGrid
         copy={
           <SceneCopy n={4} problem="2" eyebrow="Vectoring" title={<>Vectored, <em className="text-beacon">not queued.</em></>}>
@@ -179,6 +175,7 @@ export function WheelsUpScene() {
   const fired = p > 0.9;
   return (
     <Scene index={5} length={190} label="Wheels-up clock">
+      <SceneBackdrop sequence="sunrise" callsign="OD-24819" coords={[51.47, -0.4543]} />
       <SceneGrid
         copy={
           <SceneCopy n={5} problem="4" eyebrow="Wheels-up" title={<>The clock that knows when the <em className="text-critical">guest lands.</em></>}>
@@ -196,18 +193,14 @@ export function WheelsUpScene() {
           </SceneCopy>
         }
         visual={
-          <div className="mx-auto max-w-[440px]">
-            <WindowFrame caption={<span className="sign sign-dark">Night → dawn → check-in</span>}>
-              <FrameScrubber sequence="b" className="absolute inset-0" tint="none" />
-              <div className="absolute inset-0 transition-colors duration-700" style={{ background: `color-mix(in oklab, ${color} ${Math.round(p * 30)}%, transparent)`, mixBlendMode: "multiply" }} />
-              <FuelRing fuel={fuel} color={color} />
-              <div className="absolute inset-0 grid place-items-center">
-                <div className="text-center text-white">
-                  <p className="micro !text-white/70">Fuel</p>
-                  <p className="font-mono text-5xl tabular">{Math.round(fuel * 100)}%</p>
-                </div>
+          <div data-reveal="frame" className="relative mx-auto aspect-square w-full max-w-[460px]">
+            <FuelRing fuel={fuel} color={color} />
+            <div className="absolute inset-0 grid place-items-center">
+              <div className="text-center text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]">
+                <p className="micro !text-white/80">Wheels-up fuel</p>
+                <p className="font-mono text-6xl tabular">{Math.round(fuel * 100)}%</p>
               </div>
-            </WindowFrame>
+            </div>
           </div>
         }
       />

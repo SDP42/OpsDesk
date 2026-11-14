@@ -7,10 +7,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useTowerCalls } from "@/lib/stores/tower-calls";
 import { Magnetic } from "./crosshair-cursor";
-import { FrameScrubber } from "./frame-scrubber";
 import { Scene, SceneCopy, SceneGrid, useSceneProgress } from "./scene";
 import { InstrumentBay } from "./scenes-a";
-import { WindowFrame } from "./window-frame";
+import { SceneBackdrop } from "./backdrop";
 
 const seg = (p: number, a: number, b: number) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 
@@ -47,6 +46,7 @@ export function FrequenciesScene() {
   const diff = rich ? progress > 0.72 : true;
   return (
     <Scene index={6} length={220} label="Frequencies">
+      <SceneBackdrop sequence="cockpit" callsign="FREQ 118.40" />
       <SceneGrid
         copy={
           <SceneCopy n={6} problem="3" eyebrow="Frequencies" title={<>Radio channels that <em className="text-beacon">survive a handoff.</em></>}>
@@ -117,6 +117,7 @@ export function WeatherScene() {
   const p = rich ? seg(progress, 0.05, 0.6) : 1;
   return (
     <Scene index={7} length={160} label="Weather radar">
+      <SceneBackdrop sequence="clouds" callsign="WX · INV-SYNC" />
       <SceneGrid
         copy={
           <SceneCopy n={7} problem="5" eyebrow="Weather radar" title={<>Hear the weather <em className="text-ice">before the storm.</em></>}>
@@ -163,6 +164,7 @@ export function BlackBoxScene() {
   );
   return (
     <Scene index={8} length={150} label="Black box">
+      <SceneBackdrop sequence="baggage" callsign="EXPORT 60K" />
       <SceneGrid
         copy={
           <SceneCopy n={8} problem="6" eyebrow="Black box" title={<>Your data, <em className="text-signal">uncapped.</em></>}>
@@ -213,6 +215,7 @@ export function TryItLiveScene() {
   const push = useTowerCalls((s) => s.push);
   return (
     <Scene index={9} length={100} label="Try it live">
+      <SceneBackdrop sequence="checkin" callsign="PILOT DESK" />
       <SceneGrid
         copy={
           <SceneCopy n={9} eyebrow="Try it live" title={<>Work a flight <em className="text-beacon">right here.</em></>}>
@@ -289,7 +292,8 @@ export function ClearedScene() {
   }, []);
   return (
     <Scene index={10} length={150} label="Cleared for takeoff">
-      <div className="flex h-full flex-col">
+      <SceneBackdrop sequence="a" reverse callsign="RWY 27L" coords={[51.4775, -0.4614]} />
+      <div className="relative z-[3] flex h-full flex-col">
         <SceneGrid
           copy={
             <SceneCopy n={10} eyebrow="Cleared for takeoff" title={<>Every ticket is a flight. Now someone is <em className="text-beacon">watching the tower.</em></>}>
@@ -310,11 +314,7 @@ export function ClearedScene() {
             </SceneCopy>
           }
           visual={
-            <div className="mx-auto max-w-[420px]">
-              <WindowFrame caption={<span className="sign">Runway 27L · cleared</span>}>
-                <FrameScrubber sequence="a" reverse className="absolute inset-0" tint="none" />
-              </WindowFrame>
-            </div>
+            <div />
           }
         />
         <footer className="mx-auto w-full max-w-[1320px] border-t border-line px-5 py-5 sm:px-10">

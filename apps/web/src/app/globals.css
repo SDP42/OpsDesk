@@ -1,26 +1,37 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------------
- * Night Ops design tokens (spec section 9). Dark only; WCAG AA text pairs.
+ * "Daylight Tower" design system.
+ * Airport wayfinding meets an aeronautical chart: warm paper, ink type,
+ * signage yellow, international (beacon) orange and cobalt sky. Light first.
+ * Token names are semantic so every component re-themes from here:
+ *   ink-950 page · ink-900 surface · ink-800 raised · ink-700 track
  * --------------------------------------------------------------------- */
 @theme {
-  --color-ink-950: #05080d;
-  --color-ink-900: #0a1018;
-  --color-ink-800: #101926;
-  --color-ink-700: #16233a;
-  --color-line: #223246;
-  --color-text: #e8eef5;
-  --color-text-dim: #8fa1b5;
-  --color-signal: #6bffc9;
-  --color-amber: #ffb020;
-  --color-critical: #ff7a45;
-  --color-alarm: #ff4d5e;
-  --color-ice: #7cc4ff;
-  --color-violet: #9b8cff;
+  --color-ink-950: #f4f1ea; /* page: chart paper */
+  --color-ink-900: #fbfaf6; /* surface */
+  --color-ink-800: #ffffff; /* raised (strips, cards) */
+  --color-ink-700: #e7e2d6; /* tracks, dividers */
+  --color-line: #d8d2c4;
+  --color-text: #0d1117;
+  --color-text-dim: #5a6270;
+
+  --color-night: #0d1117; /* signage black */
+  --color-taxi: #ffc629; /* wayfinding yellow */
+  --color-beacon: #ff5a1f; /* international orange: primary */
+  --color-signal: #0c9f6a; /* on course / ok */
+  --color-amber: #d97a06; /* at risk */
+  --color-critical: #ef4f23; /* critical */
+  --color-alarm: #df1c47; /* breached / escalation */
+  --color-ice: #2d5bff; /* cobalt: links, info, selection */
+  --color-violet: #6f4cf6; /* AI and Co-pilot */
 
   --font-serif: var(--font-instrument-serif), "Times New Roman", serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --shadow-card: 0 1px 0 rgb(13 17 23 / 0.04), 0 12px 32px -18px rgb(13 17 23 / 0.28);
+  --shadow-lift: 0 2px 0 rgb(13 17 23 / 0.05), 0 30px 60px -30px rgb(13 17 23 / 0.45);
 
   --ease-tower: cubic-bezier(0.2, 0.8, 0.2, 1);
   --animate-sweep: sweep 4s linear infinite;
@@ -28,6 +39,7 @@
   --animate-flash: flash 900ms var(--ease-tower) 1;
   --animate-shimmer: shimmer 1.6s linear infinite;
   --animate-pulse-alarm: pulse-alarm 1.2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
 
   @keyframes sweep {
     to {
@@ -46,10 +58,10 @@
   }
   @keyframes flash {
     0% {
-      background-color: color-mix(in oklab, var(--color-amber) 28%, transparent);
+      background-color: color-mix(in oklab, var(--color-taxi) 55%, white);
     }
     100% {
-      background-color: transparent;
+      background-color: var(--color-ink-800);
     }
   }
   @keyframes shimmer {
@@ -69,11 +81,20 @@
       opacity: 0.45;
     }
   }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
 }
 
 :root {
-  color-scheme: dark;
-  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  color-scheme: light;
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
 html {
@@ -91,8 +112,8 @@ body {
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--color-signal) 35%, transparent);
-  color: var(--color-text);
+  background: var(--color-taxi);
+  color: var(--color-night);
 }
 
 :focus-visible {
@@ -100,7 +121,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Fixed 3% film grain + faint 48px grid behind everything. */
+/* Paper grain + faint chart grid behind everything. */
 .night-ops-backdrop::before,
 .night-ops-backdrop::after {
   content: "";
@@ -111,16 +132,16 @@ body {
 }
 .night-ops-backdrop::before {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--color-line) 45%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 45%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px);
   background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 80%);
-  opacity: 0.35;
+  mask-image: radial-gradient(ellipse at 50% 0%, black 10%, transparent 75%);
+  opacity: 0.55;
 }
 .night-ops-backdrop::after {
   background-image: var(--grain);
-  opacity: 0.03;
-  mix-blend-mode: overlay;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
 }
 
 @layer components {
@@ -138,63 +159,74 @@ body {
     font-variant-numeric: tabular-nums;
   }
 
-  /* Glass panel with HUD corner brackets instead of drop-shadow cards. */
+  /* Card with chart-style corner ticks. */
   .hud {
     position: relative;
-    background: color-mix(in oklab, var(--color-ink-900) 70%, transparent);
-    backdrop-filter: blur(14px);
+    background: var(--color-ink-800);
     border: 1px solid var(--color-line);
+    border-radius: 14px;
+    box-shadow: var(--shadow-card);
   }
   .hud::before,
-  .hud::after {
-    content: "";
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    pointer-events: none;
-    border-color: color-mix(in oklab, var(--color-signal) 65%, var(--color-line));
-  }
-  .hud::before {
-    top: -1px;
-    left: -1px;
-    border-top: 1px solid;
-    border-left: 1px solid;
-  }
-  .hud::after {
-    bottom: -1px;
-    right: -1px;
-    border-bottom: 1px solid;
-    border-right: 1px solid;
-  }
+  .hud::after,
   .hud > .hud-tr,
   .hud > .hud-bl {
+    content: "";
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
     pointer-events: none;
-    border-color: color-mix(in oklab, var(--color-signal) 65%, var(--color-line));
+    border-color: var(--color-text);
+    opacity: 0.55;
+  }
+  .hud::before {
+    top: 7px;
+    left: 7px;
+    border-top: 1.5px solid;
+    border-left: 1.5px solid;
+  }
+  .hud::after {
+    bottom: 7px;
+    right: 7px;
+    border-bottom: 1.5px solid;
+    border-right: 1.5px solid;
   }
   .hud > .hud-tr {
-    top: -1px;
-    right: -1px;
-    border-top: 1px solid;
-    border-right: 1px solid;
+    top: 7px;
+    right: 7px;
+    border-top: 1.5px solid;
+    border-right: 1.5px solid;
   }
   .hud > .hud-bl {
-    bottom: -1px;
-    left: -1px;
-    border-bottom: 1px solid;
-    border-left: 1px solid;
+    bottom: 7px;
+    left: 7px;
+    border-bottom: 1.5px solid;
+    border-left: 1.5px solid;
   }
 
-  /* Radar-sweep skeleton shimmer for loading states. */
+  /* Airport wayfinding sign: black on yellow (or yellow on black). */
+  .sign {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 6px;
+    background: var(--color-taxi);
+    color: var(--color-night);
+    padding: 0.2rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .sign-dark {
+    background: var(--color-night);
+    color: var(--color-taxi);
+  }
+
   .skeleton {
-    background: linear-gradient(
-      100deg,
-      var(--color-ink-800) 30%,
-      color-mix(in oklab, var(--color-signal) 12%, var(--color-ink-800)) 50%,
-      var(--color-ink-800) 70%
-    );
+    border-radius: 12px;
+    background: linear-gradient(100deg, var(--color-ink-700) 30%, #f7f4ec 50%, var(--color-ink-700) 70%);
     background-size: 200% 100%;
     animation: var(--animate-shimmer);
   }
@@ -204,67 +236,97 @@ body {
       to bottom,
       transparent 0,
       transparent 2px,
-      color-mix(in oklab, var(--color-signal) 6%, transparent) 3px
+      color-mix(in oklab, var(--color-night) 4%, transparent) 3px
     );
   }
 
   .btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
+    border-radius: 999px;
     border: 1px solid var(--color-line);
-    padding: 0.5rem 0.9rem;
+    background: var(--color-ink-800);
+    padding: 0.55rem 1rem;
     font-family: var(--font-mono);
     font-size: 12px;
-    letter-spacing: 0.08em;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--color-text);
     transition:
+      transform 160ms var(--ease-tower),
       background-color 160ms var(--ease-tower),
       border-color 160ms var(--ease-tower),
-      color 160ms var(--ease-tower);
+      box-shadow 160ms var(--ease-tower);
   }
   .btn:hover {
-    border-color: color-mix(in oklab, var(--color-signal) 60%, var(--color-line));
+    border-color: var(--color-text);
+    transform: translateY(-1px);
+  }
+  .btn:active {
+    transform: translateY(0);
   }
   .btn:disabled {
     opacity: 0.45;
     cursor: not-allowed;
+    transform: none;
   }
   .btn-signal {
-    background: var(--color-signal);
-    color: var(--color-ink-950);
-    border-color: var(--color-signal);
+    background: var(--color-night);
+    color: #fff;
+    border-color: var(--color-night);
+    box-shadow: 0 10px 24px -14px rgb(13 17 23 / 0.7);
   }
   .btn-signal:hover {
-    background: color-mix(in oklab, var(--color-signal) 85%, white);
+    background: var(--color-beacon);
+    border-color: var(--color-beacon);
+  }
+  .btn-beacon {
+    background: var(--color-beacon);
+    color: #fff;
+    border-color: var(--color-beacon);
   }
   .btn-alarm {
-    border-color: color-mix(in oklab, var(--color-alarm) 60%, var(--color-line));
+    border-color: color-mix(in oklab, var(--color-alarm) 45%, var(--color-line));
     color: var(--color-alarm);
   }
   .btn-alarm:hover {
-    background: color-mix(in oklab, var(--color-alarm) 14%, transparent);
+    background: color-mix(in oklab, var(--color-alarm) 10%, white);
+    border-color: var(--color-alarm);
   }
 
   .field {
     width: 100%;
-    background: var(--color-ink-950);
+    border-radius: 10px;
+    background: var(--color-ink-800);
     border: 1px solid var(--color-line);
-    padding: 0.6rem 0.75rem;
+    padding: 0.65rem 0.8rem;
     color: var(--color-text);
     font-size: 14px;
-    transition: border-color 160ms var(--ease-tower);
+    transition:
+      border-color 160ms var(--ease-tower),
+      box-shadow 160ms var(--ease-tower);
   }
   .field:focus {
     outline: none;
     border-color: var(--color-ice);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-ice) 15%, transparent);
   }
   .field::placeholder {
     color: color-mix(in oklab, var(--color-text-dim) 70%, transparent);
   }
+
+  /* Big editorial display type. */
+  .display {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+  }
 }
 
-/* Radar-sweep wipe used for page transitions (View Transitions API). */
+/* Radar-sweep page transition (View Transitions API). */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 600ms;
@@ -292,6 +354,62 @@ body {
   }
 }
 
+/* Radar-sweep wipe for scene entrances (rotating conic-gradient mask). */
+.radar-wipe {
+  --sweep: 360deg;
+  mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
+  -webkit-mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes wave {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* driver.js onboarding tour, restyled to the Daylight system. */
+.driver-popover.opsdesk-tour {
+  border-radius: 14px;
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-lift);
+  font-family: var(--font-sans);
+  padding: 18px;
+  max-width: 340px;
+}
+.driver-popover.opsdesk-tour .driver-popover-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1;
+}
+.driver-popover.opsdesk-tour .driver-popover-description {
+  color: var(--color-text-dim);
+  font-size: 14px;
+}
+.driver-popover.opsdesk-tour .driver-popover-navigation-btns button {
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-shadow: none;
+  padding: 6px 12px;
+}
+.driver-popover.opsdesk-tour .driver-popover-next-btn {
+  background: var(--color-night);
+  color: #fff;
+  border-color: var(--color-night);
+}
+.driver-popover.opsdesk-tour .driver-popover-progress-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -311,24 +429,5 @@ body {
   .crosshair-active,
   .crosshair-active * {
     cursor: none !important;
-  }
-}
-
-/* Radar-sweep wipe for scene entrances (rotating conic-gradient mask). */
-.radar-wipe {
-  --sweep: 360deg;
-  mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
-  -webkit-mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
-}
-
-@keyframes ticker {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes wave {
-  to {
-    transform: translateX(-50%);
   }
 }

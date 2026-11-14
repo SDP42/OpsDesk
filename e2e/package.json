@@ -1,0 +1,7 @@
+{
+  "name": "opsdesk-e2e",
+  "private": true,
+  "scripts": { "test": "playwright test" },
+  "devDependencies": { "@playwright/test": "^1.49.0" },
+  "packageManager": "pnpm@9.15.0"
+}

@@ -82,6 +82,9 @@ class User(Base):
         ForeignKey("agencies.id", ondelete="SET NULL"), index=True
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # "demo" shows the seeded demo airspace; "live" shows only real, user-created flights.
+    data_mode: Mapped[str] = mapped_column(String(8), default="demo", server_default="demo")
+    onboarded_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
     created_at: Mapped[datetime] = _created()
 
     agency: Mapped[Agency | None] = relationship(lazy="joined")
@@ -185,6 +188,7 @@ class Ticket(Base):
     routing_reason: Mapped[dict[str, Any] | None] = mapped_column(JSON)
     contact_count: Mapped[int] = mapped_column(Integer, default=1)
     guardian_flag: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_demo: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0", index=True)
     created_at: Mapped[datetime] = _created()
     updated_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=utcnow, onupdate=utcnow)
     resolved_at: Mapped[datetime | None] = mapped_column(UTCDateTime())

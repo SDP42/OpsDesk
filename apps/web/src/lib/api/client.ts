@@ -42,13 +42,11 @@ export class ApiError extends Error {
   }
 }
 
+type Inner<D> = D extends { data: infer T } ? T : never;
+
 /** Unwrap an openapi-fetch result: return `data.data` or throw an ApiError. */
-export function unwrap<T>(result: {
-  data?: { data: T } | undefined;
-  error?: unknown;
-  response: Response;
-}): T {
-  if (result.data !== undefined) return result.data.data;
+export function unwrap<D>(result: { data?: D; error?: unknown; response: Response }): Inner<D> {
+  if (result.data !== undefined) return (result.data as { data: Inner<D> }).data;
   const body = result.error as ApiErrorBody | undefined;
   throw new ApiError(
     result.response.status,

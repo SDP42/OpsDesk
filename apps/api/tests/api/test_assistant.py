@@ -41,5 +41,7 @@ async def test_pilot_cannot_find_other_agency_ticket_via_assistant(client_factor
     me = (await pilot.get("/api/me")).json()["data"]
     foreign = next((t for t in other if t["agency"]["id"] != me["agency"]["id"]), None)
     if foreign:
-        r = (await pilot.post("/api/assistant/ask", json={"question": f"find {foreign['number']}"})).json()["data"]
+        r = (
+            await pilot.post("/api/assistant/ask", json={"question": f"find {foreign['number']}"})
+        ).json()["data"]
         assert "can't see" in r["answer"]

@@ -1,0 +1,315 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------------
+ * Night Ops design tokens (spec section 9). Dark only; WCAG AA text pairs.
+ * --------------------------------------------------------------------- */
+@theme {
+  --color-ink-950: #05080d;
+  --color-ink-900: #0a1018;
+  --color-ink-800: #101926;
+  --color-ink-700: #16233a;
+  --color-line: #223246;
+  --color-text: #e8eef5;
+  --color-text-dim: #8fa1b5;
+  --color-signal: #6bffc9;
+  --color-amber: #ffb020;
+  --color-critical: #ff7a45;
+  --color-alarm: #ff4d5e;
+  --color-ice: #7cc4ff;
+  --color-violet: #9b8cff;
+
+  --font-serif: var(--font-instrument-serif), "Times New Roman", serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --ease-tower: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-sweep: sweep 4s linear infinite;
+  --animate-blip: blip 2.4s var(--ease-tower) infinite;
+  --animate-flash: flash 900ms var(--ease-tower) 1;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-pulse-alarm: pulse-alarm 1.2s ease-in-out infinite;
+
+  @keyframes sweep {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes blip {
+    0% {
+      transform: scale(0.6);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+  @keyframes flash {
+    0% {
+      background-color: color-mix(in oklab, var(--color-amber) 28%, transparent);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes pulse-alarm {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+html {
+  background: var(--color-ink-950);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-ink-950);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-signal) 35%, transparent);
+  color: var(--color-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ice);
+  outline-offset: 2px;
+}
+
+/* Fixed 3% film grain + faint 48px grid behind everything. */
+.night-ops-backdrop::before,
+.night-ops-backdrop::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.night-ops-backdrop::before {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-line) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 45%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 80%);
+  opacity: 0.35;
+}
+.night-ops-backdrop::after {
+  background-image: var(--grain);
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+}
+
+@layer components {
+  /* Micro-label: Geist Mono 11px uppercase 0.14em tracking. */
+  .micro {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Glass panel with HUD corner brackets instead of drop-shadow cards. */
+  .hud {
+    position: relative;
+    background: color-mix(in oklab, var(--color-ink-900) 70%, transparent);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--color-line);
+  }
+  .hud::before,
+  .hud::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    border-color: color-mix(in oklab, var(--color-signal) 65%, var(--color-line));
+  }
+  .hud::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+  .hud::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+  }
+  .hud > .hud-tr,
+  .hud > .hud-bl {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    border-color: color-mix(in oklab, var(--color-signal) 65%, var(--color-line));
+  }
+  .hud > .hud-tr {
+    top: -1px;
+    right: -1px;
+    border-top: 1px solid;
+    border-right: 1px solid;
+  }
+  .hud > .hud-bl {
+    bottom: -1px;
+    left: -1px;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+  }
+
+  /* Radar-sweep skeleton shimmer for loading states. */
+  .skeleton {
+    background: linear-gradient(
+      100deg,
+      var(--color-ink-800) 30%,
+      color-mix(in oklab, var(--color-signal) 12%, var(--color-ink-800)) 50%,
+      var(--color-ink-800) 70%
+    );
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+  }
+
+  .scanline {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      color-mix(in oklab, var(--color-signal) 6%, transparent) 3px
+    );
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--color-line);
+    padding: 0.5rem 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition:
+      background-color 160ms var(--ease-tower),
+      border-color 160ms var(--ease-tower),
+      color 160ms var(--ease-tower);
+  }
+  .btn:hover {
+    border-color: color-mix(in oklab, var(--color-signal) 60%, var(--color-line));
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .btn-signal {
+    background: var(--color-signal);
+    color: var(--color-ink-950);
+    border-color: var(--color-signal);
+  }
+  .btn-signal:hover {
+    background: color-mix(in oklab, var(--color-signal) 85%, white);
+  }
+  .btn-alarm {
+    border-color: color-mix(in oklab, var(--color-alarm) 60%, var(--color-line));
+    color: var(--color-alarm);
+  }
+  .btn-alarm:hover {
+    background: color-mix(in oklab, var(--color-alarm) 14%, transparent);
+  }
+
+  .field {
+    width: 100%;
+    background: var(--color-ink-950);
+    border: 1px solid var(--color-line);
+    padding: 0.6rem 0.75rem;
+    color: var(--color-text);
+    font-size: 14px;
+    transition: border-color 160ms var(--ease-tower);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-ice);
+  }
+  .field::placeholder {
+    color: color-mix(in oklab, var(--color-text-dim) 70%, transparent);
+  }
+}
+
+/* Radar-sweep wipe used for page transitions (View Transitions API). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+::view-transition-new(root) {
+  animation-name: radar-wipe-in;
+}
+::view-transition-old(root) {
+  animation: none;
+}
+@property --sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes radar-wipe-in {
+  from {
+    --sweep: 0deg;
+    mask-image: conic-gradient(from 0deg, black 0deg, black var(--sweep), transparent var(--sweep));
+  }
+  to {
+    --sweep: 360deg;
+    mask-image: conic-gradient(from 0deg, black 0deg, black var(--sweep), transparent var(--sweep));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* Hide the native cursor where the crosshair cursor is active (fine pointers only). */
+@media (pointer: fine) {
+  .crosshair-active,
+  .crosshair-active * {
+    cursor: none !important;
+  }
+}

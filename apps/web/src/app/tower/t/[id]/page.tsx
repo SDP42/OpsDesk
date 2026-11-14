@@ -13,7 +13,7 @@ import { Timeline } from "@/components/tower/timeline";
 import { Hud } from "@/components/ui/hud";
 import { ConstellationGlyph } from "@/components/ui/glyphs";
 import { ErrorState } from "@/components/ui/states";
-import { api, ApiError, unwrap } from "@/lib/api/client";
+import { api, ApiError, unwrap, type PilotTicketDetail, type TicketDetail } from "@/lib/api/client";
 import { clock, REGION_LABEL, SLA_COLOR, STATUS_LABEL, tMinus } from "@/lib/format";
 import { useMe } from "@/lib/hooks/use-me";
 
@@ -37,8 +37,8 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
       />
     );
   }
-  const detail = q.data as Extract<typeof q.data, { routing?: unknown }>;
-  if (!detail || !("guardian" in detail)) return <ErrorState message="Unexpected response" />;
+  if (!q.data || !("guardian" in q.data)) return <ErrorState message="Unexpected response" />;
+  const detail = q.data as TicketDetail;
   const t = detail.ticket;
   const scores = (detail.routing?.scores ?? {}) as { breakdown?: ScorePart[]; total?: number; runners_up?: RunnerUp[] };
   const staff = me.data?.role !== "requester";
@@ -225,7 +225,7 @@ function AgencyMirror({ ticketId }: { ticketId: string }) {
   });
   if (q.isLoading) return <div className="skeleton h-60" />;
   if (q.error) return <ErrorState message={(q.error as Error).message} />;
-  const d = q.data as { ticket: { number: string; status: string; eta?: string | null; sla_state: string; controller_callsign?: string | null }; timeline: { id: string; type: string; at: string }[] };
+  const d = q.data as PilotTicketDetail;
   return (
     <Hud title="Agency mirror · what the pilot sees" className="border-ice/60">
       <div className="grid gap-4 sm:grid-cols-4">

@@ -1,15 +1,20 @@
 "use client";
 
-import { clsx } from "clsx";
-import { Command, LogOut, Volume2, VolumeX } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Command, HelpCircle, LogOut, Volume2, VolumeX } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { Me } from "@/lib/api/client";
+import { useEffect, useState } from "react";
+import { api, unwrap, type Me } from "@/lib/api/client";
+import { cn } from "@/lib/cn";
 import { useLogout } from "@/lib/hooks/use-me";
 import { useTowerStream } from "@/lib/hooks/use-tower-stream";
 import { useTowerCalls } from "@/lib/stores/tower-calls";
+import { FirstFlight, startTour } from "@/components/onboarding/first-flight";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { HangarGlyph, RadarGlyph, StripGlyph, TowerGlyph } from "@/components/ui/glyphs";
+import { Sign, Tip, Toggle } from "@/components/ui/primitives";
 
 const PERSONA: Record<string, string> = {
   requester: "Pilot",
@@ -21,31 +26,56 @@ const PERSONA: Record<string, string> = {
 interface NavItem {
   href: string;
   label: string;
+  gate: string;
   icon: React.ReactNode;
   roles: string[];
 }
 
 const NAV: NavItem[] = [
-  { href: "/tower", label: "Overview", icon: <RadarGlyph />, roles: ["agent", "lead", "escalation_manager"] },
-  { href: "/tower/queue", label: "My queue", icon: <StripGlyph />, roles: ["agent", "lead"] },
-  { href: "/tower/triage", label: "Triage", icon: <HangarGlyph />, roles: ["agent", "lead"] },
-  { href: "/tower/escalations", label: "Escalations", icon: <TowerGlyph />, roles: ["escalation_manager", "lead", "agent"] },
+  { href: "/tower", label: "Overview", gate: "A1", icon: <RadarGlyph />, roles: ["agent", "lead", "escalation_manager"] },
+  { href: "/tower/queue", label: "My queue", gate: "A2", icon: <StripGlyph />, roles: ["agent", "lead"] },
+  { href: "/tower/triage", label: "Triage", gate: "B1", icon: <HangarGlyph />, roles: ["agent", "lead"] },
+  { href: "/tower/escalations", label: "Escalations", gate: "C1", icon: <TowerGlyph />, roles: ["escalation_manager", "lead", "agent"] },
 ];
 
 export function Brand({ compact = false }: { compact?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5" aria-label="OpsDesk home">
-      <span className="relative grid size-7 place-items-center rounded-full border border-signal/60">
-        <span className="absolute inset-1 rounded-full border border-signal/30" />
-        <span className="size-1.5 rounded-full bg-signal" />
+    <Link href="/" className="group flex items-center gap-2.5" aria-label="OpsDesk home">
+      <span className="relative grid size-9 place-items-center rounded-[10px] bg-night text-taxi shadow-[var(--shadow-card)]">
+        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+          <circle cx="12" cy="12" r="8.5" />
+          <circle cx="12" cy="12" r="4.5" opacity=".55" />
+          <path d="M12 12 18 6.5" className="origin-center transition-transform duration-700 group-hover:rotate-[200deg]" style={{ transformBox: "view-box" }} />
+          <circle cx="15.5" cy="14.5" r="1.1" fill="currentColor" />
+        </svg>
       </span>
       {!compact && (
         <span className="leading-none">
-          <span className="block font-serif text-[19px]">OpsDesk</span>
+          <span className="display block text-[22px]">OpsDesk</span>
           <span className="micro !text-[9px]">Control Tower</span>
         </span>
       )}
     </Link>
+  );
+}
+
+export function DataModeSwitch({ me }: { me: Me }) {
+  const qc = useQueryClient();
+  const save = useMutation({
+    mutationFn: async (data_mode: "demo" | "live") => unwrap(await api.PATCH("/api/me/preferences", { body: { data_mode } })),
+    onSuccess: (next) => {
+      qc.setQueryData(["me"], next);
+      void qc.invalidateQueries({ predicate: (q) => q.queryKey[0] !== "me" });
+    },
+  });
+  const live = me.data_mode === "live";
+  return (
+    <div data-tour="mode" className="flex items-center gap-2.5 rounded-full border border-line bg-ink-800 py-1 pr-1.5 pl-3">
+      <label htmlFor="mode-switch" className="micro cursor-pointer whitespace-nowrap !text-text">
+        {live ? "Live tower" : "Demo airspace"}
+      </label>
+      <Toggle id="mode-switch" label="Use live data" checked={live} onCheckedChange={(v) => save.mutate(v ? "live" : "demo")} />
+    </div>
   );
 }
 
@@ -55,92 +85,120 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
   const stream = useTowerStream(me.role !== "requester");
   const { sound, toggleSound } = useTowerCalls();
   const nav = NAV.filter((n) => n.roles.includes(me.role));
+  const [now, setNow] = useState<string>("");
+  useEffect(() => {
+    const t = () => setNow(new Date().toISOString().slice(11, 19) + "Z");
+    t();
+    const id = setInterval(t, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div className="relative z-10 flex min-h-dvh">
-      <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col border-r border-line bg-ink-950/80 px-3 py-5 lg:flex">
-        <div className="px-2">
+      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-line bg-ink-900/90 px-4 py-6 backdrop-blur lg:flex">
+        <div className="px-1">
           <Brand />
         </div>
-        <nav className="mt-8 flex flex-col gap-1" aria-label="Tower">
+        <div className="mt-8 rounded-xl bg-night p-3 text-white">
+          <p className="micro !text-white/50">Tower clock</p>
+          <p className="mt-1 font-mono text-2xl tracking-wider text-taxi tabular" suppressHydrationWarning>
+            {now || "--:--:--Z"}
+          </p>
+          <p className="mt-2 flex items-center gap-1.5 font-mono text-[10px] tracking-wider text-white/70 uppercase">
+            <span className={cn("size-1.5 rounded-full", stream.connected ? "bg-signal" : "animate-pulse-alarm bg-alarm")} />
+            {stream.connected ? "Receiving live" : "Reconnecting"}
+          </p>
+        </div>
+        <nav className="mt-6 flex flex-col gap-1.5" aria-label="Tower" data-tour="nav">
           {nav.map((n) => {
             const active = n.href === "/tower" ? pathname === "/tower" : pathname.startsWith(n.href);
             return (
               <Link
                 key={n.href}
                 href={n.href}
-                className={clsx(
-                  "flex items-center gap-3 border-l-2 px-3 py-2 text-sm transition-colors",
-                  active ? "border-signal bg-ink-800 text-text" : "border-transparent text-text-dim hover:text-text",
+                className={cn(
+                  "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] transition-colors",
+                  active ? "text-night" : "text-text-dim hover:bg-ink-700/60 hover:text-text",
                 )}
               >
-                {n.icon}
-                {n.label}
+                {active && <motion.span layoutId="nav-active" className="absolute inset-0 rounded-xl bg-taxi" transition={{ type: "spring", stiffness: 400, damping: 34 }} />}
+                <span className="relative flex w-full items-center gap-3">
+                  <span className={cn("grid size-7 place-items-center rounded-md font-mono text-[10px] font-semibold", active ? "bg-night text-taxi" : "bg-ink-700 text-text-dim")}>{n.gate}</span>
+                  {n.label}
+                  <span className="ml-auto opacity-70">{n.icon}</span>
+                </span>
               </Link>
             );
           })}
         </nav>
-        <div className="mt-auto flex flex-col gap-3 px-2">
+        <div className="mt-auto flex flex-col gap-3">
           <button
-            className="flex items-center justify-between border border-line px-3 py-2 text-left font-mono text-[11px] text-text-dim hover:text-text"
+            data-tour="command"
+            className="flex items-center justify-between rounded-xl border border-line bg-ink-800 px-3 py-2.5 text-left text-sm text-text-dim transition hover:border-text/40 hover:text-text"
             onClick={() => window.dispatchEvent(new Event("opsdesk:palette"))}
           >
             <span className="flex items-center gap-2">
-              <Command size={13} strokeWidth={1.5} /> Command
+              <Command size={14} strokeWidth={1.5} /> Jump to…
             </span>
-            <kbd>⌘K</kbd>
+            <kbd className="rounded bg-ink-700 px-1.5 font-mono text-[10px]">⌘K</kbd>
           </button>
-          <div className="flex items-center justify-between">
-            <span className="micro flex items-center gap-1.5">
-              <span className={clsx("size-1.5 rounded-full", stream.connected ? "bg-signal" : "bg-alarm animate-pulse-alarm")} />
-              {stream.connected ? "Live" : "No contact"}
+          <div className="flex items-center gap-3 rounded-xl border border-line bg-ink-800 p-3">
+            <span className="grid size-9 place-items-center rounded-full bg-beacon font-mono text-[12px] font-semibold text-white">
+              {me.name
+                .split(" ")
+                .map((w) => w[0])
+                .slice(0, 2)
+                .join("")}
             </span>
-            <button
-              onClick={toggleSound}
-              aria-label={sound ? "Mute radar ping" : "Enable radar ping"}
-              className="text-text-dim hover:text-text"
-            >
-              {sound ? <Volume2 size={14} strokeWidth={1.5} /> : <VolumeX size={14} strokeWidth={1.5} />}
-            </button>
+            <div className="min-w-0 flex-1 leading-tight">
+              <p className="truncate text-sm">{me.name}</p>
+              <p className="micro truncate">{PERSONA[me.role]}</p>
+            </div>
+            <Tip label="Sign out">
+              <button onClick={logout} className="text-text-dim hover:text-alarm" aria-label="Sign out">
+                <LogOut size={15} strokeWidth={1.5} />
+              </button>
+            </Tip>
           </div>
         </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-4 border-b border-line bg-ink-950/80 px-4 backdrop-blur-md lg:px-8">
-          <div className="flex items-center gap-4 lg:hidden">
-            <Brand compact />
-            <nav className="flex gap-3 overflow-x-auto">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b border-line bg-ink-950/80 px-4 backdrop-blur-md lg:px-8">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="lg:hidden">
+              <Brand compact />
+            </span>
+            <nav className="flex gap-1 overflow-x-auto lg:hidden">
               {nav.map((n) => (
-                <Link key={n.href} href={n.href} className="micro whitespace-nowrap hover:text-text">
+                <Link key={n.href} href={n.href} className={cn("sign whitespace-nowrap", pathname === n.href ? "" : "!bg-transparent !text-text-dim")}>
                   {n.label}
                 </Link>
               ))}
             </nav>
-          </div>
-          <div className="micro hidden lg:block">
-            {new Date().toLocaleDateString(undefined, { weekday: "short", day: "2-digit", month: "short" })} · UTC{" "}
-            <UtcClock />
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right leading-tight">
-              <div className="text-sm">{me.name}</div>
-              <div className="micro">
-                {PERSONA[me.role]} {me.callsign ? `· ${me.callsign}` : ""}
-              </div>
+            <div className="hidden items-center gap-2 lg:flex">
+              <Sign tone="dark">{me.callsign ?? PERSONA[me.role]}</Sign>
+              <span className="micro">{me.region ? `Region ${me.region}` : "All regions"}</span>
             </div>
-            <button onClick={logout} className="text-text-dim hover:text-alarm" aria-label="Sign out">
-              <LogOut size={16} strokeWidth={1.5} />
-            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <DataModeSwitch me={me} />
+            <Tip label="Replay the tour">
+              <button className="hidden size-9 place-items-center rounded-full border border-line bg-ink-800 text-text-dim hover:text-text sm:grid" onClick={() => startTour(me.role)} aria-label="Replay the tour">
+                <HelpCircle size={15} strokeWidth={1.5} />
+              </button>
+            </Tip>
+            <Tip label={sound ? "Mute radar ping" : "Radar ping on escalation"}>
+              <button onClick={toggleSound} aria-label="Toggle radar ping" className="grid size-9 place-items-center rounded-full border border-line bg-ink-800 text-text-dim hover:text-text">
+                {sound ? <Volume2 size={15} strokeWidth={1.5} /> : <VolumeX size={15} strokeWidth={1.5} />}
+              </button>
+            </Tip>
           </div>
         </header>
-        <main className="flex-1 px-4 py-6 lg:px-8">{children}</main>
+        <main className="flex-1 px-4 py-6 lg:px-8 lg:py-8">{children}</main>
       </div>
       <CommandPalette role={me.role} />
+      <FirstFlight me={me} />
     </div>
   );
-}
-
-function UtcClock() {
-  return <span suppressHydrationWarning className="tabular">{new Date().toISOString().slice(11, 16)}Z</span>;
 }

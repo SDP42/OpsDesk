@@ -9,6 +9,7 @@ export const STAFF_ROLES = ["agent", "escalation_manager", "lead"] as const;
 
 export function homeFor(role: string): string {
   if (role === "requester") return "/pilot";
+  if (role === "supplier") return "/partner";
   if (role === "escalation_manager") return "/tower/escalations";
   return "/tower";
 }

@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Brand } from "@/components/tower/app-shell";
-import { HangarGlyph, RadarGlyph, StripGlyph, TowerGlyph } from "@/components/ui/glyphs";
+import { FrequencyGlyph, HangarGlyph, RadarGlyph, StripGlyph, TowerGlyph } from "@/components/ui/glyphs";
 import { ErrorState } from "@/components/ui/states";
 import { api, ApiError, unwrap, type DemoAccount } from "@/lib/api/client";
 import { homeFor } from "@/lib/hooks/use-me";
@@ -17,6 +17,7 @@ const CARD: Record<string, { glyph: React.ReactNode; blurb: string; tone: string
   agent: { glyph: <RadarGlyph size={22} />, blurb: "Works the queue with history, links and a routing reason.", tone: "text-signal" },
   escalation_manager: { glyph: <TowerGlyph size={22} />, blurb: "Receives escalations directly. Check-in and LCD urgency.", tone: "text-alarm" },
   lead: { glyph: <HangarGlyph size={22} />, blurb: "Queue health, SLA risk, insights and uncapped exports.", tone: "text-amber" },
+  supplier: { glyph: <FrequencyGlyph size={22} />, blurb: "External partner. Replies to TBO's side conversations about bookings.", tone: "text-beacon" },
 };
 
 export default function LoginPage() {
@@ -75,13 +76,13 @@ export default function LoginPage() {
               Choose your <em className="text-signal">callsign</em>.
             </h1>
             <p className="mt-5 max-w-md text-text-dim">
-              Four seats in the tower. Pick a persona to sign in with the seeded demo account, or enter credentials below.
+              Five seats in the tower, including an external supplier partner. Pick a persona to sign in with the seeded demo account, or enter credentials below.
             </p>
           </motion.div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             {accounts.isLoading &&
-              Array.from({ length: 4 }).map((_, i) => <div key={i} className="skeleton h-40 border border-line" />)}
+              Array.from({ length: 5 }).map((_, i) => <div key={i} className="skeleton h-40 border border-line" />)}
             {accounts.error && (
               <div className="sm:col-span-2">
                 <ErrorState message="Run `make seed` and `make dev`, then retry." onRetry={() => accounts.refetch()} />

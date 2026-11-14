@@ -14,6 +14,7 @@ from app.core.errors import AppError
 from app.core.rbac import Principal, require_any
 from app.core.security import create_access_token, verify_password
 from app.db.models import User
+from app.db.seed.fixtures import DEMO_ACCOUNTS
 from app.db.session import get_session
 from app.schemas.auth import DemoAccount, LoginIn, MeOut
 from app.schemas.common import Envelope, Ok
@@ -107,12 +108,7 @@ async def demo_accounts(
     demo_password = settings.demo_password if settings.app_env != "production" else None
     out: list[DemoAccount] = []
     for role, persona, home in personas:
-        user = await session.scalar(
-            select(User)
-            .where(User.role == role, User.callsign.is_not(None))
-            .order_by(User.callsign)
-            .limit(1)
-        )
+        user = await session.scalar(select(User).where(User.email == DEMO_ACCOUNTS[role]))
         if user:
             out.append(
                 DemoAccount(

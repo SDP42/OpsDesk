@@ -110,7 +110,7 @@ export function Scene({
 /** The shared two-column grid every scene uses. */
 export function SceneGrid({ copy, visual, flip = false }: { copy: React.ReactNode; visual?: React.ReactNode; flip?: boolean }) {
   return (
-    <div className="mx-auto grid h-full w-full max-w-[1320px] items-center gap-10 px-5 pt-20 pb-10 sm:px-10 lg:grid-cols-12 lg:gap-16">
+    <div className="relative z-[3] mx-auto grid h-full w-full max-w-[1320px] items-center gap-10 px-5 pt-20 pb-10 sm:px-10 lg:grid-cols-12 lg:gap-16">
       <div className={cn("lg:col-span-6", flip && "lg:order-2")}>{copy}</div>
       <div className={cn("relative lg:col-span-6", flip && "lg:order-1")}>{visual}</div>
     </div>

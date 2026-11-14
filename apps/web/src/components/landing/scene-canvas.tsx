@@ -230,7 +230,7 @@ export default function SceneCanvas() {
   const [dpr, setDpr] = useState(1.5);
   // Confined to the right visual column so 3D never sits on top of copy.
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-y-0 right-0 z-0 hidden w-1/2 lg:block">
+    <div aria-hidden className="pointer-events-none fixed inset-y-0 right-0 z-[2] hidden w-1/2 lg:block">
       <Canvas dpr={[1, Math.min(dpr, 1.75)]} camera={{ position: [0, 0, 5.2], fov: 45 }} gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}>
         <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(1.75)} />
         <Constellation />

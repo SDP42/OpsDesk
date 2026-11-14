@@ -22,7 +22,7 @@ export function Landing() {
       <CrosshairCursor />
       {webgl && <SceneCanvas />}
       <LandingNav />
-      <main className="relative z-10">
+      <main className="relative">
         <Hero />
         <FlyingBlind />
         <ConstellationScene />

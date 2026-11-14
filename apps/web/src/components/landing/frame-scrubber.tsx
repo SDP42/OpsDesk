@@ -73,7 +73,7 @@ export function FrameScrubber({
       if (cancelled) return;
       if (caps.rich) {
         st = ScrollTrigger.create({
-          trigger: trigger?.current ?? canvas.current?.parentElement ?? undefined,
+          trigger: trigger?.current ?? canvas.current?.closest("section") ?? canvas.current?.parentElement ?? undefined,
           start: "top top",
           end: "bottom bottom",
           scrub: true,

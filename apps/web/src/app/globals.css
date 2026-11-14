@@ -313,3 +313,10 @@ body {
     cursor: none !important;
   }
 }
+
+/* Radar-sweep wipe for scene entrances (rotating conic-gradient mask). */
+.radar-wipe {
+  --sweep: 360deg;
+  mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
+  -webkit-mask-image: conic-gradient(from -90deg at 50% 50%, black 0deg, black var(--sweep), transparent var(--sweep));
+}

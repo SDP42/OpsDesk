@@ -1,5 +1,6 @@
 "use client";
 
+import { Term } from "@/components/ui/term";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { clsx } from "clsx";
 import { Zap } from "lucide-react";
@@ -85,10 +86,10 @@ export default function TowerOverview() {
         <ErrorState message={(overview.error as Error).message} onRetry={() => overview.refetch()} />
       ) : (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <Tile label="Open flights" value={o?.open} />
-          <Tile label="Unassigned (triage)" value={o?.unassigned} tone="amber" />
-          <Tile label="With Tower Chief" value={o?.escalated} tone="alarm" />
-          <Tile label="Breached" value={o?.by_sla?.breached ?? (o ? 0 : undefined)} tone="alarm" />
+          <Tile label={<Term k="flight">Open flights</Term>} value={o?.open} />
+          <Tile label={<Term k="triage">Unassigned (triage)</Term>} value={o?.unassigned} tone="amber" />
+          <Tile label={<Term k="tower chief">With Tower Chief</Term>} value={o?.escalated} tone="alarm" />
+          <Tile label={<Term k="sla">Breached (overdue)</Term>} value={o?.by_sla?.breached ?? (o ? 0 : undefined)} tone="alarm" />
         </div>
       )}
 
@@ -129,7 +130,7 @@ export default function TowerOverview() {
   );
 }
 
-function Tile({ label, value, tone = "signal" }: { label: string; value?: number; tone?: "signal" | "amber" | "alarm" }) {
+function Tile({ label, value, tone = "signal" }: { label: React.ReactNode; value?: number; tone?: "signal" | "amber" | "alarm" }) {
   const color = { signal: "text-signal", amber: "text-amber", alarm: "text-alarm" }[tone];
   return (
     <div className="hud px-4 py-3">

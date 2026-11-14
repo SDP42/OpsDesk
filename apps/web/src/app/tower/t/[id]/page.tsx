@@ -1,5 +1,6 @@
 "use client";
 
+import { Term } from "@/components/ui/term";
 import { useQuery } from "@tanstack/react-query";
 import { clsx } from "clsx";
 import { AlertTriangle, ArrowLeft, Eye } from "lucide-react";
@@ -68,7 +69,7 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
             )}
           </div>
           <button className={clsx("btn", mirror && "border-ice text-ice")} onClick={() => setMirror((m) => !m)} aria-pressed={mirror}>
-            <Eye size={14} strokeWidth={1.5} /> Agency mirror
+            <Eye size={14} strokeWidth={1.5} /> <Term k="agency mirror" hint={false}>Agency mirror</Term>
           </button>
         </div>
         {detail.guardian.triggered && (
@@ -114,7 +115,7 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
               </p>
               <div className="mt-4">
                 <div className="flex items-center justify-between">
-                  <span className="micro">Turbulence (churn risk)</span>
+                  <span className="micro"><Term k="turbulence">Turbulence (churn risk)</Term></span>
                   <span className="font-mono text-sm tabular">{Math.round(t.agency.turbulence_score)}</span>
                 </div>
                 <div className="mt-1.5 h-1.5 bg-ink-700">
@@ -128,11 +129,11 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
                 </div>
               </div>
               <dl className="mt-4 grid grid-cols-2 gap-y-2 text-sm">
-                <dt className="micro">TBOH</dt>
+                <dt className="micro"><Term k="tboh">TBOH</Term></dt>
                 <dd className="font-mono">{t.tboh ?? "—"}</dd>
                 <dt className="micro">Check-in</dt>
                 <dd className="font-mono">{tMinus(t.check_in)}</dd>
-                <dt className="micro">LCD</dt>
+                <dt className="micro"><Term k="lcd">LCD</Term></dt>
                 <dd className="font-mono">{tMinus(t.lcd)}</dd>
                 <dt className="micro">Contacts</dt>
                 <dd className="font-mono">{t.contact_count}</dd>
@@ -163,7 +164,7 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
 
           {/* Right: wheels-up, routing, intent, actions, timeline */}
           <div className="flex flex-col gap-5">
-            <Hud title="Wheels-up clock">
+            <Hud title={<Term k="wheels-up">Wheels-up clock · time left</Term>}>
               <div className="flex justify-center">
                 <FuelGauge sla={t.sla} size={190} />
               </div>
@@ -177,7 +178,7 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
             <Hud title="Actions">
               <TicketActions ticket={t} role={me.data?.role ?? "agent"} />
             </Hud>
-            <Hud title="Vectoring · why this controller">
+            <Hud title={<Term k="vectoring">Vectoring · why this person got it</Term>}>
               {scores.breakdown ? (
                 <>
                   <p className="mb-3 text-sm">
@@ -190,7 +191,7 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
                 <p className="text-sm text-text-dim">{t.owner ? `Assigned to ${t.owner.name} manually.` : "Not yet vectored."}</p>
               )}
             </Hud>
-            <Hud title="Intent">
+            <Hud title={<Term k="intent">Intent · what it is about</Term>}>
               {t.intent ? (
                 <>
                   <p className="text-sm">{t.intent.label}</p>

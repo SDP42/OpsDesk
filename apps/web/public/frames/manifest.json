@@ -2,7 +2,7 @@
   "sequences": [
     {
       "id": "a",
-      "count": 140,
+      "count": 110,
       "width": 1280,
       "height": 720,
       "pattern": "/frames/a/f_{i}.webp",
@@ -11,7 +11,7 @@
     },
     {
       "id": "b",
-      "count": 140,
+      "count": 110,
       "width": 1280,
       "height": 720,
       "pattern": "/frames/b/f_{i}.webp",
@@ -26,6 +26,78 @@
       "pattern": "/frames/radar/f_{i}.webp",
       "pad": 4,
       "blur": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAACwAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JZwDCgBqq4wyat/Ig4AD3HwwIuxE+h7wlxIjRMvtbOpRZdAqVVTXTi3+CZixqOudz11pAIi5iABgP3q4EAAAA"
+    },
+    {
+      "id": "gate",
+      "count": 110,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/gate/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAAAwBACdASoYAA4APu1iqU2ppaOiMAgBMB2JYwCdMoABEmIqQ85uPytZIAAA9yatVcHQRcO0mQYmyf6QtaGMV6+CZz7t+SM+2C2IsbdWb9dxsG7Jvbojp3PsLWPcaO+vo4oPYWfwh/qkN67YsjuH7ZZuzQ7R14A+HsXAF5nvXz44clwwAAA="
+    },
+    {
+      "id": "city",
+      "count": 110,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/city/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAABwAwCdASoYAA4APu1mqk4ppaOiMAgBMB2JZ2ZAADc119PAxgAA/vBagLNPOo7BBtyaP7GWVhMLnV9HObN0RLv/TASfOgAA"
+    },
+    {
+      "id": "taxi",
+      "count": 110,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/taxi/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACwAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JZwDCgBZCC+ZfanunAAD+D9edPwo3K87lFQI1Z4rYPi3gWe+hHwPuEKRLiJiU3HAAAA=="
+    },
+    {
+      "id": "sunrise",
+      "count": 107,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/sunrise/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADwAwCdASoYAA4APu1kqU2ppaQiMAgBMB2JQBOiP/wHkTZSNnXZMmFIAP7i+tUNKhipa82rbZXfXeDWjQz6oKLXd72EY4lGg45IbnKgDOANSbXAVNAc7IFFaqwAAA=="
+    },
+    {
+      "id": "cockpit",
+      "count": 110,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/cockpit/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAADwAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JZACdMoC2SgYmxUb3UNwgAP6haNOfDRar1DwIZtUk/zvvjalUswogfmdLpmQsKRsEoN5Eb8oQxenioesVA2mWnqvgG0Xdgmp/Dk1gk8IRor+kB7Csjpw5tEOf5bNWgcR3lq31D+keJfSB6Lg2TDFR29NSr7oA1vKRt0YuhAA="
+    },
+    {
+      "id": "clouds",
+      "count": 110,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/clouds/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAACwAwCdASoYAA4APu1kqU2ppaOiMAgBMB2JYwC7AA+R5gitOK/7gAD+jYLyC67zewv/IHjhO3U6ouwPNYN+YNlu1nl6mJbYiyUUREsynP05wb0vZiKXXrY/K2HYtHu/iMAAAA=="
+    },
+    {
+      "id": "baggage",
+      "count": 110,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/baggage/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAAAQBACdASoYAA4APu1oqk6ppiQiMAgBMB2JZgC06Bi9XO9UFSw5/LpM4AD+3gnVTk7zYwMfTl8j2+CdNyvw4pWUt+KQb78V4hhconEu0IQleCut2PTtlV0nzpXdXyQXuIQ6FcK5usO1tnwD37vDBjdmBg4NGNhOjSLEAkf9G/fNWk+FB5H/6f8fbXgJ5wAA"
+    },
+    {
+      "id": "checkin",
+      "count": 110,
+      "width": 1280,
+      "height": 720,
+      "pattern": "/frames/checkin/f_{i}.webp",
+      "pad": 4,
+      "blur": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAADQAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JQBOmUABcf6SJdDPOMgAA/pOmItpZqVtcg7v0WfnqiSwuLQb0J0HmBW1Xgfnx6pW/iJgA4rAZJ+IY4kPRtDfE7MNnSQLOOuFft6Blf7JY7g6TF2XQZaZ1zvaUCLHpPTK/jNTw2BxOQ0m80c3lRoUgAAA="
     }
   ]
 }

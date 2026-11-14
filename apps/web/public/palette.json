@@ -1,0 +1,30 @@
+{
+  "dominant": [
+    {
+      "hex": "#0e0b0a",
+      "share": 0.221
+    },
+    {
+      "hex": "#271710",
+      "share": 0.175
+    },
+    {
+      "hex": "#5d504b",
+      "share": 0.173
+    },
+    {
+      "hex": "#191210",
+      "share": 0.163
+    },
+    {
+      "hex": "#392d29",
+      "share": 0.162
+    },
+    {
+      "hex": "#a58875",
+      "share": 0.107
+    }
+  ],
+  "ink_tint": "#0e0b0a",
+  "css": ":root { --footage-ink: #0e0b0a; }"
+}

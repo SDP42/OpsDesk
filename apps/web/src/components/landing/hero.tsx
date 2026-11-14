@@ -83,7 +83,7 @@ export function Hero() {
               <div className="hero-fade">
                 <SceneTag n={1}>OpsDesk for TBO</SceneTag>
               </div>
-              <h1 className="display mt-7 text-[clamp(3.4rem,7vw,7.4rem)]">
+              <h1 className="display mt-7 text-[clamp(3rem,5.4vw,5.8rem)]">
                 {words("Every ticket")}
                 <br />
                 {words("is a")}
@@ -105,7 +105,7 @@ export function Hero() {
                   </a>
                 </Magnetic>
               </div>
-              <dl className="hero-fade mt-12 grid max-w-lg grid-cols-3 gap-4 border-t border-line pt-6">
+              <dl className="hero-fade mt-8 grid max-w-lg grid-cols-3 gap-4 border-t border-line pt-5">
                 {STATS.map(([v, l]) => (
                   <div key={l}>
                     <dt className="display text-3xl">{v}</dt>

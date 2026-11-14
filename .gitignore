@@ -1,0 +1,50 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+apps/api/.secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Databases and models generated at seed time
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+apps/api/data/
+
+# Node / Next
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.pnpm-store/
+
+# Playwright
+e2e/test-results/
+e2e/playwright-report/
+e2e/screenshots/
+playwright/.cache/
+
+# Media: raw footage never goes into git
+scripts/media/raw/
+*.mov
+apps/web/public/video/*.mp4
+apps/web/public/video/*.webm

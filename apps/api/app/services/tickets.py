@@ -42,6 +42,7 @@ from app.schemas.tickets import (
     TicketCreateIn,
     TimelineEventOut,
 )
+from app.services import embeddings
 from app.services import intents as intent_service
 from app.services import routing as routing_service
 from app.services.audit import audit, timeline
@@ -353,9 +354,14 @@ async def create_ticket(
         for h in await _history_for_linking(session, agency.id, data.tboh, now)
         if h.id != ticket.id
     ]
-    link_result = linker.find_links(
-        _to_link_ticket(ticket), [_to_link_ticket(h) for h in history], now
-    )
+    history_lt = [_to_link_ticket(h) for h in history]
+    new_lt = _to_link_ticket(ticket)
+    vectors = None
+    same_agency = [h for h in history_lt if h.agency_id == new_lt.agency_id][:300]
+    mat = embeddings.embed([f"{t.title}. {t.description}" for t in [new_lt, *same_agency]])
+    if mat is not None:
+        vectors = {t.id: mat[k].tolist() for k, t in enumerate([new_lt, *same_agency])}
+    link_result = linker.find_links(new_lt, history_lt, now, vectors)
     for prop in link_result.links:
         await add_link(
             session, ticket.id, prop.ticket_id, prop.link_type, prop.strength, prop.reason

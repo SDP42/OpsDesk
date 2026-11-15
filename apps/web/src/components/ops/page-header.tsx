@@ -30,8 +30,10 @@ export function PageHeader({
           <Sign>{eyebrow}</Sign>
         </div>
         <h1 className="display mt-4 text-5xl sm:text-6xl">{title}</h1>
-        <p className="mt-3 text-[15px] leading-relaxed text-text-dim">
-          <span className="font-mono text-[11px] tracking-wider text-text uppercase">In plain words · </span>
+        <p className="text-text-dim mt-3 text-[15px] leading-relaxed">
+          <span className="text-text font-mono text-[11px] tracking-wider uppercase">
+            In plain words ·{" "}
+          </span>
           {plain}
         </p>
       </div>

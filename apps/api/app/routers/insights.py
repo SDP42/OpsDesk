@@ -14,7 +14,7 @@ from app.core.rbac import Principal, require_roles
 from app.db.base import utcnow
 from app.db.models import Theme, Ticket, TicketTheme
 from app.db.session import get_session
-from app.engines.weather import ThemeObservation, aggregate_week, emerging_zscore, iso_week
+from app.engines.weather import ThemeObservation, aggregate_week, is_emerging, iso_week
 from app.schemas.common import Envelope, StrictModel
 from app.schemas.misc import InsightsOut, ThemeSample, ThemeWeekOut
 from app.services.audit import audit
@@ -102,7 +102,6 @@ async def heatmap(
     out = []
     for code, t in themes.items():
         counts = [grid.get(code, {}).get(w, 0) for w in labels]
-        z = emerging_zscore(counts[-1], counts[:-1])
         out.append(
             {
                 "code": code,
@@ -110,7 +109,7 @@ async def heatmap(
                 "product_link": t.product_link,
                 "counts": counts,
                 "total": sum(counts),
-                "emerging": bool(z is not None and z >= 2.0),
+                "emerging": is_emerging(counts[-1], counts[:-1]),
             }
         )
     out.sort(key=lambda d: -sum(d["counts"]))  # type: ignore[arg-type]

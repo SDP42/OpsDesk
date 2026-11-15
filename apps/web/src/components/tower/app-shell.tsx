@@ -11,6 +11,7 @@ import {
   Ghost,
   HelpCircle,
   LogOut,
+  Tv,
   Users,
   Volume2,
   VolumeX,
@@ -115,6 +116,13 @@ const NAV: NavItem[] = [
     gate: "F2",
     icon: <Database size={18} strokeWidth={1.5} />,
     roles: ["lead"],
+  },
+  {
+    href: "/wall",
+    label: "Wall mode",
+    gate: "W1",
+    icon: <Tv size={18} strokeWidth={1.5} />,
+    roles: ["agent", "lead", "escalation_manager"],
   },
   {
     href: "/tower/simulate",

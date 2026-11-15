@@ -136,6 +136,7 @@ export function CommandPalette({ role }: { role: string }) {
                 ["insights", "Weather radar (themes)", "/tower/insights"],
                 ["data", "Black box (exports)", "/tower/data"],
                 ["simulate", "Routing simulator", "/tower/simulate"],
+                ["wall", "Wall mode (ops-floor TV)", "/wall"],
               ] as const
             ).map(([id, label, href]) => ({ id, label, hint: "go", run: () => go(href) })),
           ];

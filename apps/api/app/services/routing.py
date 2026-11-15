@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.models import Queue, RoutingDecision, Ticket, User
+from app.db.base import utcnow
+from app.db.models import HrRecord, Queue, RoutingDecision, Ticket, User
 from app.engines import vectoring
 from app.engines.lifecycle import OPEN_STATUSES
 
@@ -39,6 +40,19 @@ async def load_controllers(
         await session.scalars(select(User).where(User.role == role, User.is_active.is_(True)))
     ).all()
     counts = await open_counts(session)
+    # Crew Roster: HRMS leave / weekly off overrides self-reported presence for routing.
+    today = utcnow()
+    on_leave = set(
+        (
+            await session.scalars(
+                select(HrRecord.user_id).where(
+                    HrRecord.kind.in_(["leave", "weekly_off"]),
+                    HrRecord.start <= today,
+                    HrRecord.end >= today - timedelta(days=1),
+                )
+            )
+        ).all()
+    )
     return [
         vectoring.Controller(
             id=u.id,
@@ -47,7 +61,7 @@ async def load_controllers(
             languages=u.languages or [],
             shift_start=u.shift_start,
             shift_end=u.shift_end,
-            availability=u.availability,
+            availability="away" if u.id in on_leave else u.availability,
             open_tickets=counts.get(u.id, 0),
             capacity=u.capacity,
             skills=u.skills or [],

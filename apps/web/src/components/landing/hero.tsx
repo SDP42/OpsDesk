@@ -131,9 +131,9 @@ export function Hero() {
                   </Link>
                 </Magnetic>
                 <Magnetic>
-                  <a href="#scene-2" className="btn !px-7 !py-4 !text-[13px]">
+                  <Link href="/login?autopilot=1" className="btn !px-7 !py-4 !text-[13px]">
                     <Play size={14} /> Take the 90-second flight
-                  </a>
+                  </Link>
                 </Magnetic>
               </div>
               <dl className="hero-fade border-line mt-8 grid max-w-lg grid-cols-3 gap-4 border-t pt-5">

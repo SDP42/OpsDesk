@@ -5,16 +5,19 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.errors import not_found
 from app.core.rbac import Principal, require_roles
 from app.db.base import utcnow
 from app.db.models import Theme, Ticket, TicketTheme
 from app.db.session import get_session
-from app.engines.weather import ThemeObservation, aggregate_week, iso_week
-from app.schemas.common import Envelope
+from app.engines.weather import ThemeObservation, aggregate_week, emerging_zscore, iso_week
+from app.schemas.common import Envelope, StrictModel
 from app.schemas.misc import InsightsOut, ThemeSample, ThemeWeekOut
+from app.services.audit import audit
 
 router = APIRouter(prefix="/insights", tags=["insights"])
 
@@ -66,3 +69,70 @@ async def themes(
         for w in weeks
     ]
     return Envelope(data=InsightsOut(week=target, total_tickets=total, themes=out))
+
+
+class HeatmapOut(BaseModel):
+    weeks: list[str]
+    themes: list[dict[str, object]]  # {code, label, product_link, counts: [int], total, emerging}
+
+
+@router.get("/heatmap", response_model=Envelope[HeatmapOut])
+async def heatmap(
+    weeks: int = Query(default=8, ge=2, le=26),
+    principal: Principal = Depends(require_roles("agent", "lead")),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[HeatmapOut]:
+    """Theme counts per ISO week for the Weather Radar heat map (oldest week first)."""
+    now = utcnow()
+    labels = [iso_week(now - timedelta(weeks=i)) for i in range(weeks - 1, -1, -1)]
+    since = now - timedelta(weeks=weeks)
+    rows = (
+        await session.execute(
+            select(Theme.code, Ticket.created_at)
+            .join(TicketTheme, TicketTheme.theme_id == Theme.id)
+            .join(Ticket, Ticket.id == TicketTheme.ticket_id)
+            .where(Ticket.created_at >= since, Ticket.is_demo.is_(principal.data_mode == "demo"))
+        )
+    ).all()
+    grid: dict[str, dict[str, int]] = {}
+    for code, at in rows:
+        grid.setdefault(code, {}).setdefault(iso_week(at), 0)
+        grid[code][iso_week(at)] += 1
+    themes = {t.code: t for t in (await session.scalars(select(Theme))).all()}
+    out = []
+    for code, t in themes.items():
+        counts = [grid.get(code, {}).get(w, 0) for w in labels]
+        z = emerging_zscore(counts[-1], counts[:-1])
+        out.append(
+            {
+                "code": code,
+                "label": t.label,
+                "product_link": t.product_link,
+                "counts": counts,
+                "total": sum(counts),
+                "emerging": bool(z is not None and z >= 2.0),
+            }
+        )
+    out.sort(key=lambda d: -sum(d["counts"]))  # type: ignore[arg-type]
+    return Envelope(data=HeatmapOut(weeks=labels, themes=out))
+
+
+class ProductLinkIn(StrictModel):
+    product_link: str = Field(max_length=300)
+
+
+@router.patch("/themes/{code}", response_model=Envelope[dict[str, str]])
+async def set_product_link(
+    code: str,
+    body: ProductLinkIn,
+    principal: Principal = Depends(require_roles("lead")),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[dict[str, str]]:
+    """Attach a suggested product link or bug key to a theme (closes the feedback loop)."""
+    theme = await session.scalar(select(Theme).where(Theme.code == code))
+    if theme is None:
+        raise not_found("Theme")
+    theme.product_link = body.product_link or None
+    audit(session, principal, "theme.product_link", "theme", theme.id, {"link": body.product_link})
+    await session.commit()
+    return Envelope(data={"code": code, "product_link": body.product_link})

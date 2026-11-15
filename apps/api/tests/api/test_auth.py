@@ -71,3 +71,18 @@ async def test_data_mode_switches_between_demo_and_live(client_factory) -> None:
     live = (await client.get("/api/tickets", params={"limit": 200})).json()["data"]
     assert {t["id"] for t in live}.isdisjoint({t["id"] for t in demo})
     await client.patch("/api/me/preferences", json={"data_mode": "demo"})
+
+
+async def test_login_rate_limit_is_per_account(client_factory, monkeypatch) -> None:
+    from app.core.config import get_settings
+    from app.routers import auth as auth_router
+
+    monkeypatch.setattr(get_settings(), "login_rate_limit_per_minute", 2)
+    auth_router._attempts.clear()
+    client = await client_factory()
+    bad = {"email": AGENT, "password": "wrong"}
+    codes = [(await client.post("/api/auth/login", json=bad)).status_code for _ in range(3)]
+    assert codes[-1] == 429
+    ok = await client.post("/api/auth/login", json={"email": LEAD, "password": "cleared-for-takeoff"})
+    assert ok.status_code == 200
+    auth_router._attempts.clear()

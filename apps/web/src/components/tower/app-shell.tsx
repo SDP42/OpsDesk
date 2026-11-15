@@ -237,7 +237,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
                 key={n.href}
                 href={n.href}
                 className={cn(
-                  "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] transition-colors",
+                  "group relative flex items-center gap-3 rounded-xl px-3 py-1.5 text-[14px] transition-colors",
                   active ? "text-night" : "text-text-dim hover:bg-ink-700/60 hover:text-text",
                 )}
               >
@@ -264,7 +264,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
             );
           })}
         </nav>
-        <div className="mt-auto flex flex-col gap-3">
+        <div className="mt-4 flex shrink-0 flex-col gap-3">
           <button
             data-tour="command"
             className="border-line bg-ink-800 text-text-dim hover:border-text/40 hover:text-text flex items-center justify-between rounded-xl border px-3 py-2.5 text-left text-sm transition"

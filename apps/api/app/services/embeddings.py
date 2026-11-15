@@ -37,7 +37,7 @@ def _load() -> Any:
 
                 _model = TextEmbedding(MODEL_NAME, cache_dir=str(DATA_DIR / "models"))
                 log.info("embeddings_ready", model=MODEL_NAME)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 _failed = True
                 log.warning("embeddings_unavailable", error=str(exc))
     return _model

@@ -1,7 +1,17 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Command, HelpCircle, LogOut, Volume2, VolumeX } from "lucide-react";
+import {
+  Building2,
+  CloudLightning,
+  Command,
+  Ghost,
+  HelpCircle,
+  LogOut,
+  Users,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -162,7 +172,11 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
             {stream.connected ? "Receiving live" : "Reconnecting"}
           </p>
         </div>
-        <nav className="mt-6 flex flex-col gap-1.5" aria-label="Tower" data-tour="nav">
+        <nav
+          className="mt-6 flex flex-col gap-1 overflow-y-auto"
+          aria-label="Tower"
+          data-tour="nav"
+        >
           {nav.map((n) => {
             const active =
               n.href === "/tower" ? pathname === "/tower" : pathname.startsWith(n.href);

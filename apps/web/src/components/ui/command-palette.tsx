@@ -103,6 +103,12 @@ export function CommandPalette({ role }: { role: string }) {
     if (/^TBOH-?\d{3,}$/.test(q)) {
       const t = q.startsWith("TBOH-") ? q : `TBOH-${q.slice(4)}`;
       out.push({
+        id: "constellation",
+        label: `Constellation for ${t}`,
+        hint: "3D",
+        run: () => go(`/tower/links?tboh=${t}`),
+      });
+      out.push({
         id: "tboh",
         label: `Flights on booking ${t}`,
         hint: "TBOH",
@@ -137,6 +143,8 @@ export function CommandPalette({ role }: { role: string }) {
                 ["data", "Black box (exports)", "/tower/data"],
                 ["simulate", "Routing simulator", "/tower/simulate"],
                 ["wall", "Wall mode (ops-floor TV)", "/wall"],
+                ["links", "Constellation (3D linked cases)", "/tower/links"],
+                ["handoffs", "Follow the sun (shift handoffs)", "/tower/handoffs"],
               ] as const
             ).map(([id, label, href]) => ({ id, label, hint: "go", run: () => go(href) })),
           ];

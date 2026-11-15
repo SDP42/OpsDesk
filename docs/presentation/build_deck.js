@@ -243,6 +243,7 @@ const check = (s, x, y, t, ok = true) => {
   const s = pres.addSlide();
   s.background = { color: K.paper };
   header(s, "02", "The prototype", "A working prototype: 12 live screens, the architecture and 6 persona journeys", "Every screenshot is the running app on seeded demo data; the arrows show how one request travels through the system");
+  T(s, [{ text: "▶  Watch the 4-min demo video", options: { hyperlink: { url: "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdNHtkvjsT?usp=sharing" }, color: K.beacon, bold: true } }], { x: 9.9, y: 0.8, w: 3.08, h: 0.22, fontSize: 10, align: "right" });
 
   const shots = [
     ["tower.png", "Tower overview"], ["flight.png", "Flight detail + Why"], ["pilot.png", "Pilot flight board"], ["partner.png", "Supplier portal"],
@@ -301,53 +302,66 @@ const check = (s, x, y, t, ok = true) => {
 }
 
 // ============================================================ 4. THANK YOU
+const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdNHtkvjsT?usp=sharing";
 {
   const s = pres.addSlide();
   s.background = { color: K.paper };
   rect(s, 0, 0, 13.333, 0.08, K.beacon);
   T(s, "Thank you", { x: 0.5, y: 0.35, w: 6, h: 0.8, fontFace: "Cambria", fontSize: 44, bold: true });
-  T(s, "Thank you for reviewing OpsDesk Control Tower. We welcome your questions.", { x: 0.5, y: 1.15, w: 7.6, h: 0.4, fontFace: "Cambria", fontSize: 17, italic: true, color: K.beacon });
+  T(s, "Thank you for reviewing OpsDesk Control Tower. We welcome your questions.", { x: 0.5, y: 1.15, w: 7.1, h: 0.4, fontFace: "Cambria", fontSize: 16, italic: true, color: K.beacon });
 
   [["Swayam Panchal", K.beacon], ["Jeevesh Bodhani", K.cobalt], ["Rishit Lahoti", K.signal], ["Shreyas Kale", K.violet]].forEach(([n, col], i) => {
-    const x = 0.5 + i * 1.95;
-    rect(s, x, 1.75, 1.85, 1.0, K.white, K.line);
-    rect(s, x, 1.75, 1.85, 0.06, col);
-    T(s, n, { x: x + 0.15, y: 1.97, w: 1.65, h: 0.26, fontSize: 12, bold: true });
-    T(s, "AI & Data Science · DJSCE", { x: x + 0.15, y: 2.27, w: 1.7, h: 0.2, fontSize: 9, color: K.dim });
+    const x = 0.5 + i * 1.8;
+    rect(s, x, 1.72, 1.7, 0.95, K.white, K.line);
+    rect(s, x, 1.72, 1.7, 0.06, col);
+    T(s, n, { x: x + 0.14, y: 1.93, w: 1.5, h: 0.26, fontSize: 12, bold: true });
+    T(s, "AI & Data Science · DJSCE", { x: x + 0.14, y: 2.22, w: 1.55, h: 0.2, fontSize: 8.5, color: K.dim });
   });
-  T(s, "Department of Artificial Intelligence and Data Science · Dwarkadas J. Sanghvi College of Engineering, Mumbai", { x: 0.5, y: 2.9, w: 7.7, h: 0.25, fontSize: 10.5, color: K.dim });
+  T(s, "Dept. of Artificial Intelligence and Data Science · Dwarkadas J. Sanghvi College of Engineering, Mumbai", { x: 0.5, y: 2.8, w: 7.1, h: 0.25, fontSize: 10, color: K.dim });
 
-  panel(s, 0.5, 3.3, 3.8, 2.38, K.signal, "Brief deliverables");
-  [["Runnable application", "make setup · seed · dev"], ["README mapped to P1-P6", "accounts, formulas, scale"], ["3-5 min demo script", "Autopilot + journeys A-H"], ["Seed data", "3,000+ flights, 5 agencies"], ["Architecture + cost contrast", "this deck · docs/MODELS.md"]].forEach(([a, b], i) => {
-    const y = 3.65 + i * 0.39;
+  ipanel(s, 0.5, 3.2, 3.5, 2.5, K.signal, "Brief deliverables", "badge-check");
+  [["Runnable application", "make setup · seed · dev"], ["README mapped to P1-P6", "accounts, formulas, scale"], ["3-5 min demo video", "problem → solution → every persona"], ["Seed data", "3,000+ flights, 5 agencies"], ["Architecture + cost contrast", "this deck · docs/MODELS.md"]].forEach(([a, b], i) => {
+    const y = 3.58 + i * 0.41;
     s.addShape(pres.shapes.OVAL, { x: 0.68, y, w: 0.24, h: 0.24, fill: { color: K.signal }, line: { color: K.signal } });
     T(s, "✓", { x: 0.68, y: y + 0.03, w: 0.24, h: 0.18, fontSize: 9, bold: true, color: K.white, align: "center" });
-    T(s, [{ text: a, options: { bold: true, breakLine: true } }, { text: b, options: { color: K.dim, fontSize: 8 } }], { x: 1.0, y: y - 0.03, w: 3.2, h: 0.36, fontSize: 9 });
+    T(s, [{ text: a, options: { bold: true, breakLine: true } }, { text: b, options: { color: K.dim, fontSize: 8 } }], { x: 1.0, y: y - 0.03, w: 2.9, h: 0.36, fontSize: 9 });
   });
 
-  panel(s, 4.4, 3.3, 3.8, 2.38, K.cobalt, "Run the prototype");
+  ipanel(s, 4.1, 3.2, 3.5, 2.5, K.cobalt, "Run the prototype", "terminal");
   [["Clone", "git clone github.com/SDP42/OpsDesk"], ["Install + seed", "make setup && make seed"], ["Start", "make dev  →  localhost:3000"], ["Guided demo", "Autopilot walks every persona in 90 s"]].forEach(([h, d], i) => {
-    const y = 3.66 + i * 0.49;
-    s.addShape(pres.shapes.OVAL, { x: 4.58, y, w: 0.3, h: 0.3, fill: { color: K.cobalt }, line: { color: K.cobalt } });
-    T(s, String(i + 1), { x: 4.58, y: y + 0.06, w: 0.3, h: 0.18, fontSize: 9.5, bold: true, color: K.white, align: "center" });
-    if (i < 3) s.addShape(pres.shapes.LINE, { x: 4.73, y: y + 0.3, w: 0, h: 0.19, line: { color: K.cobalt, width: 1 } });
-    T(s, [{ text: h, options: { bold: true, breakLine: true } }, { text: d, options: { color: K.dim, fontSize: 8.5, fontFace: i < 3 ? "Courier New" : "Calibri" } }], { x: 5.0, y: y - 0.02, w: 3.1, h: 0.42, fontSize: 9.5 });
+    const y = 3.6 + i * 0.5;
+    s.addShape(pres.shapes.OVAL, { x: 4.28, y, w: 0.3, h: 0.3, fill: { color: K.cobalt }, line: { color: K.cobalt } });
+    T(s, String(i + 1), { x: 4.28, y: y + 0.06, w: 0.3, h: 0.18, fontSize: 9.5, bold: true, color: K.white, align: "center" });
+    if (i < 3) s.addShape(pres.shapes.LINE, { x: 4.43, y: y + 0.3, w: 0, h: 0.2, line: { color: K.cobalt, width: 1 } });
+    T(s, [{ text: h, options: { bold: true, breakLine: true } }, { text: d, options: { color: K.dim, fontSize: 8, fontFace: i < 3 ? "Courier New" : "Calibri" } }], { x: 4.7, y: y - 0.02, w: 2.85, h: 0.42, fontSize: 9.5 });
   });
 
-  panel(s, 0.5, 5.8, 7.7, 1.3, K.beacon, "What's next");
-  chips(s, ["Webhooks", "CSAT after resolve", "Multi-tenant agencies", "Live Darwinbox tenant", "Kafka + ClickHouse", "WhatsApp channel"], 0.68, 6.12, 7.4, K.beacon, 8.5, 0.28, 0.07);
-  T(s, [{ text: "GitHub  ", options: { bold: true, color: K.beacon } }, { text: GH, options: { color: K.cobalt, hyperlink: { url: GH } } }, { text: "   ·   source code, README and model card", options: { color: K.dim } }], { x: 0.68, y: 6.65, w: 7.4, h: 0.3, fontSize: 10.5 });
+  ipanel(s, 0.5, 5.82, 7.1, 1.28, K.beacon, "What's next", "rocket");
+  chips(s, ["Webhooks", "CSAT after resolve", "Multi-tenant agencies", "Live Darwinbox tenant", "Kafka + ClickHouse", "WhatsApp"], 0.68, 6.2, 6.8, K.beacon, 8, 0.27, 0.06);
+  T(s, [{ text: "GitHub  ", options: { bold: true, color: K.beacon } }, { text: GH, options: { color: K.cobalt, hyperlink: { url: GH } } }, { text: "   ·   source, README, model card", options: { color: K.dim } }], { x: 0.68, y: 6.68, w: 6.8, h: 0.3, fontSize: 10 });
 
-  img(s, "tower.png", 8.45, 0.4, 4.45, 2.0, "Tower");
-  img(s, "flight.png", 8.45, 2.55, 2.15, 1.35, "Flight");
-  img(s, "pilot.png", 10.75, 2.55, 2.15, 1.35, "Pilot");
-  panel(s, 8.45, 4.05, 4.45, 3.05, K.violet, "Built and verified");
-  [["347", "commits, small and conventional", K.beacon], ["120+", "unit and API tests passing", K.cobalt], ["12", "Playwright journeys end to end", K.signal], ["97 / 100", "Lighthouse performance / accessibility", K.violet], ["88%", "intent accuracy with pretrained MiniLM", K.beacon], ["< 1 s", "escalation to the Tower Chief", K.cobalt]].forEach(([v, l, col], i) => {
-    const y = 4.4 + i * 0.44;
-    T(s, v, { x: 8.63, y, w: 1.2, h: 0.36, fontFace: "Cambria", fontSize: 17, bold: true, color: col });
-    T(s, l, { x: 9.88, y: y + 0.08, w: 2.95, h: 0.25, fontSize: 9.5, color: K.dim });
+  // Demo video: the hero of this slide
+  const VX = 7.85, VW = 5.08, VH = VW * 9 / 16;
+  T(s, "WATCH THE DEMO", { x: VX, y: 0.22, w: 3, h: 0.22, fontSize: 9.5, bold: true, color: K.beacon, charSpacing: 2 });
+  rect(s, VX - 0.04, 0.48, VW + 0.08, VH + 0.08, K.ink);
+  s.addImage({ path: A("video_thumb.jpg"), x: VX, y: 0.52, w: VW, h: VH, sizing: { type: "cover", w: VW, h: VH }, altText: "Demo video", hyperlink: { url: VIDEO, tooltip: "Watch the OpsDesk demo video" } });
+  s.addShape(pres.shapes.OVAL, { x: VX + VW / 2 - 0.5, y: 0.52 + VH / 2 - 0.5, w: 1.0, h: 1.0, fill: { color: K.beacon, transparency: 5 }, line: { color: K.white, width: 3 }, hyperlink: { url: VIDEO } });
+  s.addShape(pres.shapes.ISOSCELES_TRIANGLE, { x: VX + VW / 2 - 0.15, y: 0.52 + VH / 2 - 0.2, w: 0.42, h: 0.4, rotate: 90, fill: { color: K.white }, line: { color: K.white }, hyperlink: { url: VIDEO } });
+  rect(s, VX, 0.52 + VH - 0.36, 1.35, 0.28, K.ink);
+  T(s, "▶  4:11 · 1080p", { x: VX + 0.08, y: 0.52 + VH - 0.32, w: 1.25, h: 0.2, fontSize: 9, bold: true, color: K.white });
+
+  rect(s, VX, 3.5, VW, 1.0, K.white, K.line);
+  rect(s, VX, 3.5, 0.06, 1.0, K.beacon);
+  s.addImage({ path: A("video_qr.png"), x: VX + 0.14, y: 3.56, w: 0.88, h: 0.88, altText: "QR code for the demo video", hyperlink: { url: VIDEO } });
+  T(s, [{ text: "OpsDesk in 4 minutes", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "Problem → solution → every persona, live → architecture → impact. Narrated, with captions.", options: { color: K.dim, fontSize: 8.5, breakLine: true } }, { text: "Open the video on Google Drive", options: { color: K.cobalt, fontSize: 9, bold: true, hyperlink: { url: VIDEO } } }], { x: VX + 1.15, y: 3.58, w: VW - 1.25, h: 0.88 });
+
+  ipanel(s, VX, 4.62, VW, 2.48, K.violet, "Built and verified", "flask-conical");
+  [["347", "commits, small and conventional", K.beacon], ["120+", "unit and API tests passing", K.cobalt], ["12", "Playwright journeys end to end", K.signal], ["97", "Lighthouse performance score", K.violet], ["88%", "intent accuracy, pretrained MiniLM", K.beacon], ["< 1 s", "escalation to the Tower Chief", K.cobalt]].forEach(([v, l, col], i) => {
+    const x = VX + 0.2 + (i % 2) * 2.45, y = 5.0 + Math.floor(i / 2) * 0.68;
+    T(s, v, { x, y, w: 2.3, h: 0.36, fontFace: "Cambria", fontSize: 18, bold: true, color: col });
+    T(s, l, { x, y: y + 0.36, w: 2.35, h: 0.22, fontSize: 8.5, color: K.dim });
   });
-  s.addNotes("Team, deliverables, demo accounts, next steps and the evidence that it all runs.");
+  s.addNotes("Team, deliverables, how to run it, what's next, and the demo video on Google Drive.");
 }
 
 pres.writeFile({ fileName: OUT }).then(async () => {

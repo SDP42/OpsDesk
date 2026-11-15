@@ -12,6 +12,9 @@ Each one returns a human-readable reason, and each falls back to a simpler path 
 | Ghost Flights risk scorer | `engines/ghosts.py` | GradientBoostingClassifier (120 trees, depth 3) | (ours) | 4,000 synthetic labelled bookings | Predicting which bookings become tickets |
 | Breach Forecast | `engines/forecast.py` | Log-normal Monte Carlo (NumPy, 4,000 runs) | (ours) | Historical resolution times per intent | Breach probability per action |
 | Storm Cells | `engines/storms.py` | Sliding-window clustering + networkx merge | (ours) | n/a | Incident detection |
+| Routing simulator | `engines/simulator.py` | Discrete-event replay, 4 parallel lanes per controller | (ours) | Replayed real flights | What-if presets |
+| Ask the Tower | `engines/nlq.py` | Deterministic lexicon parser with explainable chips | (ours) | n/a | Plain-English filters |
+| Regional calendars | `engines/follow_the_sun.py` | `holidays` public-holiday calendars (IN, AE, GB, SG) | MIT | Official holiday data | Follow-the-Sun working days |
 
 ## Measured accuracy
 

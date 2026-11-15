@@ -94,6 +94,10 @@ make dev
 PostgreSQL (`docker compose up -d postgres` gives you one).
 
 > Seed data is generated **relative to now** (check-in in 9 hours, ghost flight in 36 hours), so run `make seed` shortly before a demo.
+> `make seed` empties and refills the tables in place, so the running API keeps working; no restart needed.
+>
+> **Fastest demo:** open http://localhost:3000 and press **Take the 90-second flight**: the Demo Autopilot signs in as the
+> Airport Director and narrates every feature.
 
 ---
 
@@ -182,6 +186,9 @@ bedbanks and DMCs, channel partners such as HyperGuest, rate-intelligence partne
 | 📦 **Black Box** | Director | Export builder (CSV or NDJSON, status, region) that **streams with a live row counter**, MB and rows-per-second, progress against `X-Total-Count`, a curl snippet, the retention ladder with *Run archive now*, and the scale path. | `GET /export/tickets` · `POST /admin/archive-run` | `/tower/data` |
 | 🧪 **Routing What-If Simulator** | Director | Replays the last N hours of real flights under every preset (discrete-event, 4 parallel lanes per controller, in-flight load) and compares missed deadlines, average wait, in-region share and load spread, with a load chart and *Apply to live routing*. | `POST /routing/simulate` | `/tower/simulate` |
 | 🔎 **Ask the Tower** | Controller, Tower Chief, Director | ⌘K accepts plain English ("breached P1 refunds in UAE with check-in this week") and shows explainable filter chips, each naming the words that produced it, then opens the filtered queue. | `GET /nlq` · `GET /tickets?checkin_within_days=` | ⌘K → `/tower/queue` |
+
+| 📺 **Wall Mode** | Everyone on the ops floor | Full-screen big board for the ops-floor TV: live radar, big counters (open, unassigned, with Tower Chief, breached, storm cells), panels that rotate every 10 s (lowest fuel, storms, ghosts, crew on leave, emerging themes) and a tower-call ticker from the SSE stream. | reuses existing routes + `/api/stream` | `/wall` |
+| ✈ **Demo Autopilot** | Anyone demoing | A narrated 90-second flight through the tower, a linked case, ghosts, storms (runs Chaos Mode live if needed), roster, weather, simulator and black box. Captions plus optional voice, pause, skip and step. *Take the 90-second flight* on the landing page signs in as the Director and starts it in one click. | client-side, `/login?autopilot=1` | everywhere in the tower |
 
 #### Pretrained models
 
@@ -393,7 +400,7 @@ springs, **NumberFlow** animated numbers, **driver.js** onboarding tour, **Recha
 
 Screens: `/login`, `/tower` (radar of open flights, queue health, SLA risk board, preset switch, Chaos Mode), `/tower/ghosts`,
 `/tower/storms`, `/tower/roster`, `/tower/suppliers`, `/tower/insights` (Weather Radar), `/tower/data` (Black Box),
-`/tower/simulate`, `/tower/queue` (also Ask-the-Tower results),
+`/tower/simulate`, `/wall` (Wall Mode), `/tower/queue` (also Ask-the-Tower results),
 `/tower/triage`, `/tower/escalations`, `/tower/t/[id]` (three panes: linked history and agency turbulence · conversation, Frequencies,
 Co-pilot · fuel gauge, actions, vectoring waterfall, intent, timeline with scrubber), `/pilot` (split-flap departures board and create
 flow), `/partner`. Every screen has designed **loading** (shimmer strips), **empty** and **error** states.
@@ -432,7 +439,8 @@ point cloud. Preloader "ESTABLISHING CONTACT", crosshair cursor, magnetic CTAs, 
 
 * No secrets in code: `.env` for configuration, `.env.example` committed, random JWT secret generated on first run.
 * Demo passwords exist only in the seed script and this README; the login cards expose them only when `APP_ENV != production`.
-* **argon2** password hashing, **JWT in an httpOnly, SameSite=Lax cookie** (Secure behind HTTPS), login **rate limiting**.
+* **argon2** password hashing, **JWT in an httpOnly, SameSite=Lax cookie** (Secure behind HTTPS), login **rate limiting** per IP
+  and account (stops brute force on one account without locking out an office that shares an IP).
 * Least privilege in one place (`core/rbac.py`); requesters scoped to their agency in every query, cross-agency reads return
   **404**; suppliers isolated to their channels.
 * Every input validated by Pydantic with length caps and `extra="forbid"`; internal notes never serialise on requester routes.
@@ -445,6 +453,13 @@ point cloud. Preloader "ESTABLISHING CONTACT", crosshair cursor, magnetic CTAs, 
 ```bash
 make test
 ```
+
+```bash
+make e2e
+```
+
+`make e2e` reseeds and runs **all demo journeys A to H plus Wall Mode and Autopilot** in Chromium (10 tests, about 90 s),
+saving a screenshot at the end of each into `e2e/screenshots/`.
 
 | Level | Coverage |
 | --- | --- |
@@ -539,5 +554,7 @@ and the pretrained MiniLM and VADER models, all with unit and API tests.
 
 **Stubbed with typed signatures and placeholder tests** (`app/engines`): Follow-the-Sun handoffs.
 
-**Next:** Follow-the-Sun handoffs with regional holiday calendars, Constellation 3D page, Wall Mode, Demo Autopilot, a live
-Darwinbox API adapter (the roster already accepts its record shape), Playwright journeys B to H and Lighthouse checks.
+**Also done:** Wall Mode, Demo Autopilot, and Playwright journeys A to H plus Wall Mode and Autopilot (all passing).
+
+**Next:** Follow-the-Sun handoffs with regional holiday calendars, Constellation 3D page, a live Darwinbox API adapter (the
+roster already accepts its record shape) and Lighthouse checks.

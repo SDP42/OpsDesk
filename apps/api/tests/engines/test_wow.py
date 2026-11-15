@@ -136,3 +136,8 @@ def test_nlq_parses_plain_english_into_chips() -> None:
     }
     assert all(c.because for c in p.chips) and p.reason.startswith("Read as")
     assert parse_query("my unassigned flights").filters.get("view") in {"triage", "mine"}
+
+
+def test_frustration_vader_catches_negativity_outside_lexicon() -> None:
+    r = score_frustration("This is terrible service and a horrible experience for our guest")
+    assert any("VADER" in s for s in r.signals) and r.band != "calm"

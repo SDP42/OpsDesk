@@ -39,6 +39,7 @@ function layout(nodes: Node[], edges: Edge[]): Record<string, [number, number, n
     const a = (i / nodes.length) * Math.PI * 2;
     pos[n.id] = [Math.cos(a) * 3, Math.sin(a) * 3, ((i % 5) - 2) * 0.6];
   });
+  const rep = 0.6 * Math.min(1, 12 / Math.max(nodes.length, 1));
   for (let it = 0; it < 220; it++) {
     const f: Record<string, [number, number, number]> = Object.fromEntries(
       nodes.map((n) => [n.id, [0, 0, 0]]),
@@ -50,8 +51,8 @@ function layout(nodes: Node[], edges: Edge[]): Record<string, [number, number, n
         const d = [p[0] - q[0], p[1] - q[1], p[2] - q[2]];
         const dist2 = Math.max(d[0]! ** 2 + d[1]! ** 2 + d[2]! ** 2, 0.05);
         for (let k = 0; k < 3; k++) {
-          f[nodes[i]!.id]![k]! += (d[k]! / dist2) * 0.6;
-          f[nodes[j]!.id]![k]! -= (d[k]! / dist2) * 0.6;
+          f[nodes[i]!.id]![k]! += (d[k]! / dist2) * rep;
+          f[nodes[j]!.id]![k]! -= (d[k]! / dist2) * rep;
         }
       }
     for (const e of edges) {
@@ -68,6 +69,11 @@ function layout(nodes: Node[], edges: Edge[]): Record<string, [number, number, n
       for (let k = 0; k < 3; k++)
         pos[n.id]![k]! += Math.max(-0.3, Math.min(0.3, f[n.id]![k]! - pos[n.id]![k]! * 0.01));
   }
+  // Recentre and scale so the whole constellation fits the view, however dense the graph.
+  const ids = Object.keys(pos);
+  const c = [0, 1, 2].map((k) => ids.reduce((a, id) => a + pos[id]![k]!, 0) / Math.max(ids.length, 1));
+  const r = Math.max(...ids.map((id) => Math.hypot(pos[id]![0]! - c[0]!, pos[id]![1]! - c[1]!, pos[id]![2]! - c[2]!)), 0.001);
+  for (const id of ids) pos[id] = [0, 1, 2].map((k) => ((pos[id]![k]! - c[k]!) / r) * 4.2) as [number, number, number];
   return pos;
 }
 

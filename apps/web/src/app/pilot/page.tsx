@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { LogOut, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TowerRadio } from "@/components/assistant/tower-radio";
 import { CreateFlight } from "@/components/pilot/create-flight";
 import { DepartureBoard } from "@/components/pilot/departure-board";
@@ -21,6 +21,15 @@ export default function PilotPage() {
   const logout = useLogout();
   const [selected, setSelected] = useState<string | null>(null);
   const [creating, setCreating] = useState(true);
+
+  // Deep link from Tower Radio answer cards: /pilot?flight=<id>
+  useEffect(() => {
+    const flight = new URLSearchParams(window.location.search).get("flight");
+    if (flight) {
+      setSelected(flight);
+      setCreating(false);
+    }
+  }, []);
 
   const board = useInfiniteQuery({
     queryKey: ["tickets", "pilot"],

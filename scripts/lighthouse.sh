@@ -3,7 +3,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PORT=3100
-cd "$ROOT/apps/web" && pnpm -s build
+cd "$ROOT/apps/web" && export NEXT_DIST_DIR=.next-prod && pnpm -s build
 pnpm -s next start --port "$PORT" > /dev/null 2>&1 &
 SERVER=$!
 trap 'kill $SERVER 2>/dev/null || true' EXIT

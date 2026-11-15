@@ -47,3 +47,4 @@ playwright/.cache/
 scripts/media/raw/
 *.mov
 e2e/reports/
+.next-prod/

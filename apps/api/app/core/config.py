@@ -47,6 +47,8 @@ class Settings(BaseSettings):
     demo_password: str = "cleared-for-takeoff"
     anthropic_api_key: str = ""
     intent_model_path: Path = DATA_DIR / "intent_model.joblib"
+    # Pretrained MiniLM sentence embeddings (fastembed / ONNX); falls back to TF-IDF when off.
+    embeddings_enabled: bool = True
 
     @field_validator("cors_origins", mode="before")
     @classmethod

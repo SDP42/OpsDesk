@@ -178,6 +178,19 @@ bedbanks and DMCs, channel partners such as HyperGuest, rate-intelligence partne
 | 🔥 **Frustration Radar** | Controller | Lexicon + VADER-style rules (repeats, "still no update", capitals, threats to switch supplier) give an agency mood score, a priority-bump flag and a calm-reply tone. | `engines/frustration.py` · `GET /tickets/{id}/signals` | flight detail |
 | 🤝 **Promise Tracker** | Controller, Tower Chief | Regex + **dateparser** extract commitments such as "will confirm by 5 pm IST" or "refund in 3 working days" from replies and supplier messages, with due dates and overdue flags. | `engines/promises.py` · `GET /tickets/{id}/signals` | flight detail |
 | 🏨 **Supplier Scorecard** | Director, Controller | Reliability per hotel, bedbank and DMC from Frequency reply times, open asks, unconfirmed upcoming bookings and ticket volume, with the best contact to chase. | `GET /suppliers/scorecard` | `/tower/suppliers` |
+| 🌦 **Weather Radar** | Director, Controller | Theme heat map across 8 weeks, week-over-week change, **emerging** flag (z ≥ 2.5 and 2.5× the recent average), sample flights, and an editable *product link* (e.g. a Jira key) per theme to close the feedback loop. | `GET /insights/heatmap` · `GET /insights/themes` · `PATCH /insights/themes/{code}` | `/tower/insights` |
+| 📦 **Black Box** | Director | Export builder (CSV or NDJSON, status, region) that **streams with a live row counter**, MB and rows-per-second, progress against `X-Total-Count`, a curl snippet, the retention ladder with *Run archive now*, and the scale path. | `GET /export/tickets` · `POST /admin/archive-run` | `/tower/data` |
+| 🧪 **Routing What-If Simulator** | Director | Replays the last N hours of real flights under every preset (discrete-event, 4 parallel lanes per controller, in-flight load) and compares missed deadlines, average wait, in-region share and load spread, with a load chart and *Apply to live routing*. | `POST /routing/simulate` | `/tower/simulate` |
+| 🔎 **Ask the Tower** | Controller, Tower Chief, Director | ⌘K accepts plain English ("breached P1 refunds in UAE with check-in this week") and shows explainable filter chips, each naming the words that produced it, then opens the filtered queue. | `GET /nlq` · `GET /tickets?checkin_within_days=` | ⌘K → `/tower/queue` |
+
+#### Pretrained models
+
+| Model | Licence | Where it helps | Measured |
+| --- | --- | --- | --- |
+| **all-MiniLM-L6-v2** sentence embeddings (ONNX via `fastembed`, CPU) | Apache-2.0 | Meaning-level ticket linking ("Same meaning (MiniLM cosine 0.62)") and an embedding head ensembled with the TF-IDF intent model | Intent on hand-written phrasings: **76% → 88%**, mean confidence 0.75 |
+| **VADER** sentiment | MIT | Frustration Radar catches negativity outside the ops lexicon | Test-enforced |
+
+Both fall back gracefully (`EMBEDDINGS_ENABLED=false` runs fully offline on TF-IDF). Full details in [`docs/MODELS.md`](docs/MODELS.md).
 
 Every result carries a plain-language **reason**, and every screen opens with an *In plain words* explainer for non-technical users.
 
@@ -242,6 +255,8 @@ backlog, and decays with time (`exp(-days/14)`).
   Supplier confirmation, Special request, Visa and documents, Platform or access) and 25 sub-intents.
 * **Training data:** a deterministic generated corpus of 1,600 labelled ticket texts (templates with slot filling), built at seed time.
   No external dataset or paid API.
+* **Pretrained boost:** a logistic-regression head on **all-MiniLM-L6-v2** embeddings is ensembled with the TF-IDF model
+  (weight 0.7, C=2000). On 25 hand-written phrasings unlike the templates, accuracy rises from **76% to 88%**.
 * **Model:** scikit-learn `FeatureUnion` of word 1-2-gram and character 3-5-gram TF-IDF into multinomial `LogisticRegression`,
   saved with joblib to `apps/api/data/intent_model.joblib`.
 * **Override rules:** strong signals are applied transparently, e.g. a TBOH + "refund" + a delay word forces *Refund > Delay*;
@@ -348,6 +363,14 @@ All routes are under `/api`, validated with Pydantic (unknown fields rejected), 
 | `GET /intents` · `POST /intents/suggest` | Taxonomy and top-3 suggestions | all |
 | `GET /insights/themes?week=` | Weather radar | agent, lead |
 | `GET /bookings/{tboh}` | Validate TBOH and list earlier cases | scoped |
+| `GET /roster` · `POST /roster/records` · `POST /roster/rebalance` | Crew Roster (HRMS leave and shifts) | staff · lead · staff |
+| `GET /ghosts` · `POST /ghosts/{tboh}/preempt` | Ghost Flights | staff |
+| `GET /storms` · `POST /storms/broadcast` | Storm Cells | staff |
+| `GET /tickets/{id}/forecast` · `GET /tickets/{id}/signals` | Breach Forecast · frustration and promises | staff |
+| `GET /suppliers/scorecard` | Supplier reliability | staff |
+| `GET /insights/heatmap` · `PATCH /insights/themes/{code}` | Weather Radar heat map · product link | agent, lead · lead |
+| `POST /routing/simulate` | Routing What-If Simulator | lead |
+| `GET /nlq?q=` | Ask the Tower parser | staff |
 | `GET /agencies` · `GET /controllers` · `GET /stats/overview` · `GET /stats/trend` | Supporting reads | staff |
 | `GET/PUT /routing/preset` | Active routing preset | staff / lead |
 | `GET /export/tickets?format=csv\|ndjson&cursor=` | Streaming export, keyset, no cap, `X-Total-Count` | lead |
@@ -368,7 +391,9 @@ Open-source UI: **Radix UI** primitives (dialog, tooltip, switch…) in shadcn s
 springs, **NumberFlow** animated numbers, **driver.js** onboarding tour, **Recharts**, **lucide** icons, **TanStack Query** and
 **Zustand**.
 
-Screens: `/login`, `/tower` (radar of open flights, queue health, SLA risk board, preset switch, Chaos Mode), `/tower/queue`,
+Screens: `/login`, `/tower` (radar of open flights, queue health, SLA risk board, preset switch, Chaos Mode), `/tower/ghosts`,
+`/tower/storms`, `/tower/roster`, `/tower/suppliers`, `/tower/insights` (Weather Radar), `/tower/data` (Black Box),
+`/tower/simulate`, `/tower/queue` (also Ask-the-Tower results),
 `/tower/triage`, `/tower/escalations`, `/tower/t/[id]` (three panes: linked history and agency turbulence · conversation, Frequencies,
 Co-pilot · fuel gauge, actions, vectoring waterfall, intent, timeline with scrubber), `/pilot` (split-flap departures board and create
 flow), `/partner`. Every screen has designed **loading** (shimmer strips), **empty** and **error** states.
@@ -456,6 +481,8 @@ engine: no per-seat AI add-on, no third-party TBOH-linking app, no export or arc
   script prints exactly which page to download and where to save it.
 * **Data:** all agencies, people, suppliers and bookings are **synthetic and fictional**, generated by `app/db/seed/`. The intent
   corpus is generated from templates. No external dataset or paid API is used.
+* **Pretrained models:** all-MiniLM-L6-v2 (Apache-2.0, downloaded once to `apps/api/data/models/`, gitignored) and VADER
+  (MIT). See [`docs/MODELS.md`](docs/MODELS.md).
 * **Libraries:** all open source (MIT / Apache-2.0 / BSD).
 
 ---
@@ -482,7 +509,8 @@ apps/
   api/                    FastAPI backend (uv, ruff, mypy, pytest)
     app/core/             config, security, rbac, sse, logging, errors
     app/db/               models, session, migrations (Alembic), seed/
-    app/engines/          vectoring, wheels_up, linker, intent, weather, copilot, assistant + stubs
+    app/engines/          vectoring, wheels_up, linker, intent, weather, copilot, assistant, roster, ghosts,
+                          storms, forecast, frustration, promises, simulator, nlq (+ follow_the_sun stub)
     app/services/         wiring engines to the database
     app/routers/          auth, tickets, comments, links, frequencies, partner, intents, insights,
                           export, stream, assistant, meta, admin
@@ -495,7 +523,7 @@ apps/
     public/video/         hero loop and poster
 scripts/media/            media pipeline
 e2e/                      Playwright journeys
-docs/                     build spec
+docs/                     build spec, MODELS.md (model card)
 ```
 
 ---
@@ -505,11 +533,11 @@ docs/                     build spec
 **Done:** everything in sections 4 and 5, the landing page with footage and 3D, onboarding, Tower Radio, the Supplier Partner
 portal, and tests.
 
-**Also done:** Ghost Flights, Storm Cells, Crew Roster (HRMS sync), Breach Forecast, Frustration Radar, Promise Tracker and the
-Supplier Scorecard (section 5b), with unit and API tests.
+**Also done:** Ghost Flights, Storm Cells, Crew Roster (HRMS sync), Breach Forecast, Frustration Radar, Promise Tracker,
+Supplier Scorecard, Weather Radar screen, Black Box screen with a live export counter, Routing What-If Simulator, Ask the Tower,
+and the pretrained MiniLM and VADER models, all with unit and API tests.
 
-**Stubbed with typed signatures and placeholder tests** (`app/engines`): Follow-the-Sun handoffs, Ask-the-Tower NLQ filters.
+**Stubbed with typed signatures and placeholder tests** (`app/engines`): Follow-the-Sun handoffs.
 
-**Next:** Weather Radar and Black Box screens with a live export counter, Routing What-If Simulator, Constellation 3D page, Wall
-Mode, Demo Autopilot, a live Darwinbox API adapter (the roster already accepts its record shape), more Playwright journeys and
-Lighthouse checks.
+**Next:** Follow-the-Sun handoffs with regional holiday calendars, Constellation 3D page, Wall Mode, Demo Autopilot, a live
+Darwinbox API adapter (the roster already accepts its record shape), Playwright journeys B to H and Lighthouse checks.

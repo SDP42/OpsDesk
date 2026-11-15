@@ -8,6 +8,8 @@ import Link from "next/link";
 import { use, useState } from "react";
 import { Conversation, Frequencies } from "@/components/tower/conversation";
 import { CopilotBrief } from "@/components/tower/copilot-brief";
+import { ForecastPanel } from "@/components/tower/forecast-panel";
+import { SignalsPanel } from "@/components/tower/signals-panel";
 import { FuelGauge } from "@/components/tower/fuel-gauge";
 import { ScoreWaterfall, type RunnerUp, type ScorePart } from "@/components/tower/score-waterfall";
 import { TicketActions } from "@/components/tower/ticket-actions";
@@ -206,6 +208,9 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
                 <Frequencies ticketId={t.id} />
               </Hud>
             )}
+            <Hud title="Agency mood and promises">
+              <SignalsPanel ticketId={t.id} />
+            </Hud>
             <Hud title="Co-pilot brief">
               <CopilotBrief ticketId={t.id} />
             </Hud>
@@ -223,6 +228,12 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
                   Critical near check-in · escalation proposed
                 </p>
               )}
+            </Hud>
+            <Hud title={<Term k="sla">Breach forecast · what if I act now?</Term>}>
+              <ForecastPanel
+                ticketId={t.id}
+                minutesLeft={Math.max(1, t.sla.remaining_seconds / 60)}
+              />
             </Hud>
             <Hud title="Actions">
               <TicketActions ticket={t} role={me.data?.role ?? "agent"} />

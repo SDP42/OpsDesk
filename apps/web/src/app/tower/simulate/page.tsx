@@ -149,7 +149,7 @@ export default function SimulatePage() {
                         )}
                       >
                         <Num value={o.breaches} />
-                        <span className="text-text-dim ml-2 text-lg">
+                        <span className="text-text-dim ml-3 align-middle font-mono text-base">
                           {Math.round(o.breach_rate * 100)}%
                         </span>
                       </p>

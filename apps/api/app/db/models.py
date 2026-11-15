@@ -121,6 +121,9 @@ class Booking(Base):
     amount: Mapped[float] = mapped_column(Float)
     currency: Mapped[str] = mapped_column(String(3))
     supplier_status: Mapped[str] = mapped_column(String(16), default="confirmed")
+    # Ghost Flights: set when ops sends a pre-emptive message for a risky booking.
+    preempted_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
+    preempt_message: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = _created()
 
     agency: Mapped[Agency] = relationship(lazy="joined")
@@ -366,3 +369,35 @@ class ArchiveTicket(Base):
     closed_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
     snapshot: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     archived_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=utcnow)
+
+
+class HrRecord(Base):
+    """HRMS feed (Darwinbox-style): leave, weekly off and shift changes per controller."""
+
+    __tablename__ = "hr_records"
+
+    id: Mapped[str] = _id()
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(16))
+    start: Mapped[datetime] = mapped_column(UTCDateTime())
+    end: Mapped[datetime] = mapped_column(UTCDateTime())
+    note: Mapped[str] = mapped_column(String(200), default="")
+    shift_start: Mapped[str | None] = mapped_column(String(5))
+    shift_end: Mapped[str | None] = mapped_column(String(5))
+    source: Mapped[str] = mapped_column(String(24), default="darwinbox")
+    created_at: Mapped[datetime] = _created()
+
+
+class Incident(Base):
+    """A Storm Cell: many flights about one hotel, supplier or theme in a short window."""
+
+    __tablename__ = "incidents"
+
+    id: Mapped[str] = _id()
+    key: Mapped[str] = mapped_column(String(160), index=True)
+    title: Mapped[str] = mapped_column(String(200))
+    ticket_ids: Mapped[list[str]] = mapped_column(JSON, default=list)
+    status: Mapped[str] = mapped_column(String(12), default="active")
+    broadcast: Mapped[str | None] = mapped_column(Text)
+    broadcast_at: Mapped[datetime | None] = mapped_column(UTCDateTime())
+    created_at: Mapped[datetime] = _created()

@@ -66,7 +66,10 @@ def simulate(
 ) -> PresetOutcome:
     ordered = sorted(flights, key=lambda f: f.created_at)
     # In the replay, capacity is concurrent work: lanes busy now plus a short queue.
-    team = {c.id: c.model_copy(update={"open_tickets": 0, "capacity": PARALLEL_SLOTS * 3}) for c in controllers}
+    team = {
+        c.id: c.model_copy(update={"open_tickets": 0, "capacity": PARALLEL_SLOTS * 3})
+        for c in controllers
+    }
     finishes: dict[str, list[datetime]] = {c.id: [] for c in controllers}
     slots: dict[str, list[datetime]] = {}
     load: dict[str, int] = {c.name: 0 for c in controllers}

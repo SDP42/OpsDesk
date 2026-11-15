@@ -20,7 +20,9 @@ Spec: `docs/OpsDesk_Build_Spec.pdf` is the source of truth (the design moved fro
 - Commits: small, frequent, conventional (`feat(api): …`), no co-author trailers.
 
 ## Commands
-make setup | make dev | make seed | make seed-big | make chaos | make media | make test | make e2e | make lint | make gen-api
+make setup | make dev | make seed | make seed-big | make chaos | make media | make test | make e2e | make lighthouse | make lint | make gen-api
+
+Never run `next build` into `.next` while `next dev` is running; audit builds use `NEXT_DIST_DIR=.next-prod`.
 
 ## Definition of done
 Tests pass, `make e2e` passes (journeys A to H, Wall Mode, Autopilot), screenshots reviewed, README and

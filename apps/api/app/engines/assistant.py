@@ -92,6 +92,12 @@ KNOWLEDGE = {
     "the intent, shows earlier cases on the booking and routes it with a visible reason.",
     "escalate": "Press Escalate (or E) on a flight, give a reason, and it moves to the Tower Chief's queue with a "
     "new owner within a second. The timeline records it.",
+    "ghost": "Ghost Flights are bookings a model predicts will turn into tickets: unconfirmed supplier, close check-in, "
+    "rate changes. Send the suggested heads-up and the ghost dissolves before the agency ever writes in.",
+    "storm": "A Storm Cell forms when five or more flights about one hotel, supplier or theme land within an hour. "
+    "Write one approved reply and it goes to every affected agency at once.",
+    "roster": "The Crew Roster reads leave, weekly offs and shift changes from the HR system. Nobody on leave gets new "
+    "flights, and flights they still own are flagged so you can re-vector them in one click.",
     "locked": "A locked recipient cannot be dropped by a transfer. Suppliers are locked by default so the "
     "conversation never breaks when ownership changes.",
 }
@@ -156,6 +162,9 @@ def plan(question: str, role: str) -> AssistantPlan:
         "export": ["export", "scale", "black box", "download", "csv"],
         "frequency": ["frequency", "side conversation", "handoff"],
         "locked": ["locked"],
+        "ghost": ["ghost"],
+        "storm": ["storm", "incident", "broadcast"],
+        "roster": ["roster", "leave", "day off", "hrms", "darwinbox", "shift"],
         "file": ["file a", "new flight", "raise a", "create a", "open a ticket", "how do i file"],
         "escalate": ["how do i escalate", "how to escalate", "escalate a"],
     }.items():

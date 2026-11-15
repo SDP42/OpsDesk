@@ -206,7 +206,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
         <div className="px-1">
           <Brand />
         </div>
-        <div className="bg-night mt-8 rounded-xl p-3 text-white">
+        <div className="bg-night mt-6 shrink-0 rounded-xl p-3 text-white">
           <p className="micro !text-white/50">Tower clock</p>
           <p
             className="text-taxi tabular mt-1 font-mono text-2xl tracking-wider"
@@ -225,7 +225,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
           </p>
         </div>
         <nav
-          className="mt-6 flex flex-col gap-1 overflow-y-auto"
+          className="-mr-2 mt-5 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto pr-2"
           aria-label="Tower"
           data-tour="nav"
         >

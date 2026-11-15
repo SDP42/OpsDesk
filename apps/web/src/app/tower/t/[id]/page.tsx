@@ -179,7 +179,18 @@ export default function TicketPage({ params }: { params: Promise<{ id: string }>
                 <dt className="micro">
                   <Term k="tboh">TBOH</Term>
                 </dt>
-                <dd className="font-mono">{t.tboh ?? "—"}</dd>
+                <dd className="font-mono">
+                  {t.tboh ? (
+                    <Link
+                      href={`/tower/links?tboh=${t.tboh}`}
+                      className="hover:text-ice underline decoration-dotted underline-offset-4"
+                    >
+                      {t.tboh} ↗
+                    </Link>
+                  ) : (
+                    "—"
+                  )}
+                </dd>
                 <dt className="micro">Check-in</dt>
                 <dd className="font-mono">{tMinus(t.check_in)}</dd>
                 <dt className="micro">

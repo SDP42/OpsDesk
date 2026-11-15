@@ -1,7 +1,7 @@
 "use client";
 
 /** Constellation: a 3D force-directed graph of every flight linked to a booking, with a list mode. */
-import { Html, Line, OrbitControls } from "@react-three/drei";
+import { Line, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useQuery } from "@tanstack/react-query";
 import { List, Orbit, Search } from "lucide-react";
@@ -71,9 +71,24 @@ function layout(nodes: Node[], edges: Edge[]): Record<string, [number, number, n
   }
   // Recentre and scale so the whole constellation fits the view, however dense the graph.
   const ids = Object.keys(pos);
-  const c = [0, 1, 2].map((k) => ids.reduce((a, id) => a + pos[id]![k]!, 0) / Math.max(ids.length, 1));
-  const r = Math.max(...ids.map((id) => Math.hypot(pos[id]![0]! - c[0]!, pos[id]![1]! - c[1]!, pos[id]![2]! - c[2]!)), 0.001);
-  for (const id of ids) pos[id] = [0, 1, 2].map((k) => ((pos[id]![k]! - c[k]!) / r) * 4.2) as [number, number, number];
+  const c = [0, 1, 2].map(
+    (k) => ids.reduce((a, id) => a + pos[id]![k]!, 0) / Math.max(ids.length, 1),
+  );
+  const r = Math.max(
+    ...ids.map((id) =>
+      Math.hypot(pos[id]![0]! - c[0]!, pos[id]![1]! - c[1]!, pos[id]![2]! - c[2]!),
+    ),
+    0.001,
+  );
+  if (!Number.isFinite(r)) {
+    nodes.forEach((n, i) => {
+      const a = (i / nodes.length) * Math.PI * 2;
+      pos[n.id] = [Math.cos(a) * 4, Math.sin(a) * 4, 0];
+    });
+    return pos;
+  }
+  for (const id of ids)
+    pos[id] = [0, 1, 2].map((k) => ((pos[id]![k]! - c[k]!) / r) * 4.2) as [number, number, number];
   return pos;
 }
 
@@ -81,15 +96,22 @@ function Graph({
   nodes,
   edges,
   onOpen,
+  hover,
+  setHover,
 }: {
   nodes: Node[];
   edges: Edge[];
   onOpen: (n: Node) => void;
+  hover: string | null;
+  setHover: (id: string | null) => void;
 }) {
   const pos = useMemo(() => layout(nodes, edges), [nodes, edges]);
-  const [hover, setHover] = useState<string | null>(null);
   return (
-    <Canvas camera={{ position: [0, 0, 11], fov: 50 }} dpr={[1, 1.75]}>
+    <Canvas
+      camera={{ position: [0, 0, 11], fov: 50 }}
+      dpr={[1, 1.75]}
+      style={{ position: "absolute", inset: 0 }}
+    >
       <ambientLight intensity={0.8} />
       <OrbitControls enableDamping autoRotate autoRotateSpeed={0.6} />
       {edges.map((e, i) =>
@@ -124,13 +146,6 @@ function Graph({
             color={n.seed ? "#FF5A1F" : getComputedColor(n.sla_state)}
             emissive={hover === n.id ? "#FFC629" : "#000000"}
           />
-          {(hover === n.id || n.seed) && (
-            <Html distanceFactor={10} center style={{ pointerEvents: "none" }}>
-              <div className="bg-night rounded-md px-2 py-1 font-mono text-[11px] whitespace-nowrap text-white shadow">
-                {n.number} · {n.agency}
-              </div>
-            </Html>
-          )}
         </mesh>
       ))}
     </Canvas>
@@ -151,6 +166,7 @@ function Constellation() {
   const [input, setInput] = useState(params.get("tboh") ?? "TBOH-88213");
   const [tboh, setTboh] = useState(params.get("tboh") ?? "TBOH-88213");
   const [mode, setMode] = useState<"3d" | "list">("3d");
+  const [hover, setHover] = useState<string | null>(null);
   const q = useQuery({
     queryKey: ["constellation", tboh],
     queryFn: async () =>
@@ -222,12 +238,28 @@ function Constellation() {
         )
       ) : mode === "3d" ? (
         <Hud title={q.data?.reason ?? ""} bodyClassName="p-0">
-          <div className="h-[560px] cursor-grab active:cursor-grabbing">
+          <div className="relative h-[560px] cursor-grab active:cursor-grabbing">
             <Graph
               nodes={nodes}
               edges={edges}
+              hover={hover}
+              setHover={setHover}
               onOpen={(n) => router.push(`/tower/t/${n.number}`)}
             />
+            {(() => {
+              const n = nodes.find((x) => x.id === hover);
+              return n ? (
+                <div className="bg-night pointer-events-none absolute top-4 left-4 rounded-xl px-3 py-2 font-mono text-[12px] text-white shadow">
+                  <span className="text-taxi">{n.number}</span> · {n.agency} ·{" "}
+                  {STATUS_LABEL[n.status] ?? n.status}
+                  <p className="max-w-xs truncate text-white/70">{n.title}</p>
+                </div>
+              ) : (
+                <p className="micro pointer-events-none absolute top-4 left-4">
+                  Hover a star to read it · click to open
+                </p>
+              );
+            })()}
           </div>
         </Hud>
       ) : (

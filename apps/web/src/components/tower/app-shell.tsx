@@ -225,7 +225,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
           </p>
         </div>
         <nav
-          className="-mr-2 mt-5 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto pr-2"
+          className="mt-5 -mr-2 flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto pr-2"
           aria-label="Tower"
           data-tour="nav"
         >

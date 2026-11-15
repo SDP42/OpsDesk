@@ -26,7 +26,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import API_ROOT, REGION_TIMEZONES, SLA_BASE_MINUTES, get_settings
 from app.core.security import hash_password
 from app.db import models as m
-from app.db.base import new_id, utcnow
+from app.db.base import Base, new_id, utcnow
 from app.db.seed import fixtures as fx
 from app.db.session import build_engine, set_engine
 from app.engines import intent as intent_engine
@@ -56,20 +56,34 @@ def log(msg: str) -> None:
 
 
 def reset_schema() -> None:
+    """Bring the schema to head, then empty every table in place.
+
+    The database file is never deleted, so a running API keeps a valid connection
+    and picks up the fresh demo data immediately (no restart after `make seed`).
+    """
     settings = get_settings()
     if settings.is_sqlite:
-        db_path = Path(settings.database_url.split(":///", 1)[1])
-        for suffix in ("", "-wal", "-shm"):
-            p = Path(f"{db_path}{suffix}")
-            if p.exists():
-                p.unlink()
-        db_path.parent.mkdir(parents=True, exist_ok=True)
+        Path(settings.database_url.split(":///", 1)[1]).parent.mkdir(parents=True, exist_ok=True)
     cfg = Config(str(API_ROOT / "alembic.ini"))
     cfg.set_main_option("script_location", str(API_ROOT / "app/db/migrations"))
     cfg.attributes["configure_logger"] = False
-    if not settings.is_sqlite:
-        command.downgrade(cfg, "base")
     command.upgrade(cfg, "head")
+    sync_url = settings.database_url.replace("+aiosqlite", "").replace("+asyncpg", "+psycopg")
+    if settings.is_sqlite:
+        import sqlite3
+
+        con = sqlite3.connect(sync_url.split(":///", 1)[1], timeout=30)
+        try:
+            con.execute("PRAGMA foreign_keys=OFF")
+            for table in reversed(Base.metadata.sorted_tables):
+                con.execute(f'DELETE FROM "{table.name}"')
+            con.commit()
+            con.execute("PRAGMA foreign_keys=ON")
+        finally:
+            con.close()
+    else:
+        command.downgrade(cfg, "base")
+        command.upgrade(cfg, "head")
 
 
 async def bulk(session: AsyncSession, model: type[Any], rows: list[dict[str, Any]]) -> None:

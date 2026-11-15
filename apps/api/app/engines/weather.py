@@ -91,6 +91,15 @@ def iso_week(dt: datetime) -> str:
     return f"{year}-W{week:02d}"
 
 
+def is_emerging(current: int, history: list[int]) -> bool:
+    """A spike, not a trend: z >= 2.5 AND at least 2.5x the last four weeks' average."""
+    z = emerging_zscore(current, history)
+    if z is None or not history:
+        return False
+    recent = history[-4:]
+    return z >= 2.5 and current >= 2.5 * max(statistics.fmean(recent), 1.0)
+
+
 def emerging_zscore(current: int, history: list[int]) -> float | None:
     """z-score of this week's count against previous weeks (needs >= 3 weeks)."""
     if len(history) < 3:
@@ -121,7 +130,7 @@ def aggregate_week(
         previous = by_week[prev_week][theme] if prev_week else 0
         wow = round((count - previous) / previous * 100, 1) if previous else None
         z = emerging_zscore(count, [by_week[w][theme] for w in ordered])
-        emerging = z is not None and z >= 2.0
+        emerging = is_emerging(count, [by_week[w][theme] for w in ordered])
         label = THEME_LEXICON.get(theme, (theme, []))[0]
         reason = f"{count} this week vs {previous} last week" + (
             f"; z={z:g}" if z is not None else ""

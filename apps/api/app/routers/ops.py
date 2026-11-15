@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import ROUTING_PRESETS
@@ -27,11 +27,19 @@ from app.db.models import (
     Supplier,
     Theme,
     Ticket,
+    TicketLink,
     TicketTheme,
     User,
 )
 from app.db.session import get_session
 from app.engines import roster as roster_engine
+from app.engines.follow_the_sun import (
+    HandoffController,
+    HandoffFlight,
+    HandoffPlan,
+    non_working,
+    plan_handoffs,
+)
 from app.engines.forecast import ForecastInput, ForecastResult, forecast_breach
 from app.engines.frustration import FrustrationResult, score_frustration
 from app.engines.ghosts import GhostInput, GhostPrediction, score_booking
@@ -40,7 +48,9 @@ from app.engines.nlq import ParsedQuery, parse_query
 from app.engines.promises import extract_promises
 from app.engines.simulator import SimFlight, SimulationResult, compare
 from app.engines.storms import StormCell, StormTicket, detect_storms
+from app.engines.vectoring import is_on_shift
 from app.schemas.common import Envelope, StrictModel
+from app.services import hrms
 from app.services import routing as routing_service
 from app.services import tickets as svc
 from app.services.audit import audit, timeline
@@ -755,3 +765,244 @@ async def ask_the_tower(
 ) -> Envelope[ParsedQuery]:
     """Plain English → explainable filter chips for the command palette."""
     return Envelope(data=parse_query(q))
+
+
+# --------------------------------------------------------------------------- Follow-the-Sun
+
+
+class HandoffBoard(BaseModel):
+    plans: list[HandoffPlan]
+    regions: dict[str, str | None]  # region -> non-working reason today (None = working)
+
+
+async def _handoff_plans(session: AsyncSession, principal: Principal) -> HandoffBoard:
+    now = utcnow()
+    controllers = await routing_service.load_controllers(session)
+    statuses, _ = await crew_statuses(session, now.date())
+    away = {s.id for s in statuses if s.on_leave}
+    shift = {c.id: is_on_shift(c, now) for c in controllers}
+    rows = (
+        (
+            await session.scalars(
+                select(Ticket).where(
+                    Ticket.status.in_(["new", "open", "pending"]),
+                    Ticket.owner_id.is_not(None),
+                    Ticket.is_demo.is_(principal.data_mode == "demo"),
+                )
+            )
+        )
+        .unique()
+        .all()
+    )
+    region_of = {c.id: c.region for c in controllers}
+    flights = []
+    for t in rows:
+        if t.owner_id not in shift:
+            continue
+        deadlines = [d for d in (t.check_in, t.lcd, t.sla_due_at) if d and d > now]
+        hours = min((d - now).total_seconds() / 3600 for d in deadlines) if deadlines else None
+        flights.append(
+            HandoffFlight(
+                id=t.id,
+                number=t.number,
+                title=t.title,
+                owner_id=t.owner_id,
+                owner_region=region_of.get(t.owner_id),
+                owner_on_shift=shift[t.owner_id] and t.owner_id not in away,
+                hours_to_deadline=hours,
+                sla_state=t.sla_state,
+            )
+        )
+    team = [
+        HandoffController(
+            id=c.id,
+            name=c.name,
+            region=c.region,
+            on_shift=shift[c.id],
+            available=c.availability != "away" and c.id not in away,
+            load=c.open_tickets,
+        )
+        for c in controllers
+    ]
+    plans = plan_handoffs(flights, team, now, horizon_hours=24)
+    regions = {r: non_working(r, now.date()) for r in ["IN", "AE", "UK", "SEA"]}
+    return HandoffBoard(plans=plans[:60], regions=regions)
+
+
+@router.get("/handoffs/plan", response_model=Envelope[HandoffBoard])
+async def handoff_plan(
+    principal: Principal = Depends(require_staff), session: AsyncSession = Depends(get_session)
+) -> Envelope[HandoffBoard]:
+    """Preview Follow-the-Sun handoffs: urgent flights whose owner is off shift, and who should take them."""
+    return Envelope(data=await _handoff_plans(session, principal))
+
+
+@router.post("/handoffs/apply", response_model=Envelope[dict[str, int]])
+async def handoff_apply(
+    principal: Principal = Depends(require_staff), session: AsyncSession = Depends(get_session)
+) -> Envelope[dict[str, int]]:
+    """Execute the plan: reassign, post the Handoff Brief as an internal note, and log it."""
+    board = await _handoff_plans(session, principal)
+    moved = 0
+    for p in board.plans:
+        if not p.to_user_id:
+            continue
+        t = await svc.load_ticket(session, p.ticket_id)
+        if t is None:
+            continue
+        t.owner_id = p.to_user_id
+        session.add(
+            Comment(ticket_id=t.id, visibility="internal", body=p.brief, author_id=principal.id)
+        )
+        timeline(
+            session,
+            t.id,
+            "follow_the_sun",
+            principal,
+            {"from": p.from_user_id, "to": p.to_user_id, "reason": p.reason, "brief": p.brief},
+        )
+        moved += 1
+    audit(session, principal, "handoffs.apply", "ticket", None, {"moved": moved})
+    await session.commit()
+    broker.publish("ticket.updated", {"change": "follow_the_sun", "moved": moved})
+    return Envelope(data={"moved": moved})
+
+
+# --------------------------------------------------------------------------- Constellation
+
+
+class ConstellationOut(BaseModel):
+    nodes: list[dict[str, object]]
+    edges: list[dict[str, object]]
+    reason: str
+
+
+@router.get("/constellation", response_model=Envelope[ConstellationOut])
+async def constellation(
+    tboh: str | None = None,
+    ticket: str | None = None,
+    principal: Principal = Depends(require_staff),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[ConstellationOut]:
+    """Linked-case graph around a booking or a flight (two hops, capped at 80 nodes)."""
+    seeds: list[Ticket] = []
+    if tboh:
+        seeds = list(
+            (await session.scalars(select(Ticket).where(Ticket.tboh == tboh.upper())))
+            .unique()
+            .all()
+        )
+    elif ticket:
+        t = await svc.load_ticket(session, ticket)
+        seeds = [t] if t else []
+    if not seeds:
+        raise not_found("Flights for this booking")
+    ids = {t.id for t in seeds}
+    edges: dict[tuple[str, str], TicketLink] = {}
+    frontier = set(ids)
+    for _ in range(2):
+        rows = (
+            await session.scalars(
+                select(TicketLink).where(
+                    or_(TicketLink.ticket_a.in_(frontier), TicketLink.ticket_b.in_(frontier))
+                )
+            )
+        ).all()
+        frontier = set()
+        for r in rows:
+            edges[(r.ticket_a, r.ticket_b)] = r
+            for x in (r.ticket_a, r.ticket_b):
+                if x not in ids and len(ids) < 80:
+                    ids.add(x)
+                    frontier.add(x)
+    tickets = {
+        t.id: t
+        for t in (await session.scalars(select(Ticket).where(Ticket.id.in_(ids)))).unique().all()
+    }
+    nodes = [
+        {
+            "id": t.id,
+            "number": t.number,
+            "title": t.title,
+            "status": t.status,
+            "sla_state": t.sla_state,
+            "agency": t.agency.name,
+            "tboh": t.tboh,
+            "seed": t.id in {s.id for s in seeds},
+        }
+        for t in tickets.values()
+    ]
+    out_edges = [
+        {"a": a, "b": b, "type": e.link_type, "strength": e.strength, "reason": e.reason}
+        for (a, b), e in edges.items()
+        if a in tickets and b in tickets
+    ]
+    return Envelope(
+        data=ConstellationOut(
+            nodes=nodes,
+            edges=out_edges,
+            reason=f"{len(nodes)} flights and {len(out_edges)} links within two hops",
+        )
+    )
+
+
+class SyncOut(BaseModel):
+    mode: str
+    imported: int
+    skipped: int
+    errors: list[str]
+
+
+@router.post("/roster/sync", response_model=Envelope[SyncOut])
+async def roster_sync(
+    principal: Principal = Depends(require_lead), session: AsyncSession = Depends(get_session)
+) -> Envelope[SyncOut]:
+    """Pull the next 14 days of leave and shift changes from Darwinbox (or the simulated feed)."""
+    users = (
+        await session.scalars(select(User).where(User.role.in_(["agent", "escalation_manager"])))
+    ).all()
+    by_email = {u.email.lower(): u for u in users}
+    result = await hrms.pull(list(by_email), utcnow().date())
+    imported = skipped = 0
+    for r in result.records:
+        u = by_email.get(r.email)
+        if u is None:
+            skipped += 1
+            continue
+        start, end = (
+            datetime.combine(r.start, datetime.min.time()),
+            datetime.combine(r.end, datetime.min.time()),
+        )
+        exists = await session.scalar(
+            select(HrRecord.id).where(
+                HrRecord.user_id == u.id, HrRecord.kind == r.kind, HrRecord.start == start
+            )
+        )
+        if exists:
+            skipped += 1
+            continue
+        session.add(
+            HrRecord(
+                user_id=u.id,
+                kind=r.kind,
+                start=start,
+                end=end,
+                note=r.note,
+                shift_start=r.shift_start,
+                shift_end=r.shift_end,
+                source=f"darwinbox-{result.mode}",
+            )
+        )
+        imported += 1
+    audit(
+        session,
+        principal,
+        "roster.sync",
+        "hr_records",
+        None,
+        {"mode": result.mode, "imported": imported},
+    )
+    await session.commit()
+    return Envelope(
+        data=SyncOut(mode=result.mode, imported=imported, skipped=skipped, errors=result.errors)
+    )

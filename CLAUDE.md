@@ -14,6 +14,9 @@ Spec: `docs/OpsDesk_Build_Spec.pdf` is the source of truth (the design moved fro
 - Frontend: design tokens in `globals.css` only; no purple gradients; every screen has empty, loading and error
   states; respect `prefers-reduced-motion`; technical terms get a plain-language `<Term>` hint.
 - API types are generated: run `make gen-api` after changing schemas.
+- Models must be free and open source, run on CPU, and degrade gracefully: pretrained MiniLM (via `fastembed`) falls
+  back to TF-IDF when `EMBEDDINGS_ENABLED=false`. Record licences and measured accuracy in `docs/MODELS.md`.
+- New screens open with a `PageHeader` that explains the feature in plain words, and get a nav item and a ⌘K entry.
 - Commits: small, frequent, conventional (`feat(api): …`), no co-author trailers.
 
 ## Commands

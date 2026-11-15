@@ -103,6 +103,17 @@ export function CommandPalette({ role }: { role: string }) {
               hint: "go",
               run: () => go("/tower/escalations"),
             },
+            ...(
+              [
+                ["ghosts", "Ghost flights (predicted tickets)", "/tower/ghosts"],
+                ["storms", "Storm cells (incidents)", "/tower/storms"],
+                ["roster", "Crew roster (HRMS leave)", "/tower/roster"],
+                ["suppliers", "Supplier scorecard", "/tower/suppliers"],
+                ["insights", "Weather radar (themes)", "/tower/insights"],
+                ["data", "Black box (exports)", "/tower/data"],
+                ["simulate", "Routing simulator", "/tower/simulate"],
+              ] as const
+            ).map(([id, label, href]) => ({ id, label, hint: "go", run: () => go(href) })),
           ];
     nav.push({
       id: "sound",

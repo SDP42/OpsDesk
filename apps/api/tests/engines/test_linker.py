@@ -98,3 +98,13 @@ def test_turbulence_rises_and_decays() -> None:
     assert hot.score > cooled.score
     assert hot.band in {"moderate", "severe"}
     assert "repeat contacts" in hot.reason
+
+
+def test_semantic_link_uses_pretrained_vectors_when_given() -> None:
+    new = t("new", 0, title="Still waiting on our refund", description="money not back yet")
+    para = t("a", 40, title="Refund for cancelled stay not credited", description="")
+    other = t("b", 40, title="Visa documents", description="")
+    vectors = {"new": [1.0, 0.0], "a": [0.8, 0.6], "b": [0.1, 0.995]}  # cosine 0.8 and 0.1
+    links = find_links(new, [para, other], NOW, vectors).links
+    assert [lk.ticket_id for lk in links] == ["a"]
+    assert links[0].reason.startswith("Same meaning (MiniLM")

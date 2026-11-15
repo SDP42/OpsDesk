@@ -4,4262 +4,4336 @@
  */
 
 export interface paths {
-  "/api/auth/login": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login */
+        post: operations["login_api_auth_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Login */
-    post: operations["login_api_auth_login_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/auth/logout": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Logout */
+        post: operations["logout_api_auth_logout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Logout */
-    post: operations["logout_api_auth_logout_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/auth/demo-accounts": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/demo-accounts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Demo Accounts
+         * @description The four callsign cards on /login (demo-only; emails come from the seed).
+         */
+        get: operations["demo_accounts_api_auth_demo_accounts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Demo Accounts
-     * @description The four callsign cards on /login (demo-only; emails come from the seed).
-     */
-    get: operations["demo_accounts_api_auth_demo_accounts_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Tickets */
+        get: operations["list_tickets_api_tickets_get"];
+        put?: never;
+        /** Create Ticket */
+        post: operations["create_ticket_api_tickets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Tickets */
-    get: operations["list_tickets_api_tickets_get"];
-    put?: never;
-    /** Create Ticket */
-    post: operations["create_ticket_api_tickets_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Ticket
+         * @description Ticket with timeline, links, routing reason and SLA. ``?as=requester`` is the Agency Mirror.
+         */
+        get: operations["get_ticket_api_tickets__ticket_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Patch Ticket */
+        patch: operations["patch_ticket_api_tickets__ticket_id__patch"];
+        trace?: never;
     };
-    /**
-     * Get Ticket
-     * @description Ticket with timeline, links, routing reason and SLA. ``?as=requester`` is the Agency Mirror.
-     */
-    get: operations["get_ticket_api_tickets__ticket_id__get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /** Patch Ticket */
-    patch: operations["patch_ticket_api_tickets__ticket_id__patch"];
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/assign": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/assign": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Assign */
+        post: operations["assign_api_tickets__ticket_id__assign_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Assign */
-    post: operations["assign_api_tickets__ticket_id__assign_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/unassign": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/unassign": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Unassign */
+        post: operations["unassign_api_tickets__ticket_id__unassign_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Unassign */
-    post: operations["unassign_api_tickets__ticket_id__unassign_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/handoff-preview": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/handoff-preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Handoff Preview */
+        get: operations["handoff_preview_api_tickets__ticket_id__handoff_preview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Handoff Preview */
-    get: operations["handoff_preview_api_tickets__ticket_id__handoff_preview_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/reassign": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/reassign": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reassign
+         * @description Transfer ownership. With open Frequencies, the handoff check must be confirmed.
+         */
+        post: operations["reassign_api_tickets__ticket_id__reassign_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Reassign
-     * @description Transfer ownership. With open Frequencies, the handoff check must be confirmed.
-     */
-    post: operations["reassign_api_tickets__ticket_id__reassign_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/escalate": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/escalate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Escalate
+         * @description Escalate to the Tower Chief: changes owner and queue, requires a reason.
+         */
+        post: operations["escalate_api_tickets__ticket_id__escalate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Escalate
-     * @description Escalate to the Tower Chief: changes owner and queue, requires a reason.
-     */
-    post: operations["escalate_api_tickets__ticket_id__escalate_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/route": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/route": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Auto Route
+         * @description Run Vectoring now (triage auto-route button).
+         */
+        post: operations["auto_route_api_tickets__ticket_id__route_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Auto Route
-     * @description Run Vectoring now (triage auto-route button).
-     */
-    post: operations["auto_route_api_tickets__ticket_id__route_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/brief": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/brief": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Copilot Brief
+         * @description Co-pilot Brief: summary, next best action and a reply draft from linked history.
+         */
+        get: operations["copilot_brief_api_tickets__ticket_id__brief_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Copilot Brief
-     * @description Co-pilot Brief: summary, next best action and a reply draft from linked history.
-     */
-    get: operations["copilot_brief_api_tickets__ticket_id__brief_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/comments": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Comments */
+        get: operations["list_comments_api_tickets__ticket_id__comments_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Comments */
-    get: operations["list_comments_api_tickets__ticket_id__comments_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/comments/internal": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/comments/internal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post Internal
+         * @description Internal note: staff only, never serialised on requester routes.
+         */
+        post: operations["post_internal_api_tickets__ticket_id__comments_internal_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Post Internal
-     * @description Internal note: staff only, never serialised on requester routes.
-     */
-    post: operations["post_internal_api_tickets__ticket_id__comments_internal_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/comments/external": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/comments/external": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post External
+         * @description External reply: visible to the Pilot.
+         */
+        post: operations["post_external_api_tickets__ticket_id__comments_external_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Post External
-     * @description External reply: visible to the Pilot.
-     */
-    post: operations["post_external_api_tickets__ticket_id__comments_external_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/links": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Links */
+        get: operations["list_links_api_tickets__ticket_id__links_get"];
+        put?: never;
+        /** Add Link */
+        post: operations["add_link_api_tickets__ticket_id__links_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Links */
-    get: operations["list_links_api_tickets__ticket_id__links_get"];
-    put?: never;
-    /** Add Link */
-    post: operations["add_link_api_tickets__ticket_id__links_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/frequencies": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/frequencies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Frequencies */
+        get: operations["list_frequencies_api_tickets__ticket_id__frequencies_get"];
+        put?: never;
+        /** Open Frequency */
+        post: operations["open_frequency_api_tickets__ticket_id__frequencies_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** List Frequencies */
-    get: operations["list_frequencies_api_tickets__ticket_id__frequencies_get"];
-    put?: never;
-    /** Open Frequency */
-    post: operations["open_frequency_api_tickets__ticket_id__frequencies_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/frequencies/{frequency_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/frequencies/{frequency_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Frequency */
+        get: operations["get_frequency_api_frequencies__frequency_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Get Frequency */
-    get: operations["get_frequency_api_frequencies__frequency_id__get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/frequencies/{frequency_id}/recipients": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/frequencies/{frequency_id}/recipients": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Recipient */
+        post: operations["add_recipient_api_frequencies__frequency_id__recipients_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Add Recipient */
-    post: operations["add_recipient_api_frequencies__frequency_id__recipients_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/frequencies/{frequency_id}/recipients/{recipient_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/frequencies/{frequency_id}/recipients/{recipient_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove Recipient */
+        delete: operations["remove_recipient_api_frequencies__frequency_id__recipients__recipient_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /** Remove Recipient */
-    delete: operations["remove_recipient_api_frequencies__frequency_id__recipients__recipient_id__delete"];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/frequencies/{frequency_id}/messages": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/frequencies/{frequency_id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Post Message */
+        post: operations["post_message_api_frequencies__frequency_id__messages_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Post Message */
-    post: operations["post_message_api_frequencies__frequency_id__messages_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/intents": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/intents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Taxonomy */
+        get: operations["taxonomy_api_intents_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Taxonomy */
-    get: operations["taxonomy_api_intents_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/intents/suggest": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/intents/suggest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Suggest
+         * @description Top 3 intents with confidence; below 0.55 the UI shows 'needs a human'.
+         */
+        post: operations["suggest_api_intents_suggest_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Suggest
-     * @description Top 3 intents with confidence; below 0.55 the UI shows 'needs a human'.
-     */
-    post: operations["suggest_api_intents_suggest_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/insights/themes": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/insights/themes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Themes */
+        get: operations["themes_api_insights_themes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Themes */
-    get: operations["themes_api_insights_themes_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/insights/heatmap": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/insights/heatmap": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Heatmap
+         * @description Theme counts per ISO week for the Weather Radar heat map (oldest week first).
+         */
+        get: operations["heatmap_api_insights_heatmap_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Heatmap
-     * @description Theme counts per ISO week for the Weather Radar heat map (oldest week first).
-     */
-    get: operations["heatmap_api_insights_heatmap_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/insights/themes/{code}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/insights/themes/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Set Product Link
+         * @description Attach a suggested product link or bug key to a theme (closes the feedback loop).
+         */
+        patch: operations["set_product_link_api_insights_themes__code__patch"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /**
-     * Set Product Link
-     * @description Attach a suggested product link or bug key to a theme (closes the feedback loop).
-     */
-    patch: operations["set_product_link_api_insights_themes__code__patch"];
-    trace?: never;
-  };
-  "/api/export/tickets": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/export/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Tickets */
+        get: operations["export_tickets_api_export_tickets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Export Tickets */
-    get: operations["export_tickets_api_export_tickets_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/stream": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Stream
+         * @description ticket.created, ticket.updated, sla.tick, escalation, guardian.
+         *
+         *     Staff receive every event; Pilots only events about their own agency.
+         */
+        get: operations["stream_api_stream_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Stream
-     * @description ticket.created, ticket.updated, sla.tick, escalation, guardian.
-     *
-     *     Staff receive every event; Pilots only events about their own agency.
-     */
-    get: operations["stream_api_stream_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/admin/archive-run": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/admin/archive-run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Run */
+        post: operations["archive_run_api_admin_archive_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Archive Run */
-    post: operations["archive_run_api_admin_archive_run_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/admin/chaos": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/admin/chaos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Chaos
+         * @description Chaos Mode: inject a burst of overbooking flights from many agencies to show live routing.
+         */
+        post: operations["chaos_api_admin_chaos_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Chaos
-     * @description Chaos Mode: inject a burst of overbooking flights from many agencies to show live routing.
-     */
-    post: operations["chaos_api_admin_chaos_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/bookings/{tboh}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/bookings/{tboh}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Booking
+         * @description Validate a TBOH and list earlier cases on it (Pilot create flow).
+         */
+        get: operations["booking_api_bookings__tboh__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Booking
-     * @description Validate a TBOH and list earlier cases on it (Pilot create flow).
-     */
-    get: operations["booking_api_bookings__tboh__get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/agencies": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/agencies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Agencies */
+        get: operations["agencies_api_agencies_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Agencies */
-    get: operations["agencies_api_agencies_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/controllers": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/controllers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Controllers */
+        get: operations["controllers_api_controllers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Controllers */
-    get: operations["controllers_api_controllers_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/stats/overview": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/stats/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Overview */
+        get: operations["overview_api_stats_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Overview */
-    get: operations["overview_api_stats_overview_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routing/preset": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routing/preset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Preset */
+        get: operations["get_preset_api_routing_preset_get"];
+        /** Put Preset */
+        put: operations["put_preset_api_routing_preset_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Get Preset */
-    get: operations["get_preset_api_routing_preset_get"];
-    /** Put Preset */
-    put: operations["put_preset_api_routing_preset_put"];
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/stats/trend": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/stats/trend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Trend
+         * @description Daily created/resolved/breached counts, intent mix and the most turbulent agencies.
+         */
+        get: operations["trend_api_stats_trend_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Trend
-     * @description Daily created/resolved/breached counts, intent mix and the most turbulent agencies.
-     */
-    get: operations["trend_api_stats_trend_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/assistant/ask": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/assistant/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask */
+        post: operations["ask_api_assistant_ask_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Ask */
-    post: operations["ask_api_assistant_ask_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/assistant/suggestions": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/assistant/suggestions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Suggestions */
+        get: operations["suggestions_api_assistant_suggestions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Suggestions */
-    get: operations["suggestions_api_assistant_suggestions_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/partner/channels": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/partner/channels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Channels */
+        get: operations["channels_api_partner_channels_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Channels */
-    get: operations["channels_api_partner_channels_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/partner/channels/{channel_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/partner/channels/{channel_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Channel */
+        get: operations["channel_api_partner_channels__channel_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Channel */
-    get: operations["channel_api_partner_channels__channel_id__get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/partner/channels/{channel_id}/messages": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/partner/channels/{channel_id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reply */
+        post: operations["reply_api_partner_channels__channel_id__messages_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Reply */
-    post: operations["reply_api_partner_channels__channel_id__messages_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/partner/stats": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/partner/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Stats
+         * @description Supplier reliability: median minutes from a TBO message to this supplier's reply.
+         */
+        get: operations["stats_api_partner_stats_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Stats
-     * @description Supplier reliability: median minutes from a TBO message to this supplier's reply.
-     */
-    get: operations["stats_api_partner_stats_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/roster": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/roster": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Roster
+         * @description HRMS-aware crew board: who is really available today, and which flights are orphaned.
+         */
+        get: operations["roster_api_roster_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Roster
-     * @description HRMS-aware crew board: who is really available today, and which flights are orphaned.
-     */
-    get: operations["roster_api_roster_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/roster/records": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/roster/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add Record
+         * @description Accept an HRMS record (the shape a Darwinbox leave/shift webhook would deliver).
+         */
+        post: operations["add_record_api_roster_records_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Add Record
-     * @description Accept an HRMS record (the shape a Darwinbox leave/shift webhook would deliver).
-     */
-    post: operations["add_record_api_roster_records_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/roster/rebalance": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/roster/rebalance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rebalance
+         * @description Re-vector every orphaned flight to an available controller, with reasons on the timeline.
+         */
+        post: operations["rebalance_api_roster_rebalance_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Rebalance
-     * @description Re-vector every orphaned flight to an available controller, with reasons on the timeline.
-     */
-    post: operations["rebalance_api_roster_rebalance_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/ghosts": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/ghosts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ghosts
+         * @description Bookings likely to become tickets in the next week, before the agency writes in.
+         */
+        get: operations["ghosts_api_ghosts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Ghosts
-     * @description Bookings likely to become tickets in the next week, before the agency writes in.
-     */
-    get: operations["ghosts_api_ghosts_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/ghosts/{tboh}/preempt": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/ghosts/{tboh}/preempt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preempt
+         * @description Send the pre-emptive message to the agency; the ghost dissolves from the radar.
+         */
+        post: operations["preempt_api_ghosts__tboh__preempt_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Preempt
-     * @description Send the pre-emptive message to the agency; the ghost dissolves from the radar.
-     */
-    post: operations["preempt_api_ghosts__tboh__preempt_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/storms": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/storms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Storms */
+        get: operations["storms_api_storms_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Storms */
-    get: operations["storms_api_storms_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/storms/broadcast": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/storms/broadcast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Broadcast
+         * @description One approved reply to every agency in the Storm Cell, recorded as a parent incident.
+         */
+        post: operations["broadcast_api_storms_broadcast_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Broadcast
-     * @description One approved reply to every agency in the Storm Cell, recorded as a parent incident.
-     */
-    post: operations["broadcast_api_storms_broadcast_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/forecast": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/forecast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Forecast */
+        get: operations["forecast_api_tickets__ticket_id__forecast_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Forecast */
-    get: operations["forecast_api_tickets__ticket_id__forecast_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/tickets/{ticket_id}/signals": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/tickets/{ticket_id}/signals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Signals
+         * @description Frustration Radar on the agency's words and Promise Tracker on what we committed to.
+         */
+        get: operations["signals_api_tickets__ticket_id__signals_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Signals
-     * @description Frustration Radar on the agency's words and Promise Tracker on what we committed to.
-     */
-    get: operations["signals_api_tickets__ticket_id__signals_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/suppliers/scorecard": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/suppliers/scorecard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Scorecard
+         * @description Supplier reliability from Frequencies, confirmations and ticket volume, with best contact.
+         */
+        get: operations["scorecard_api_suppliers_scorecard_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Scorecard
-     * @description Supplier reliability from Frequencies, confirmations and ticket volume, with best contact.
-     */
-    get: operations["scorecard_api_suppliers_scorecard_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/routing/simulate": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/routing/simulate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate Routing
+         * @description Replay the last N hours of flights under each preset and compare breaches, waits and load.
+         */
+        post: operations["simulate_routing_api_routing_simulate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Simulate Routing
-     * @description Replay the last N hours of flights under each preset and compare breaches, waits and load.
-     */
-    post: operations["simulate_routing_api_routing_simulate_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/me": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/nlq": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ask The Tower
+         * @description Plain English → explainable filter chips for the command palette.
+         */
+        get: operations["ask_the_tower_api_nlq_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Me */
-    get: operations["me_api_me_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/me/preferences": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Me */
+        get: operations["me_api_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /**
-     * Preferences
-     * @description Switch between the demo airspace and live data, and mark onboarding complete.
-     */
-    patch: operations["preferences_api_me_preferences_patch"];
-    trace?: never;
-  };
-  "/api/health": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/me/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Preferences
+         * @description Switch between the demo airspace and live data, and mark onboarding complete.
+         */
+        patch: operations["preferences_api_me_preferences_patch"];
+        trace?: never;
     };
-    /** Health */
-    get: operations["health_api_health_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
+    "/api/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health */
+        get: operations["health_api_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    /** ActionForecast */
-    ActionForecast: {
-      /** Action */
-      action: string;
-      /** Label */
-      label: string;
-      /** Breach Probability */
-      breach_probability: number;
-      /** P50 Minutes */
-      p50_minutes: number;
-      /** Histogram */
-      histogram: number[];
-    };
-    /** AgencyBrief */
-    AgencyBrief: {
-      /** Id */
-      id: string;
-      /** Code */
-      code: string;
-      /** Name */
-      name: string;
-      /** City */
-      city: string;
-      /** Country */
-      country: string;
-      /** Region */
-      region: string;
-      /** Tier */
-      tier: number;
-      /** Turbulence Score */
-      turbulence_score: number;
-    };
-    /** AnswerCard */
-    AnswerCard: {
-      /** Number */
-      number: string;
-      /** Title */
-      title: string;
-      /** Status */
-      status: string;
-      /** Sla State */
-      sla_state: string;
-      /** Detail */
-      detail: string;
-      /** Href */
-      href: string;
-    };
-    /** ArchiveRunIn */
-    ArchiveRunIn: {
-      /** Older Than Days */
-      older_than_days?: number | null;
-    };
-    /** ArchiveRunOut */
-    ArchiveRunOut: {
-      /** Archived */
-      archived: number;
-      /**
-       * Cutoff
-       * Format: date-time
-       */
-      cutoff: string;
-      /** Policy */
-      policy: string;
-    };
-    /** AskIn */
-    AskIn: {
-      /** Question */
-      question: string;
-      /**
-       * Channel
-       * @default text
-       */
-      channel: string;
-    };
-    /** AssignIn */
-    AssignIn: {
-      /** User Id */
-      user_id?: string | null;
-    };
-    /** AssistantAnswer */
-    AssistantAnswer: {
-      /** Answer */
-      answer: string;
-      /** Speak */
-      speak: string;
-      /**
-       * Cards
-       * @default []
-       */
-      cards: components["schemas"]["AnswerCard"][];
-      /**
-       * Suggestions
-       * @default []
-       */
-      suggestions: string[];
-      /** Understood */
-      understood: string;
-    };
-    /** BookingOut */
-    BookingOut: {
-      /** Tboh */
-      tboh: string;
-      /** Hotel Name */
-      hotel_name: string;
-      /** Destination */
-      destination: string;
-      /** Guest Name */
-      guest_name: string;
-      /**
-       * Check In
-       * Format: date-time
-       */
-      check_in: string;
-      /** Lcd */
-      lcd: string | null;
-      /** Supplier Name */
-      supplier_name: string;
-      /** Supplier Status */
-      supplier_status: string;
-      /** Earlier Cases */
-      earlier_cases: {
-        [key: string]: string;
-      }[];
-    };
-    /** Brief */
-    Brief: {
-      /** Headline */
-      headline: string;
-      /** Lines */
-      lines: components["schemas"]["BriefLine"][];
-      /** Next Action */
-      next_action: string;
-      /** Reply Draft */
-      reply_draft: string;
-    };
-    /** BriefLine */
-    BriefLine: {
-      /** Label */
-      label: string;
-      /** Text */
-      text: string;
-      /** Why */
-      why: string;
-    };
-    /** BroadcastIn */
-    BroadcastIn: {
-      /** Key */
-      key: string;
-      /** Message */
-      message: string;
-    };
-    /** Channel */
-    Channel: {
-      /** Id */
-      id: string;
-      /** Subject */
-      subject: string;
-      /** Status */
-      status: string;
-      /** Ticket Number */
-      ticket_number: string;
-      /** Hotel */
-      hotel: string | null;
-      /** Check In */
-      check_in: string | null;
-      /** Tboh */
-      tboh: string | null;
-      /** Awaiting Reply */
-      awaiting_reply: boolean;
-      /** Last At */
-      last_at: string | null;
-      /**
-       * Messages
-       * @default []
-       */
-      messages: components["schemas"]["ChannelMessage"][];
-    };
-    /** ChannelMessage */
-    ChannelMessage: {
-      /** Id */
-      id: string;
-      /** Sender Type */
-      sender_type: string;
-      /** Sender Name */
-      sender_name: string;
-      /** Body */
-      body: string;
-      /**
-       * At
-       * Format: date-time
-       */
-      at: string;
-    };
-    /** CommentIn */
-    CommentIn: {
-      /** Body */
-      body: string;
-    };
-    /** CommentOut */
-    CommentOut: {
-      /** Id */
-      id: string;
-      /** Visibility */
-      visibility: string;
-      /** Body */
-      body: string;
-      author: components["schemas"]["UserBrief"] | null;
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
-    };
-    /** ControllerOut */
-    ControllerOut: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      /** Callsign */
-      callsign: string | null;
-      /** Role */
-      role: string;
-      /** Region */
-      region: string | null;
-      /** Availability */
-      availability: string;
-      /** Rank */
-      rank: number;
-      /** Capacity */
-      capacity: number;
-      /** Open Tickets */
-      open_tickets: number;
-      /** On Shift */
-      on_shift: boolean;
-      /** Shift */
-      shift: string | null;
-    };
-    /** CrewStatus */
-    CrewStatus: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      /** Availability */
-      availability: string;
-      /** On Leave */
-      on_leave: boolean;
-      /** Returns On */
-      returns_on: string | null;
-      /** Shift Start */
-      shift_start: string | null;
-      /** Shift End */
-      shift_end: string | null;
-      /** Source */
-      source: string;
-      /** Reason */
-      reason: string;
-    };
-    /** DemoAccount */
-    DemoAccount: {
-      /** Role */
-      role: string;
-      /** Persona */
-      persona: string;
-      /** Name */
-      name: string;
-      /** Email */
-      email: string;
-      /** Region */
-      region: string | null;
-      /** Home */
-      home: string;
-      /** Demo Password */
-      demo_password?: string | null;
-    };
-    /** Envelope[ArchiveRunOut] */
-    Envelope_ArchiveRunOut_: {
-      data: components["schemas"]["ArchiveRunOut"];
-    };
-    /** Envelope[AssistantAnswer] */
-    Envelope_AssistantAnswer_: {
-      data: components["schemas"]["AssistantAnswer"];
-    };
-    /** Envelope[BookingOut] */
-    Envelope_BookingOut_: {
-      data: components["schemas"]["BookingOut"];
-    };
-    /** Envelope[Brief] */
-    Envelope_Brief_: {
-      data: components["schemas"]["Brief"];
-    };
-    /** Envelope[Channel] */
-    Envelope_Channel_: {
-      data: components["schemas"]["Channel"];
-    };
-    /** Envelope[CommentOut] */
-    Envelope_CommentOut_: {
-      data: components["schemas"]["CommentOut"];
-    };
-    /** Envelope[ForecastResult] */
-    Envelope_ForecastResult_: {
-      data: components["schemas"]["ForecastResult"];
-    };
-    /** Envelope[FrequencyOut] */
-    Envelope_FrequencyOut_: {
-      data: components["schemas"]["FrequencyOut"];
-    };
-    /** Envelope[HandoffDiffOut] */
-    Envelope_HandoffDiffOut_: {
-      data: components["schemas"]["HandoffDiffOut"];
-    };
-    /** Envelope[HeatmapOut] */
-    Envelope_HeatmapOut_: {
-      data: components["schemas"]["HeatmapOut"];
-    };
-    /** Envelope[InsightsOut] */
-    Envelope_InsightsOut_: {
-      data: components["schemas"]["InsightsOut"];
-    };
-    /** Envelope[MeOut] */
-    Envelope_MeOut_: {
-      data: components["schemas"]["MeOut"];
-    };
-    /** Envelope[Ok] */
-    Envelope_Ok_: {
-      data: components["schemas"]["Ok"];
-    };
-    /** Envelope[OverviewOut] */
-    Envelope_OverviewOut_: {
-      data: components["schemas"]["OverviewOut"];
-    };
-    /** Envelope[PartnerStats] */
-    Envelope_PartnerStats_: {
-      data: components["schemas"]["PartnerStats"];
-    };
-    /** Envelope[PilotTicketDetailOut] */
-    Envelope_PilotTicketDetailOut_: {
-      data: components["schemas"]["PilotTicketDetailOut"];
-    };
-    /** Envelope[PresetIn] */
-    Envelope_PresetIn_: {
-      data: components["schemas"]["PresetIn"];
-    };
-    /** Envelope[RosterOut] */
-    Envelope_RosterOut_: {
-      data: components["schemas"]["RosterOut"];
-    };
-    /** Envelope[SignalsOut] */
-    Envelope_SignalsOut_: {
-      data: components["schemas"]["SignalsOut"];
-    };
-    /** Envelope[SimulationResult] */
-    Envelope_SimulationResult_: {
-      data: components["schemas"]["SimulationResult"];
-    };
-    /** Envelope[SuggestOut] */
-    Envelope_SuggestOut_: {
-      data: components["schemas"]["SuggestOut"];
-    };
-    /** Envelope[TicketCreatedOut] */
-    Envelope_TicketCreatedOut_: {
-      data: components["schemas"]["TicketCreatedOut"];
-    };
-    /** Envelope[TicketDetailOut] */
-    Envelope_TicketDetailOut_: {
-      data: components["schemas"]["TicketDetailOut"];
-    };
-    /** Envelope[TicketOut] */
-    Envelope_TicketOut_: {
-      data: components["schemas"]["TicketOut"];
-    };
-    /** Envelope[TrendOut] */
-    Envelope_TrendOut_: {
-      data: components["schemas"]["TrendOut"];
-    };
-    /** Envelope[dict[str, int]] */
-    Envelope_dict_str__int__: {
-      /** Data */
-      data: {
-        [key: string]: number;
-      };
-    };
-    /** Envelope[dict[str, str]] */
-    Envelope_dict_str__str__: {
-      /** Data */
-      data: {
-        [key: string]: string;
-      };
-    };
-    /** Envelope[list[AgencyBrief]] */
-    Envelope_list_AgencyBrief__: {
-      /** Data */
-      data: components["schemas"]["AgencyBrief"][];
-    };
-    /** Envelope[list[Channel]] */
-    Envelope_list_Channel__: {
-      /** Data */
-      data: components["schemas"]["Channel"][];
-    };
-    /** Envelope[list[CommentOut]] */
-    Envelope_list_CommentOut__: {
-      /** Data */
-      data: components["schemas"]["CommentOut"][];
-    };
-    /** Envelope[list[ControllerOut]] */
-    Envelope_list_ControllerOut__: {
-      /** Data */
-      data: components["schemas"]["ControllerOut"][];
-    };
-    /** Envelope[list[DemoAccount]] */
-    Envelope_list_DemoAccount__: {
-      /** Data */
-      data: components["schemas"]["DemoAccount"][];
-    };
-    /** Envelope[list[FrequencyOut]] */
-    Envelope_list_FrequencyOut__: {
-      /** Data */
-      data: components["schemas"]["FrequencyOut"][];
-    };
-    /** Envelope[list[GhostOut]] */
-    Envelope_list_GhostOut__: {
-      /** Data */
-      data: components["schemas"]["GhostOut"][];
-    };
-    /** Envelope[list[IntentNode]] */
-    Envelope_list_IntentNode__: {
-      /** Data */
-      data: components["schemas"]["IntentNode"][];
-    };
-    /** Envelope[list[LinkOut]] */
-    Envelope_list_LinkOut__: {
-      /** Data */
-      data: components["schemas"]["LinkOut"][];
-    };
-    /** Envelope[list[StormOut]] */
-    Envelope_list_StormOut__: {
-      /** Data */
-      data: components["schemas"]["StormOut"][];
-    };
-    /** Envelope[list[SupplierScore]] */
-    Envelope_list_SupplierScore__: {
-      /** Data */
-      data: components["schemas"]["SupplierScore"][];
-    };
-    /** Envelope[list[str]] */
-    Envelope_list_str__: {
-      /** Data */
-      data: string[];
-    };
-    /** EscalateIn */
-    EscalateIn: {
-      /** Reason */
-      reason: string;
-    };
-    /** ForecastResult */
-    ForecastResult: {
-      /** Actions */
-      actions: components["schemas"]["ActionForecast"][];
-      /** Best Action */
-      best_action: string;
-      /** Bin Edges */
-      bin_edges: number[];
-      /** Reason */
-      reason: string;
-    };
-    /** FrequencyCreateIn */
-    FrequencyCreateIn: {
-      /** Subject */
-      subject: string;
-      /** Recipients */
-      recipients?: components["schemas"]["RecipientIn"][];
-      /** First Message */
-      first_message?: string | null;
-    };
-    /** FrequencyMessageIn */
-    FrequencyMessageIn: {
-      /** Body */
-      body: string;
-    };
-    /** FrequencyMessageOut */
-    FrequencyMessageOut: {
-      /** Id */
-      id: string;
-      /** Sender Type */
-      sender_type: string;
-      /** Sender Name */
-      sender_name: string;
-      /** Body */
-      body: string;
-      /**
-       * At
-       * Format: date-time
-       */
-      at: string;
-    };
-    /** FrequencyOut */
-    FrequencyOut: {
-      /** Id */
-      id: string;
-      /** Ticket Id */
-      ticket_id: string;
-      /** Subject */
-      subject: string;
-      /** Status */
-      status: string;
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
-      /** Recipients */
-      recipients: components["schemas"]["RecipientOut"][];
-      /**
-       * Messages
-       * @default []
-       */
-      messages: components["schemas"]["FrequencyMessageOut"][];
-    };
-    /** FrustrationResult */
-    FrustrationResult: {
-      /** Score */
-      score: number;
-      /** Band */
-      band: string;
-      /** Signals */
-      signals: string[];
-      /** Calm Reply */
-      calm_reply: string;
-      /** Priority Bump */
-      priority_bump: boolean;
-      /** Reason */
-      reason: string;
-    };
-    /** GhostDriver */
-    GhostDriver: {
-      /** Feature */
-      feature: string;
-      /** Label */
-      label: string;
-      /** Impact */
-      impact: number;
-    };
-    /** GhostOut */
-    GhostOut: {
-      /** Tboh */
-      tboh: string;
-      /** Risk */
-      risk: number;
-      /** Band */
-      band: string;
-      /** Drivers */
-      drivers: components["schemas"]["GhostDriver"][];
-      /** Recommended Message */
-      recommended_message: string;
-      /** Reason */
-      reason: string;
-      /** Hotel */
-      hotel: string;
-      /** Agency */
-      agency: string;
-      /**
-       * Check In
-       * Format: date-time
-       */
-      check_in: string;
-      /** Supplier */
-      supplier: string;
-    };
-    /** GuardianOut */
-    GuardianOut: {
-      /** Triggered */
-      triggered: boolean;
-      /** Contact Count */
-      contact_count: number;
-      /** Reason */
-      reason: string;
-    };
-    /** HTTPValidationError */
-    HTTPValidationError: {
-      /** Detail */
-      detail?: components["schemas"]["ValidationError"][];
-    };
-    /** HandoffDiffOut */
-    HandoffDiffOut: {
-      from_owner: components["schemas"]["UserBrief"] | null;
-      to_owner: components["schemas"]["UserBrief"];
-      /** Stayed */
-      stayed: components["schemas"]["HandoffRecipient"][];
-      /** Added */
-      added: components["schemas"]["HandoffRecipient"][];
-      /** Dropped */
-      dropped: components["schemas"]["HandoffRecipient"][];
-      /** Requires Confirmation */
-      requires_confirmation: boolean;
-    };
-    /** HandoffRecipient */
-    HandoffRecipient: {
-      /** Frequency Id */
-      frequency_id: string;
-      /** Frequency Subject */
-      frequency_subject: string;
-      /** Party Type */
-      party_type: string;
-      /** Name */
-      name: string;
-      /** Email */
-      email: string;
-      /** Locked */
-      locked: boolean;
-    };
-    /** HeatmapOut */
-    HeatmapOut: {
-      /** Weeks */
-      weeks: string[];
-      /** Themes */
-      themes: {
-        [key: string]: unknown;
-      }[];
-    };
-    /** InsightsOut */
-    InsightsOut: {
-      /** Week */
-      week: string;
-      /** Total Tickets */
-      total_tickets: number;
-      /** Themes */
-      themes: components["schemas"]["ThemeWeekOut"][];
-    };
-    /** IntentBrief */
-    IntentBrief: {
-      /** Code */
-      code: string;
-      /** Label */
-      label: string;
-      /** Confidence */
-      confidence?: number | null;
-      /**
-       * Source
-       * @default auto
-       */
-      source: string;
-    };
-    /** IntentCandidateOut */
-    IntentCandidateOut: {
-      /** Code */
-      code: string;
-      /** Label */
-      label: string;
-      /** Confidence */
-      confidence: number;
-    };
-    /** IntentNode */
-    IntentNode: {
-      /** Code */
-      code: string;
-      /** Label */
-      label: string;
-      /**
-       * Children
-       * @default []
-       */
-      children: components["schemas"]["IntentNode"][];
-    };
-    /** IntentShare */
-    IntentShare: {
-      /** Parent */
-      parent: string;
-      /** Count */
-      count: number;
-    };
-    /** LeaveIn */
-    LeaveIn: {
-      /** User Id */
-      user_id: string;
-      /** Kind */
-      kind: string;
-      /**
-       * Start
-       * Format: date
-       */
-      start: string;
-      /**
-       * End
-       * Format: date
-       */
-      end: string;
-      /**
-       * Note
-       * @default
-       */
-      note: string;
-      /** Shift Start */
-      shift_start?: string | null;
-      /** Shift End */
-      shift_end?: string | null;
-    };
-    /** LinkOut */
-    LinkOut: {
-      /** Id */
-      id: string;
-      /** Link Type */
-      link_type: string;
-      /** Strength */
-      strength: number;
-      /** Reason */
-      reason: string;
-      /** Other Id */
-      other_id: string;
-      /** Other Number */
-      other_number: string;
-      /** Other Title */
-      other_title: string;
-      /** Other Status */
-      other_status: string;
-      /**
-       * Other Created At
-       * Format: date-time
-       */
-      other_created_at: string;
-    };
-    /** LoginIn */
-    LoginIn: {
-      /**
-       * Email
-       * Format: email
-       */
-      email: string;
-      /** Password */
-      password: string;
-    };
-    /** ManualLinkIn */
-    ManualLinkIn: {
-      /**
-       * Target
-       * @description Ticket number (OD-24817) or id
-       */
-      target: string;
-      /**
-       * Reason
-       * @default Linked by controller
-       */
-      reason: string;
-    };
-    /** MeOut */
-    MeOut: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      /** Email */
-      email: string;
-      /** Role */
-      role: string;
-      /** Callsign */
-      callsign: string | null;
-      /** Region */
-      region: string | null;
-      /** Availability */
-      availability: string;
-      agency: components["schemas"]["AgencyBrief"] | null;
-      /**
-       * Data Mode
-       * @default demo
-       */
-      data_mode: string;
-      /**
-       * Onboarded
-       * @default false
-       */
-      onboarded: boolean;
-    };
-    /** Ok */
-    Ok: {
-      /**
-       * Ok
-       * @default true
-       */
-      ok: boolean;
-    };
-    /** OrphanRisk */
-    OrphanRisk: {
-      /** Ticket Id */
-      ticket_id: string;
-      /** Number */
-      number: string;
-      /** Owner Id */
-      owner_id: string;
-      /** Reason */
-      reason: string;
-    };
-    /** OverviewOut */
-    OverviewOut: {
-      /** Open */
-      open: number;
-      /** Unassigned */
-      unassigned: number;
-      /** Escalated */
-      escalated: number;
-      /** By Sla */
-      by_sla: {
-        [key: string]: number;
-      };
-      /** By Region */
-      by_region: {
-        [key: string]: number;
-      };
-      /** By Status */
-      by_status: {
-        [key: string]: number;
-      };
-      /** Preset */
-      preset: string;
-    };
-    /** PageMeta */
-    PageMeta: {
-      /** Next Cursor */
-      next_cursor?: string | null;
-      /** Count */
-      count: number;
-    };
-    /** Page[PilotTicketOut] */
-    Page_PilotTicketOut_: {
-      /** Data */
-      data: components["schemas"]["PilotTicketOut"][];
-      meta: components["schemas"]["PageMeta"];
-    };
-    /** Page[TicketOut] */
-    Page_TicketOut_: {
-      /** Data */
-      data: components["schemas"]["TicketOut"][];
-      meta: components["schemas"]["PageMeta"];
-    };
-    /** PartnerStats */
-    PartnerStats: {
-      /** Supplier */
-      supplier: string;
-      /** Open Channels */
-      open_channels: number;
-      /** Awaiting Reply */
-      awaiting_reply: number;
-      /** Median Response Minutes */
-      median_response_minutes: number | null;
-      /** Reason */
-      reason: string;
-    };
-    /** PilotTicketDetailOut */
-    PilotTicketDetailOut: {
-      ticket: components["schemas"]["PilotTicketOut"];
-      /** Timeline */
-      timeline: components["schemas"]["TimelineEventOut"][];
-      /** Links */
-      links: components["schemas"]["LinkOut"][];
-    };
-    /**
-     * PilotTicketOut
-     * @description Requester view: status, ETA and external information only (Agency Mirror uses it).
-     */
-    PilotTicketOut: {
-      /** Id */
-      id: string;
-      /** Number */
-      number: string;
-      /** Title */
-      title: string;
-      /** Description */
-      description: string;
-      /** Tboh */
-      tboh: string | null;
-      intent: components["schemas"]["IntentBrief"] | null;
-      /** Priority */
-      priority: string;
-      /** Status */
-      status: string;
-      /** Controller Callsign */
-      controller_callsign: string | null;
-      /** Check In */
-      check_in: string | null;
-      /** Eta */
-      eta: string | null;
-      /** Sla State */
-      sla_state: string;
-      /**
-       * Link Count
-       * @default 0
-       */
-      link_count: number;
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
-      /**
-       * Updated At
-       * Format: date-time
-       */
-      updated_at: string;
-      /** Resolved At */
-      resolved_at: string | null;
-    };
-    /** PreemptIn */
-    PreemptIn: {
-      /** Message */
-      message: string;
-    };
-    /** PreferencesIn */
-    PreferencesIn: {
-      /** Data Mode */
-      data_mode?: ("demo" | "live") | null;
-      /** Onboarded */
-      onboarded?: boolean | null;
-    };
-    /** PresetIn */
-    PresetIn: {
-      /** Preset */
-      preset: string;
-    };
-    /** PresetOutcome */
-    PresetOutcome: {
-      /** Preset */
-      preset: string;
-      /** Flights */
-      flights: number;
-      /** Breaches */
-      breaches: number;
-      /** Breach Rate */
-      breach_rate: number;
-      /** Avg Wait Minutes */
-      avg_wait_minutes: number;
-      /** Region Match Pct */
-      region_match_pct: number;
-      /** Load */
-      load: {
-        [key: string]: number;
-      };
-      /** Load Spread */
-      load_spread: number;
-      /** Unrouted */
-      unrouted: number;
-      /** Reason */
-      reason: string;
-    };
-    /** ProductLinkIn */
-    ProductLinkIn: {
-      /** Product Link */
-      product_link: string;
-    };
-    /** PromiseOut */
-    PromiseOut: {
-      /** Text */
-      text: string;
-      /** Due At */
-      due_at: string | null;
-      /** Overdue */
-      overdue: boolean;
-      /** Source */
-      source: string;
-      /** Reason */
-      reason: string;
-    };
-    /** QueueBrief */
-    QueueBrief: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      /** Kind */
-      kind: string;
-      /** Region */
-      region?: string | null;
-    };
-    /** ReassignIn */
-    ReassignIn: {
-      /** To User Id */
-      to_user_id: string;
-      /**
-       * Handoff Confirmed
-       * @default false
-       */
-      handoff_confirmed: boolean;
-      /** Note */
-      note?: string | null;
-    };
-    /** RecipientIn */
-    RecipientIn: {
-      /**
-       * Party Type
-       * @enum {string}
-       */
-      party_type: "supplier" | "agency" | "internal";
-      /** Party Id */
-      party_id?: string | null;
-      /** Name */
-      name: string;
-      /**
-       * Email
-       * Format: email
-       */
-      email: string;
-      /**
-       * Locked
-       * @default true
-       */
-      locked: boolean;
-    };
-    /** RecipientOut */
-    RecipientOut: {
-      /** Id */
-      id: string;
-      /** Party Type */
-      party_type: string;
-      /** Party Id */
-      party_id: string | null;
-      /** Name */
-      name: string;
-      /** Email */
-      email: string;
-      /** Locked */
-      locked: boolean;
-      /**
-       * Added At
-       * Format: date-time
-       */
-      added_at: string;
-      /** Removed At */
-      removed_at: string | null;
-    };
-    /** ReplyIn */
-    ReplyIn: {
-      /** Body */
-      body: string;
-    };
-    /** RosterOut */
-    RosterOut: {
-      /** Crew */
-      crew: components["schemas"]["CrewStatus"][];
-      /** Orphans */
-      orphans: components["schemas"]["OrphanRisk"][];
-      /** Upcoming */
-      upcoming: {
-        [key: string]: string;
-      }[];
-      /**
-       * Synced At
-       * Format: date-time
-       */
-      synced_at: string;
-      /** Source */
-      source: string;
-    };
-    /** RouteIn */
-    RouteIn: {
-      /** Preset */
-      preset?: ("balanced" | "urgency_first" | "regional_affinity" | "fairness") | null;
-    };
-    /** RoutingDecisionOut */
-    RoutingDecisionOut: {
-      /** Id */
-      id: string;
-      chosen: components["schemas"]["UserBrief"] | null;
-      /** Preset */
-      preset: string;
-      /** Reason */
-      reason: string;
-      /** Scores */
-      scores: {
-        [key: string]: unknown;
-      };
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
-    };
-    /** SignalsOut */
-    SignalsOut: {
-      frustration: components["schemas"]["FrustrationResult"];
-      /** Promises */
-      promises: components["schemas"]["PromiseOut"][];
-    };
-    /** SimulateIn */
-    SimulateIn: {
-      /**
-       * Hours
-       * @default 24
-       */
-      hours: number;
-      /** Presets */
-      presets?: string[];
-    };
-    /** SimulationResult */
-    SimulationResult: {
-      /** Outcomes */
-      outcomes: components["schemas"]["PresetOutcome"][];
-      /** Best Preset */
-      best_preset: string;
-      /** Reason */
-      reason: string;
-    };
-    /** SlaOut */
-    SlaOut: {
-      /** Due At */
-      due_at: string | null;
-      /** State */
-      state: string;
-      /** Elapsed Pct */
-      elapsed_pct: number;
-      /** Fuel */
-      fuel: number;
-      /** Remaining Seconds */
-      remaining_seconds: number;
-      /** Urgency Driver */
-      urgency_driver: string;
-      /** Propose Escalation */
-      propose_escalation: boolean;
-      /**
-       * Holiday Paused
-       * @default false
-       */
-      holiday_paused: boolean;
-      /** Reason */
-      reason: string;
-    };
-    /** StormOut */
-    StormOut: {
-      /** Key */
-      key: string;
-      /** Label */
-      label: string;
-      /** Ticket Ids */
-      ticket_ids: string[];
-      /**
-       * Agencies
-       * @default 0
-       */
-      agencies: number;
-      /** Reason */
-      reason: string;
-      /** Tickets */
-      tickets: {
-        [key: string]: string;
-      }[];
-      /** Broadcast At */
-      broadcast_at?: string | null;
-    };
-    /** SuggestIn */
-    SuggestIn: {
-      /** Text */
-      text: string;
-    };
-    /** SuggestOut */
-    SuggestOut: {
-      /** Top */
-      top: components["schemas"]["IntentCandidateOut"][];
-      /** Needs Human */
-      needs_human: boolean;
-      /** Rule */
-      rule: string | null;
-      /** Reason */
-      reason: string;
-    };
-    /** SupplierScore */
-    SupplierScore: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      /** Region */
-      region: string;
-      /** Channels */
-      channels: number;
-      /** Awaiting Reply */
-      awaiting_reply: number;
-      /** Median Reply Minutes */
-      median_reply_minutes: number | null;
-      /** Unconfirmed Bookings */
-      unconfirmed_bookings: number;
-      /** Tickets 30D */
-      tickets_30d: number;
-      /** Reliability */
-      reliability: number;
-      /** Best Contact */
-      best_contact: string;
-      /** Reason */
-      reason: string;
-    };
-    /** ThemeSample */
-    ThemeSample: {
-      /** Id */
-      id: string;
-      /** Number */
-      number: string;
-      /** Title */
-      title: string;
-    };
-    /** ThemeWeekOut */
-    ThemeWeekOut: {
-      /** Theme */
-      theme: string;
-      /** Label */
-      label: string;
-      /** Count */
-      count: number;
-      /** Previous */
-      previous: number;
-      /** Wow Change Pct */
-      wow_change_pct: number | null;
-      /** Agencies */
-      agencies: number;
-      /** Zscore */
-      zscore: number | null;
-      /** Emerging */
-      emerging: boolean;
-      /** Product Link */
-      product_link: string | null;
-      /** Samples */
-      samples: components["schemas"]["ThemeSample"][];
-      /** Reason */
-      reason: string;
-    };
-    /** TicketCreateIn */
-    TicketCreateIn: {
-      /** Title */
-      title: string;
-      /**
-       * Description
-       * @default
-       */
-      description: string;
-      /** Tboh */
-      tboh?: string | null;
-      /**
-       * Priority
-       * @default P3
-       * @enum {string}
-       */
-      priority: "P1" | "P2" | "P3" | "P4";
-      /** Intent Code */
-      intent_code?: string | null;
-      /** Check In */
-      check_in?: string | null;
-      /** Lcd */
-      lcd?: string | null;
-      /** Agency Id */
-      agency_id?: string | null;
-    };
-    /** TicketCreatedOut */
-    TicketCreatedOut: {
-      /** Ticket */
-      ticket: components["schemas"]["TicketOut"] | components["schemas"]["PilotTicketOut"];
-      /** Links */
-      links: components["schemas"]["LinkOut"][];
-      guardian: components["schemas"]["GuardianOut"];
-      /** Intent Suggestion */
-      intent_suggestion: {
-        [key: string]: unknown;
-      } | null;
-    };
-    /** TicketDetailOut */
-    TicketDetailOut: {
-      ticket: components["schemas"]["TicketOut"];
-      /** Timeline */
-      timeline: components["schemas"]["TimelineEventOut"][];
-      /** Links */
-      links: components["schemas"]["LinkOut"][];
-      routing: components["schemas"]["RoutingDecisionOut"] | null;
-      guardian: components["schemas"]["GuardianOut"];
-    };
-    /**
-     * TicketOut
-     * @description Staff (controller / tower chief / director) view of a flight.
-     */
-    TicketOut: {
-      /** Id */
-      id: string;
-      /** Number */
-      number: string;
-      /** Title */
-      title: string;
-      /** Description */
-      description: string;
-      agency: components["schemas"]["AgencyBrief"];
-      /** Requester Id */
-      requester_id: string | null;
-      /** Tboh */
-      tboh: string | null;
-      intent: components["schemas"]["IntentBrief"] | null;
-      /** Priority */
-      priority: string;
-      /** Status */
-      status: string;
-      owner: components["schemas"]["UserBrief"] | null;
-      queue: components["schemas"]["QueueBrief"] | null;
-      /** Region */
-      region: string;
-      /** Check In */
-      check_in: string | null;
-      /** Lcd */
-      lcd: string | null;
-      sla: components["schemas"]["SlaOut"];
-      /** Escalated To */
-      escalated_to: string | null;
-      /** Escalation Reason */
-      escalation_reason: string | null;
-      /** Routing Reason */
-      routing_reason: {
-        [key: string]: unknown;
-      } | null;
-      /** Contact Count */
-      contact_count: number;
-      /** Guardian Flag */
-      guardian_flag: boolean;
-      /**
-       * Link Count
-       * @default 0
-       */
-      link_count: number;
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
-      /**
-       * Updated At
-       * Format: date-time
-       */
-      updated_at: string;
-      /** Resolved At */
-      resolved_at: string | null;
-    };
-    /** TicketPatchIn */
-    TicketPatchIn: {
-      /** Status */
-      status?: ("new" | "open" | "pending" | "escalated" | "resolved" | "closed") | null;
-      /** Priority */
-      priority?: ("P1" | "P2" | "P3" | "P4") | null;
-      /** Intent Code */
-      intent_code?: string | null;
-      /** Title */
-      title?: string | null;
-      /** Note */
-      note?: string | null;
-    };
-    /** TimelineEventOut */
-    TimelineEventOut: {
-      /** Id */
-      id: string;
-      /** Type */
-      type: string;
-      actor: components["schemas"]["UserBrief"] | null;
-      /** Payload */
-      payload: {
-        [key: string]: unknown;
-      };
-      /**
-       * At
-       * Format: date-time
-       */
-      at: string;
-    };
-    /** TrendOut */
-    TrendOut: {
-      /** Days */
-      days: components["schemas"]["TrendPoint"][];
-      /** Intents */
-      intents: components["schemas"]["IntentShare"][];
-      /** Agencies At Risk */
-      agencies_at_risk: {
-        [key: string]: unknown;
-      }[];
-    };
-    /** TrendPoint */
-    TrendPoint: {
-      /** Day */
-      day: string;
-      /** Created */
-      created: number;
-      /** Resolved */
-      resolved: number;
-      /** Breached */
-      breached: number;
-    };
-    /** UserBrief */
-    UserBrief: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      /** Callsign */
-      callsign?: string | null;
-      /** Region */
-      region?: string | null;
-      /** Role */
-      role?: string | null;
-    };
-    /** ValidationError */
-    ValidationError: {
-      /** Location */
-      loc: (string | number)[];
-      /** Message */
-      msg: string;
-      /** Error Type */
-      type: string;
-      /** Input */
-      input?: unknown;
-      /** Context */
-      ctx?: Record<string, never>;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    schemas: {
+        /** ActionForecast */
+        ActionForecast: {
+            /** Action */
+            action: string;
+            /** Label */
+            label: string;
+            /** Breach Probability */
+            breach_probability: number;
+            /** P50 Minutes */
+            p50_minutes: number;
+            /** Histogram */
+            histogram: number[];
+        };
+        /** AgencyBrief */
+        AgencyBrief: {
+            /** Id */
+            id: string;
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** City */
+            city: string;
+            /** Country */
+            country: string;
+            /** Region */
+            region: string;
+            /** Tier */
+            tier: number;
+            /** Turbulence Score */
+            turbulence_score: number;
+        };
+        /** AnswerCard */
+        AnswerCard: {
+            /** Number */
+            number: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /** Sla State */
+            sla_state: string;
+            /** Detail */
+            detail: string;
+            /** Href */
+            href: string;
+        };
+        /** ArchiveRunIn */
+        ArchiveRunIn: {
+            /** Older Than Days */
+            older_than_days?: number | null;
+        };
+        /** ArchiveRunOut */
+        ArchiveRunOut: {
+            /** Archived */
+            archived: number;
+            /**
+             * Cutoff
+             * Format: date-time
+             */
+            cutoff: string;
+            /** Policy */
+            policy: string;
+        };
+        /** AskIn */
+        AskIn: {
+            /** Question */
+            question: string;
+            /**
+             * Channel
+             * @default text
+             */
+            channel: string;
+        };
+        /** AssignIn */
+        AssignIn: {
+            /** User Id */
+            user_id?: string | null;
+        };
+        /** AssistantAnswer */
+        AssistantAnswer: {
+            /** Answer */
+            answer: string;
+            /** Speak */
+            speak: string;
+            /**
+             * Cards
+             * @default []
+             */
+            cards: components["schemas"]["AnswerCard"][];
+            /**
+             * Suggestions
+             * @default []
+             */
+            suggestions: string[];
+            /** Understood */
+            understood: string;
+        };
+        /** BookingOut */
+        BookingOut: {
+            /** Tboh */
+            tboh: string;
+            /** Hotel Name */
+            hotel_name: string;
+            /** Destination */
+            destination: string;
+            /** Guest Name */
+            guest_name: string;
+            /**
+             * Check In
+             * Format: date-time
+             */
+            check_in: string;
+            /** Lcd */
+            lcd: string | null;
+            /** Supplier Name */
+            supplier_name: string;
+            /** Supplier Status */
+            supplier_status: string;
+            /** Earlier Cases */
+            earlier_cases: {
+                [key: string]: string;
+            }[];
+        };
+        /** Brief */
+        Brief: {
+            /** Headline */
+            headline: string;
+            /** Lines */
+            lines: components["schemas"]["BriefLine"][];
+            /** Next Action */
+            next_action: string;
+            /** Reply Draft */
+            reply_draft: string;
+        };
+        /** BriefLine */
+        BriefLine: {
+            /** Label */
+            label: string;
+            /** Text */
+            text: string;
+            /** Why */
+            why: string;
+        };
+        /** BroadcastIn */
+        BroadcastIn: {
+            /** Key */
+            key: string;
+            /** Message */
+            message: string;
+        };
+        /** Channel */
+        Channel: {
+            /** Id */
+            id: string;
+            /** Subject */
+            subject: string;
+            /** Status */
+            status: string;
+            /** Ticket Number */
+            ticket_number: string;
+            /** Hotel */
+            hotel: string | null;
+            /** Check In */
+            check_in: string | null;
+            /** Tboh */
+            tboh: string | null;
+            /** Awaiting Reply */
+            awaiting_reply: boolean;
+            /** Last At */
+            last_at: string | null;
+            /**
+             * Messages
+             * @default []
+             */
+            messages: components["schemas"]["ChannelMessage"][];
+        };
+        /** ChannelMessage */
+        ChannelMessage: {
+            /** Id */
+            id: string;
+            /** Sender Type */
+            sender_type: string;
+            /** Sender Name */
+            sender_name: string;
+            /** Body */
+            body: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+        };
+        /** Chip */
+        Chip: {
+            /** Key */
+            key: string;
+            /** Value */
+            value: string;
+            /** Label */
+            label: string;
+            /** Because */
+            because: string;
+        };
+        /** CommentIn */
+        CommentIn: {
+            /** Body */
+            body: string;
+        };
+        /** CommentOut */
+        CommentOut: {
+            /** Id */
+            id: string;
+            /** Visibility */
+            visibility: string;
+            /** Body */
+            body: string;
+            author: components["schemas"]["UserBrief"] | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** ControllerOut */
+        ControllerOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Callsign */
+            callsign: string | null;
+            /** Role */
+            role: string;
+            /** Region */
+            region: string | null;
+            /** Availability */
+            availability: string;
+            /** Rank */
+            rank: number;
+            /** Capacity */
+            capacity: number;
+            /** Open Tickets */
+            open_tickets: number;
+            /** On Shift */
+            on_shift: boolean;
+            /** Shift */
+            shift: string | null;
+        };
+        /** CrewStatus */
+        CrewStatus: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Availability */
+            availability: string;
+            /** On Leave */
+            on_leave: boolean;
+            /** Returns On */
+            returns_on: string | null;
+            /** Shift Start */
+            shift_start: string | null;
+            /** Shift End */
+            shift_end: string | null;
+            /** Source */
+            source: string;
+            /** Reason */
+            reason: string;
+        };
+        /** DemoAccount */
+        DemoAccount: {
+            /** Role */
+            role: string;
+            /** Persona */
+            persona: string;
+            /** Name */
+            name: string;
+            /** Email */
+            email: string;
+            /** Region */
+            region: string | null;
+            /** Home */
+            home: string;
+            /** Demo Password */
+            demo_password?: string | null;
+        };
+        /** Envelope[ArchiveRunOut] */
+        Envelope_ArchiveRunOut_: {
+            data: components["schemas"]["ArchiveRunOut"];
+        };
+        /** Envelope[AssistantAnswer] */
+        Envelope_AssistantAnswer_: {
+            data: components["schemas"]["AssistantAnswer"];
+        };
+        /** Envelope[BookingOut] */
+        Envelope_BookingOut_: {
+            data: components["schemas"]["BookingOut"];
+        };
+        /** Envelope[Brief] */
+        Envelope_Brief_: {
+            data: components["schemas"]["Brief"];
+        };
+        /** Envelope[Channel] */
+        Envelope_Channel_: {
+            data: components["schemas"]["Channel"];
+        };
+        /** Envelope[CommentOut] */
+        Envelope_CommentOut_: {
+            data: components["schemas"]["CommentOut"];
+        };
+        /** Envelope[ForecastResult] */
+        Envelope_ForecastResult_: {
+            data: components["schemas"]["ForecastResult"];
+        };
+        /** Envelope[FrequencyOut] */
+        Envelope_FrequencyOut_: {
+            data: components["schemas"]["FrequencyOut"];
+        };
+        /** Envelope[HandoffDiffOut] */
+        Envelope_HandoffDiffOut_: {
+            data: components["schemas"]["HandoffDiffOut"];
+        };
+        /** Envelope[HeatmapOut] */
+        Envelope_HeatmapOut_: {
+            data: components["schemas"]["HeatmapOut"];
+        };
+        /** Envelope[InsightsOut] */
+        Envelope_InsightsOut_: {
+            data: components["schemas"]["InsightsOut"];
+        };
+        /** Envelope[MeOut] */
+        Envelope_MeOut_: {
+            data: components["schemas"]["MeOut"];
+        };
+        /** Envelope[Ok] */
+        Envelope_Ok_: {
+            data: components["schemas"]["Ok"];
+        };
+        /** Envelope[OverviewOut] */
+        Envelope_OverviewOut_: {
+            data: components["schemas"]["OverviewOut"];
+        };
+        /** Envelope[ParsedQuery] */
+        Envelope_ParsedQuery_: {
+            data: components["schemas"]["ParsedQuery"];
+        };
+        /** Envelope[PartnerStats] */
+        Envelope_PartnerStats_: {
+            data: components["schemas"]["PartnerStats"];
+        };
+        /** Envelope[PilotTicketDetailOut] */
+        Envelope_PilotTicketDetailOut_: {
+            data: components["schemas"]["PilotTicketDetailOut"];
+        };
+        /** Envelope[PresetIn] */
+        Envelope_PresetIn_: {
+            data: components["schemas"]["PresetIn"];
+        };
+        /** Envelope[RosterOut] */
+        Envelope_RosterOut_: {
+            data: components["schemas"]["RosterOut"];
+        };
+        /** Envelope[SignalsOut] */
+        Envelope_SignalsOut_: {
+            data: components["schemas"]["SignalsOut"];
+        };
+        /** Envelope[SimulationResult] */
+        Envelope_SimulationResult_: {
+            data: components["schemas"]["SimulationResult"];
+        };
+        /** Envelope[SuggestOut] */
+        Envelope_SuggestOut_: {
+            data: components["schemas"]["SuggestOut"];
+        };
+        /** Envelope[TicketCreatedOut] */
+        Envelope_TicketCreatedOut_: {
+            data: components["schemas"]["TicketCreatedOut"];
+        };
+        /** Envelope[TicketDetailOut] */
+        Envelope_TicketDetailOut_: {
+            data: components["schemas"]["TicketDetailOut"];
+        };
+        /** Envelope[TicketOut] */
+        Envelope_TicketOut_: {
+            data: components["schemas"]["TicketOut"];
+        };
+        /** Envelope[TrendOut] */
+        Envelope_TrendOut_: {
+            data: components["schemas"]["TrendOut"];
+        };
+        /** Envelope[dict[str, int]] */
+        Envelope_dict_str__int__: {
+            /** Data */
+            data: {
+                [key: string]: number;
+            };
+        };
+        /** Envelope[dict[str, str]] */
+        Envelope_dict_str__str__: {
+            /** Data */
+            data: {
+                [key: string]: string;
+            };
+        };
+        /** Envelope[list[AgencyBrief]] */
+        Envelope_list_AgencyBrief__: {
+            /** Data */
+            data: components["schemas"]["AgencyBrief"][];
+        };
+        /** Envelope[list[Channel]] */
+        Envelope_list_Channel__: {
+            /** Data */
+            data: components["schemas"]["Channel"][];
+        };
+        /** Envelope[list[CommentOut]] */
+        Envelope_list_CommentOut__: {
+            /** Data */
+            data: components["schemas"]["CommentOut"][];
+        };
+        /** Envelope[list[ControllerOut]] */
+        Envelope_list_ControllerOut__: {
+            /** Data */
+            data: components["schemas"]["ControllerOut"][];
+        };
+        /** Envelope[list[DemoAccount]] */
+        Envelope_list_DemoAccount__: {
+            /** Data */
+            data: components["schemas"]["DemoAccount"][];
+        };
+        /** Envelope[list[FrequencyOut]] */
+        Envelope_list_FrequencyOut__: {
+            /** Data */
+            data: components["schemas"]["FrequencyOut"][];
+        };
+        /** Envelope[list[GhostOut]] */
+        Envelope_list_GhostOut__: {
+            /** Data */
+            data: components["schemas"]["GhostOut"][];
+        };
+        /** Envelope[list[IntentNode]] */
+        Envelope_list_IntentNode__: {
+            /** Data */
+            data: components["schemas"]["IntentNode"][];
+        };
+        /** Envelope[list[LinkOut]] */
+        Envelope_list_LinkOut__: {
+            /** Data */
+            data: components["schemas"]["LinkOut"][];
+        };
+        /** Envelope[list[StormOut]] */
+        Envelope_list_StormOut__: {
+            /** Data */
+            data: components["schemas"]["StormOut"][];
+        };
+        /** Envelope[list[SupplierScore]] */
+        Envelope_list_SupplierScore__: {
+            /** Data */
+            data: components["schemas"]["SupplierScore"][];
+        };
+        /** Envelope[list[str]] */
+        Envelope_list_str__: {
+            /** Data */
+            data: string[];
+        };
+        /** EscalateIn */
+        EscalateIn: {
+            /** Reason */
+            reason: string;
+        };
+        /** ForecastResult */
+        ForecastResult: {
+            /** Actions */
+            actions: components["schemas"]["ActionForecast"][];
+            /** Best Action */
+            best_action: string;
+            /** Bin Edges */
+            bin_edges: number[];
+            /** Reason */
+            reason: string;
+        };
+        /** FrequencyCreateIn */
+        FrequencyCreateIn: {
+            /** Subject */
+            subject: string;
+            /** Recipients */
+            recipients?: components["schemas"]["RecipientIn"][];
+            /** First Message */
+            first_message?: string | null;
+        };
+        /** FrequencyMessageIn */
+        FrequencyMessageIn: {
+            /** Body */
+            body: string;
+        };
+        /** FrequencyMessageOut */
+        FrequencyMessageOut: {
+            /** Id */
+            id: string;
+            /** Sender Type */
+            sender_type: string;
+            /** Sender Name */
+            sender_name: string;
+            /** Body */
+            body: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+        };
+        /** FrequencyOut */
+        FrequencyOut: {
+            /** Id */
+            id: string;
+            /** Ticket Id */
+            ticket_id: string;
+            /** Subject */
+            subject: string;
+            /** Status */
+            status: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Recipients */
+            recipients: components["schemas"]["RecipientOut"][];
+            /**
+             * Messages
+             * @default []
+             */
+            messages: components["schemas"]["FrequencyMessageOut"][];
+        };
+        /** FrustrationResult */
+        FrustrationResult: {
+            /** Score */
+            score: number;
+            /** Band */
+            band: string;
+            /** Signals */
+            signals: string[];
+            /** Calm Reply */
+            calm_reply: string;
+            /** Priority Bump */
+            priority_bump: boolean;
+            /** Reason */
+            reason: string;
+        };
+        /** GhostDriver */
+        GhostDriver: {
+            /** Feature */
+            feature: string;
+            /** Label */
+            label: string;
+            /** Impact */
+            impact: number;
+        };
+        /** GhostOut */
+        GhostOut: {
+            /** Tboh */
+            tboh: string;
+            /** Risk */
+            risk: number;
+            /** Band */
+            band: string;
+            /** Drivers */
+            drivers: components["schemas"]["GhostDriver"][];
+            /** Recommended Message */
+            recommended_message: string;
+            /** Reason */
+            reason: string;
+            /** Hotel */
+            hotel: string;
+            /** Agency */
+            agency: string;
+            /**
+             * Check In
+             * Format: date-time
+             */
+            check_in: string;
+            /** Supplier */
+            supplier: string;
+        };
+        /** GuardianOut */
+        GuardianOut: {
+            /** Triggered */
+            triggered: boolean;
+            /** Contact Count */
+            contact_count: number;
+            /** Reason */
+            reason: string;
+        };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /** HandoffDiffOut */
+        HandoffDiffOut: {
+            from_owner: components["schemas"]["UserBrief"] | null;
+            to_owner: components["schemas"]["UserBrief"];
+            /** Stayed */
+            stayed: components["schemas"]["HandoffRecipient"][];
+            /** Added */
+            added: components["schemas"]["HandoffRecipient"][];
+            /** Dropped */
+            dropped: components["schemas"]["HandoffRecipient"][];
+            /** Requires Confirmation */
+            requires_confirmation: boolean;
+        };
+        /** HandoffRecipient */
+        HandoffRecipient: {
+            /** Frequency Id */
+            frequency_id: string;
+            /** Frequency Subject */
+            frequency_subject: string;
+            /** Party Type */
+            party_type: string;
+            /** Name */
+            name: string;
+            /** Email */
+            email: string;
+            /** Locked */
+            locked: boolean;
+        };
+        /** HeatmapOut */
+        HeatmapOut: {
+            /** Weeks */
+            weeks: string[];
+            /** Themes */
+            themes: {
+                [key: string]: unknown;
+            }[];
+        };
+        /** InsightsOut */
+        InsightsOut: {
+            /** Week */
+            week: string;
+            /** Total Tickets */
+            total_tickets: number;
+            /** Themes */
+            themes: components["schemas"]["ThemeWeekOut"][];
+        };
+        /** IntentBrief */
+        IntentBrief: {
+            /** Code */
+            code: string;
+            /** Label */
+            label: string;
+            /** Confidence */
+            confidence?: number | null;
+            /**
+             * Source
+             * @default auto
+             */
+            source: string;
+        };
+        /** IntentCandidateOut */
+        IntentCandidateOut: {
+            /** Code */
+            code: string;
+            /** Label */
+            label: string;
+            /** Confidence */
+            confidence: number;
+        };
+        /** IntentNode */
+        IntentNode: {
+            /** Code */
+            code: string;
+            /** Label */
+            label: string;
+            /**
+             * Children
+             * @default []
+             */
+            children: components["schemas"]["IntentNode"][];
+        };
+        /** IntentShare */
+        IntentShare: {
+            /** Parent */
+            parent: string;
+            /** Count */
+            count: number;
+        };
+        /** LeaveIn */
+        LeaveIn: {
+            /** User Id */
+            user_id: string;
+            /** Kind */
+            kind: string;
+            /**
+             * Start
+             * Format: date
+             */
+            start: string;
+            /**
+             * End
+             * Format: date
+             */
+            end: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            /** Shift Start */
+            shift_start?: string | null;
+            /** Shift End */
+            shift_end?: string | null;
+        };
+        /** LinkOut */
+        LinkOut: {
+            /** Id */
+            id: string;
+            /** Link Type */
+            link_type: string;
+            /** Strength */
+            strength: number;
+            /** Reason */
+            reason: string;
+            /** Other Id */
+            other_id: string;
+            /** Other Number */
+            other_number: string;
+            /** Other Title */
+            other_title: string;
+            /** Other Status */
+            other_status: string;
+            /**
+             * Other Created At
+             * Format: date-time
+             */
+            other_created_at: string;
+        };
+        /** LoginIn */
+        LoginIn: {
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+            /** Password */
+            password: string;
+        };
+        /** ManualLinkIn */
+        ManualLinkIn: {
+            /**
+             * Target
+             * @description Ticket number (OD-24817) or id
+             */
+            target: string;
+            /**
+             * Reason
+             * @default Linked by controller
+             */
+            reason: string;
+        };
+        /** MeOut */
+        MeOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Email */
+            email: string;
+            /** Role */
+            role: string;
+            /** Callsign */
+            callsign: string | null;
+            /** Region */
+            region: string | null;
+            /** Availability */
+            availability: string;
+            agency: components["schemas"]["AgencyBrief"] | null;
+            /**
+             * Data Mode
+             * @default demo
+             */
+            data_mode: string;
+            /**
+             * Onboarded
+             * @default false
+             */
+            onboarded: boolean;
+        };
+        /** Ok */
+        Ok: {
+            /**
+             * Ok
+             * @default true
+             */
+            ok: boolean;
+        };
+        /** OrphanRisk */
+        OrphanRisk: {
+            /** Ticket Id */
+            ticket_id: string;
+            /** Number */
+            number: string;
+            /** Owner Id */
+            owner_id: string;
+            /** Reason */
+            reason: string;
+        };
+        /** OverviewOut */
+        OverviewOut: {
+            /** Open */
+            open: number;
+            /** Unassigned */
+            unassigned: number;
+            /** Escalated */
+            escalated: number;
+            /** By Sla */
+            by_sla: {
+                [key: string]: number;
+            };
+            /** By Region */
+            by_region: {
+                [key: string]: number;
+            };
+            /** By Status */
+            by_status: {
+                [key: string]: number;
+            };
+            /** Preset */
+            preset: string;
+        };
+        /** PageMeta */
+        PageMeta: {
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /** Count */
+            count: number;
+        };
+        /** Page[PilotTicketOut] */
+        Page_PilotTicketOut_: {
+            /** Data */
+            data: components["schemas"]["PilotTicketOut"][];
+            meta: components["schemas"]["PageMeta"];
+        };
+        /** Page[TicketOut] */
+        Page_TicketOut_: {
+            /** Data */
+            data: components["schemas"]["TicketOut"][];
+            meta: components["schemas"]["PageMeta"];
+        };
+        /** ParsedQuery */
+        ParsedQuery: {
+            /** Filters */
+            filters: {
+                [key: string]: string;
+            };
+            /** Chips */
+            chips: components["schemas"]["Chip"][];
+            /** Reason */
+            reason: string;
+        };
+        /** PartnerStats */
+        PartnerStats: {
+            /** Supplier */
+            supplier: string;
+            /** Open Channels */
+            open_channels: number;
+            /** Awaiting Reply */
+            awaiting_reply: number;
+            /** Median Response Minutes */
+            median_response_minutes: number | null;
+            /** Reason */
+            reason: string;
+        };
+        /** PilotTicketDetailOut */
+        PilotTicketDetailOut: {
+            ticket: components["schemas"]["PilotTicketOut"];
+            /** Timeline */
+            timeline: components["schemas"]["TimelineEventOut"][];
+            /** Links */
+            links: components["schemas"]["LinkOut"][];
+        };
+        /**
+         * PilotTicketOut
+         * @description Requester view: status, ETA and external information only (Agency Mirror uses it).
+         */
+        PilotTicketOut: {
+            /** Id */
+            id: string;
+            /** Number */
+            number: string;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Tboh */
+            tboh: string | null;
+            intent: components["schemas"]["IntentBrief"] | null;
+            /** Priority */
+            priority: string;
+            /** Status */
+            status: string;
+            /** Controller Callsign */
+            controller_callsign: string | null;
+            /** Check In */
+            check_in: string | null;
+            /** Eta */
+            eta: string | null;
+            /** Sla State */
+            sla_state: string;
+            /**
+             * Link Count
+             * @default 0
+             */
+            link_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Resolved At */
+            resolved_at: string | null;
+        };
+        /** PreemptIn */
+        PreemptIn: {
+            /** Message */
+            message: string;
+        };
+        /** PreferencesIn */
+        PreferencesIn: {
+            /** Data Mode */
+            data_mode?: ("demo" | "live") | null;
+            /** Onboarded */
+            onboarded?: boolean | null;
+        };
+        /** PresetIn */
+        PresetIn: {
+            /** Preset */
+            preset: string;
+        };
+        /** PresetOutcome */
+        PresetOutcome: {
+            /** Preset */
+            preset: string;
+            /** Flights */
+            flights: number;
+            /** Breaches */
+            breaches: number;
+            /** Breach Rate */
+            breach_rate: number;
+            /** Avg Wait Minutes */
+            avg_wait_minutes: number;
+            /** Region Match Pct */
+            region_match_pct: number;
+            /** Load */
+            load: {
+                [key: string]: number;
+            };
+            /** Load Spread */
+            load_spread: number;
+            /** Unrouted */
+            unrouted: number;
+            /** Reason */
+            reason: string;
+        };
+        /** ProductLinkIn */
+        ProductLinkIn: {
+            /** Product Link */
+            product_link: string;
+        };
+        /** PromiseOut */
+        PromiseOut: {
+            /** Text */
+            text: string;
+            /** Due At */
+            due_at: string | null;
+            /** Overdue */
+            overdue: boolean;
+            /** Source */
+            source: string;
+            /** Reason */
+            reason: string;
+        };
+        /** QueueBrief */
+        QueueBrief: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Kind */
+            kind: string;
+            /** Region */
+            region?: string | null;
+        };
+        /** ReassignIn */
+        ReassignIn: {
+            /** To User Id */
+            to_user_id: string;
+            /**
+             * Handoff Confirmed
+             * @default false
+             */
+            handoff_confirmed: boolean;
+            /** Note */
+            note?: string | null;
+        };
+        /** RecipientIn */
+        RecipientIn: {
+            /**
+             * Party Type
+             * @enum {string}
+             */
+            party_type: "supplier" | "agency" | "internal";
+            /** Party Id */
+            party_id?: string | null;
+            /** Name */
+            name: string;
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+            /**
+             * Locked
+             * @default true
+             */
+            locked: boolean;
+        };
+        /** RecipientOut */
+        RecipientOut: {
+            /** Id */
+            id: string;
+            /** Party Type */
+            party_type: string;
+            /** Party Id */
+            party_id: string | null;
+            /** Name */
+            name: string;
+            /** Email */
+            email: string;
+            /** Locked */
+            locked: boolean;
+            /**
+             * Added At
+             * Format: date-time
+             */
+            added_at: string;
+            /** Removed At */
+            removed_at: string | null;
+        };
+        /** ReplyIn */
+        ReplyIn: {
+            /** Body */
+            body: string;
+        };
+        /** RosterOut */
+        RosterOut: {
+            /** Crew */
+            crew: components["schemas"]["CrewStatus"][];
+            /** Orphans */
+            orphans: components["schemas"]["OrphanRisk"][];
+            /** Upcoming */
+            upcoming: {
+                [key: string]: string;
+            }[];
+            /**
+             * Synced At
+             * Format: date-time
+             */
+            synced_at: string;
+            /** Source */
+            source: string;
+        };
+        /** RouteIn */
+        RouteIn: {
+            /** Preset */
+            preset?: ("balanced" | "urgency_first" | "regional_affinity" | "fairness") | null;
+        };
+        /** RoutingDecisionOut */
+        RoutingDecisionOut: {
+            /** Id */
+            id: string;
+            chosen: components["schemas"]["UserBrief"] | null;
+            /** Preset */
+            preset: string;
+            /** Reason */
+            reason: string;
+            /** Scores */
+            scores: {
+                [key: string]: unknown;
+            };
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** SignalsOut */
+        SignalsOut: {
+            frustration: components["schemas"]["FrustrationResult"];
+            /** Promises */
+            promises: components["schemas"]["PromiseOut"][];
+        };
+        /** SimulateIn */
+        SimulateIn: {
+            /**
+             * Hours
+             * @default 24
+             */
+            hours: number;
+            /** Presets */
+            presets?: string[];
+        };
+        /** SimulationResult */
+        SimulationResult: {
+            /** Outcomes */
+            outcomes: components["schemas"]["PresetOutcome"][];
+            /** Best Preset */
+            best_preset: string;
+            /** Reason */
+            reason: string;
+        };
+        /** SlaOut */
+        SlaOut: {
+            /** Due At */
+            due_at: string | null;
+            /** State */
+            state: string;
+            /** Elapsed Pct */
+            elapsed_pct: number;
+            /** Fuel */
+            fuel: number;
+            /** Remaining Seconds */
+            remaining_seconds: number;
+            /** Urgency Driver */
+            urgency_driver: string;
+            /** Propose Escalation */
+            propose_escalation: boolean;
+            /**
+             * Holiday Paused
+             * @default false
+             */
+            holiday_paused: boolean;
+            /** Reason */
+            reason: string;
+        };
+        /** StormOut */
+        StormOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Ticket Ids */
+            ticket_ids: string[];
+            /**
+             * Agencies
+             * @default 0
+             */
+            agencies: number;
+            /** Reason */
+            reason: string;
+            /** Tickets */
+            tickets: {
+                [key: string]: string;
+            }[];
+            /** Broadcast At */
+            broadcast_at?: string | null;
+        };
+        /** SuggestIn */
+        SuggestIn: {
+            /** Text */
+            text: string;
+        };
+        /** SuggestOut */
+        SuggestOut: {
+            /** Top */
+            top: components["schemas"]["IntentCandidateOut"][];
+            /** Needs Human */
+            needs_human: boolean;
+            /** Rule */
+            rule: string | null;
+            /** Reason */
+            reason: string;
+        };
+        /** SupplierScore */
+        SupplierScore: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Region */
+            region: string;
+            /** Channels */
+            channels: number;
+            /** Awaiting Reply */
+            awaiting_reply: number;
+            /** Median Reply Minutes */
+            median_reply_minutes: number | null;
+            /** Unconfirmed Bookings */
+            unconfirmed_bookings: number;
+            /** Tickets 30D */
+            tickets_30d: number;
+            /** Reliability */
+            reliability: number;
+            /** Best Contact */
+            best_contact: string;
+            /** Reason */
+            reason: string;
+        };
+        /** ThemeSample */
+        ThemeSample: {
+            /** Id */
+            id: string;
+            /** Number */
+            number: string;
+            /** Title */
+            title: string;
+        };
+        /** ThemeWeekOut */
+        ThemeWeekOut: {
+            /** Theme */
+            theme: string;
+            /** Label */
+            label: string;
+            /** Count */
+            count: number;
+            /** Previous */
+            previous: number;
+            /** Wow Change Pct */
+            wow_change_pct: number | null;
+            /** Agencies */
+            agencies: number;
+            /** Zscore */
+            zscore: number | null;
+            /** Emerging */
+            emerging: boolean;
+            /** Product Link */
+            product_link: string | null;
+            /** Samples */
+            samples: components["schemas"]["ThemeSample"][];
+            /** Reason */
+            reason: string;
+        };
+        /** TicketCreateIn */
+        TicketCreateIn: {
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Tboh */
+            tboh?: string | null;
+            /**
+             * Priority
+             * @default P3
+             * @enum {string}
+             */
+            priority: "P1" | "P2" | "P3" | "P4";
+            /** Intent Code */
+            intent_code?: string | null;
+            /** Check In */
+            check_in?: string | null;
+            /** Lcd */
+            lcd?: string | null;
+            /** Agency Id */
+            agency_id?: string | null;
+        };
+        /** TicketCreatedOut */
+        TicketCreatedOut: {
+            /** Ticket */
+            ticket: components["schemas"]["TicketOut"] | components["schemas"]["PilotTicketOut"];
+            /** Links */
+            links: components["schemas"]["LinkOut"][];
+            guardian: components["schemas"]["GuardianOut"];
+            /** Intent Suggestion */
+            intent_suggestion: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** TicketDetailOut */
+        TicketDetailOut: {
+            ticket: components["schemas"]["TicketOut"];
+            /** Timeline */
+            timeline: components["schemas"]["TimelineEventOut"][];
+            /** Links */
+            links: components["schemas"]["LinkOut"][];
+            routing: components["schemas"]["RoutingDecisionOut"] | null;
+            guardian: components["schemas"]["GuardianOut"];
+        };
+        /**
+         * TicketOut
+         * @description Staff (controller / tower chief / director) view of a flight.
+         */
+        TicketOut: {
+            /** Id */
+            id: string;
+            /** Number */
+            number: string;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            agency: components["schemas"]["AgencyBrief"];
+            /** Requester Id */
+            requester_id: string | null;
+            /** Tboh */
+            tboh: string | null;
+            intent: components["schemas"]["IntentBrief"] | null;
+            /** Priority */
+            priority: string;
+            /** Status */
+            status: string;
+            owner: components["schemas"]["UserBrief"] | null;
+            queue: components["schemas"]["QueueBrief"] | null;
+            /** Region */
+            region: string;
+            /** Check In */
+            check_in: string | null;
+            /** Lcd */
+            lcd: string | null;
+            sla: components["schemas"]["SlaOut"];
+            /** Escalated To */
+            escalated_to: string | null;
+            /** Escalation Reason */
+            escalation_reason: string | null;
+            /** Routing Reason */
+            routing_reason: {
+                [key: string]: unknown;
+            } | null;
+            /** Contact Count */
+            contact_count: number;
+            /** Guardian Flag */
+            guardian_flag: boolean;
+            /**
+             * Link Count
+             * @default 0
+             */
+            link_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Resolved At */
+            resolved_at: string | null;
+        };
+        /** TicketPatchIn */
+        TicketPatchIn: {
+            /** Status */
+            status?: ("new" | "open" | "pending" | "escalated" | "resolved" | "closed") | null;
+            /** Priority */
+            priority?: ("P1" | "P2" | "P3" | "P4") | null;
+            /** Intent Code */
+            intent_code?: string | null;
+            /** Title */
+            title?: string | null;
+            /** Note */
+            note?: string | null;
+        };
+        /** TimelineEventOut */
+        TimelineEventOut: {
+            /** Id */
+            id: string;
+            /** Type */
+            type: string;
+            actor: components["schemas"]["UserBrief"] | null;
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            };
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+        };
+        /** TrendOut */
+        TrendOut: {
+            /** Days */
+            days: components["schemas"]["TrendPoint"][];
+            /** Intents */
+            intents: components["schemas"]["IntentShare"][];
+            /** Agencies At Risk */
+            agencies_at_risk: {
+                [key: string]: unknown;
+            }[];
+        };
+        /** TrendPoint */
+        TrendPoint: {
+            /** Day */
+            day: string;
+            /** Created */
+            created: number;
+            /** Resolved */
+            resolved: number;
+            /** Breached */
+            breached: number;
+        };
+        /** UserBrief */
+        UserBrief: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Callsign */
+            callsign?: string | null;
+            /** Region */
+            region?: string | null;
+            /** Role */
+            role?: string | null;
+        };
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  login_api_auth_login_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LoginIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_MeOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  logout_api_auth_logout_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_Ok_"];
-        };
-      };
-    };
-  };
-  demo_accounts_api_auth_demo_accounts_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_DemoAccount__"];
-        };
-      };
-    };
-  };
-  list_tickets_api_tickets_get: {
-    parameters: {
-      query?: {
-        view?: "all" | "triage" | "mine" | "escalations" | "open";
-        status?: string[] | null;
-        region?: string | null;
-        /** @description Intent code or parent code */
-        intent?: string | null;
-        owner?: string | null;
-        sla_state?: string[] | null;
-        tboh?: string | null;
-        agency?: string | null;
-        priority?: string | null;
-        q?: string | null;
-        sort?: "created_desc" | "sla_asc";
-        cursor?: string | null;
-        limit?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json":
-            | components["schemas"]["Page_TicketOut_"]
-            | components["schemas"]["Page_PilotTicketOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  create_ticket_api_tickets_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TicketCreateIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TicketCreatedOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_ticket_api_tickets__ticket_id__get: {
-    parameters: {
-      query?: {
-        as?: "requester" | null;
-      };
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json":
-            | components["schemas"]["Envelope_TicketDetailOut_"]
-            | components["schemas"]["Envelope_PilotTicketDetailOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  patch_ticket_api_tickets__ticket_id__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TicketPatchIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TicketOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  assign_api_tickets__ticket_id__assign_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AssignIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TicketOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  unassign_api_tickets__ticket_id__unassign_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TicketOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  handoff_preview_api_tickets__ticket_id__handoff_preview_get: {
-    parameters: {
-      query: {
-        to_user_id: string;
-      };
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_HandoffDiffOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  reassign_api_tickets__ticket_id__reassign_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ReassignIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TicketOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  escalate_api_tickets__ticket_id__escalate_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["EscalateIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TicketOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  auto_route_api_tickets__ticket_id__route_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RouteIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TicketOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  copilot_brief_api_tickets__ticket_id__brief_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_Brief_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_comments_api_tickets__ticket_id__comments_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_CommentOut__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  post_internal_api_tickets__ticket_id__comments_internal_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CommentIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_CommentOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  post_external_api_tickets__ticket_id__comments_external_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CommentIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_CommentOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_links_api_tickets__ticket_id__links_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_LinkOut__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  add_link_api_tickets__ticket_id__links_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ManualLinkIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_LinkOut__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  list_frequencies_api_tickets__ticket_id__frequencies_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_FrequencyOut__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  open_frequency_api_tickets__ticket_id__frequencies_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["FrequencyCreateIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_FrequencyOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_frequency_api_frequencies__frequency_id__get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        frequency_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_FrequencyOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  add_recipient_api_frequencies__frequency_id__recipients_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        frequency_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RecipientIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_FrequencyOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  remove_recipient_api_frequencies__frequency_id__recipients__recipient_id__delete: {
-    parameters: {
-      query?: {
-        force?: boolean;
-      };
-      header?: never;
-      path: {
-        frequency_id: string;
-        recipient_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_FrequencyOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  post_message_api_frequencies__frequency_id__messages_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        frequency_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["FrequencyMessageIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_FrequencyOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  taxonomy_api_intents_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_IntentNode__"];
-        };
-      };
-    };
-  };
-  suggest_api_intents_suggest_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SuggestIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_SuggestOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  themes_api_insights_themes_get: {
-    parameters: {
-      query?: {
-        week?: string | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_InsightsOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  heatmap_api_insights_heatmap_get: {
-    parameters: {
-      query?: {
-        weeks?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_HeatmapOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  set_product_link_api_insights_themes__code__patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        code: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ProductLinkIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_dict_str__str__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  export_tickets_api_export_tickets_get: {
-    parameters: {
-      query?: {
-        format?: "csv" | "ndjson";
-        status?: string | null;
-        region?: string | null;
-        since?: string | null;
-        /** @description created_at|id to resume after */
-        cursor?: string | null;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": unknown;
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  stream_api_stream_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": unknown;
-        };
-      };
-    };
-  };
-  archive_run_api_admin_archive_run_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: {
-      content: {
-        "application/json": components["schemas"]["ArchiveRunIn"] | null;
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_ArchiveRunOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  chaos_api_admin_chaos_post: {
-    parameters: {
-      query?: {
-        count?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_dict_str__int__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  booking_api_bookings__tboh__get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        tboh: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_BookingOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  agencies_api_agencies_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_AgencyBrief__"];
-        };
-      };
-    };
-  };
-  controllers_api_controllers_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_ControllerOut__"];
-        };
-      };
-    };
-  };
-  overview_api_stats_overview_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_OverviewOut_"];
-        };
-      };
-    };
-  };
-  get_preset_api_routing_preset_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_PresetIn_"];
-        };
-      };
-    };
-  };
-  put_preset_api_routing_preset_put: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PresetIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_PresetIn_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  trend_api_stats_trend_get: {
-    parameters: {
-      query?: {
-        days?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_TrendOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  ask_api_assistant_ask_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["AskIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_AssistantAnswer_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  suggestions_api_assistant_suggestions_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_str__"];
-        };
-      };
-    };
-  };
-  channels_api_partner_channels_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_Channel__"];
-        };
-      };
-    };
-  };
-  channel_api_partner_channels__channel_id__get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        channel_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_Channel_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  reply_api_partner_channels__channel_id__messages_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        channel_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ReplyIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_Channel_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  stats_api_partner_stats_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_PartnerStats_"];
-        };
-      };
-    };
-  };
-  roster_api_roster_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_RosterOut_"];
-        };
-      };
-    };
-  };
-  add_record_api_roster_records_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LeaveIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_RosterOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  rebalance_api_roster_rebalance_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_dict_str__int__"];
-        };
-      };
-    };
-  };
-  ghosts_api_ghosts_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_GhostOut__"];
-        };
-      };
-    };
-  };
-  preempt_api_ghosts__tboh__preempt_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        tboh: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PreemptIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_dict_str__str__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  storms_api_storms_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_StormOut__"];
-        };
-      };
-    };
-  };
-  broadcast_api_storms_broadcast_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["BroadcastIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_dict_str__int__"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  forecast_api_tickets__ticket_id__forecast_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_ForecastResult_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  signals_api_tickets__ticket_id__signals_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        ticket_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_SignalsOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  scorecard_api_suppliers_scorecard_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_list_SupplierScore__"];
-        };
-      };
-    };
-  };
-  simulate_routing_api_routing_simulate_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SimulateIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_SimulationResult_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  me_api_me_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_MeOut_"];
-        };
-      };
-    };
-  };
-  preferences_api_me_preferences_patch: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PreferencesIn"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Envelope_MeOut_"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  health_api_health_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": {
-            [key: string]: unknown;
-          };
-        };
-      };
-    };
-  };
+    login_api_auth_login_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_MeOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    logout_api_auth_logout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Ok_"];
+                };
+            };
+        };
+    };
+    demo_accounts_api_auth_demo_accounts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_DemoAccount__"];
+                };
+            };
+        };
+    };
+    list_tickets_api_tickets_get: {
+        parameters: {
+            query?: {
+                view?: "all" | "triage" | "mine" | "escalations" | "open";
+                status?: string[] | null;
+                region?: string | null;
+                /** @description Intent code or parent code */
+                intent?: string | null;
+                owner?: string | null;
+                sla_state?: string[] | null;
+                tboh?: string | null;
+                agency?: string | null;
+                priority?: string | null;
+                q?: string | null;
+                checkin_within_days?: number | null;
+                sort?: "created_desc" | "sla_asc";
+                cursor?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_TicketOut_"] | components["schemas"]["Page_PilotTicketOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_ticket_api_tickets_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TicketCreateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketCreatedOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_ticket_api_tickets__ticket_id__get: {
+        parameters: {
+            query?: {
+                as?: "requester" | null;
+            };
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketDetailOut_"] | components["schemas"]["Envelope_PilotTicketDetailOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patch_ticket_api_tickets__ticket_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TicketPatchIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    assign_api_tickets__ticket_id__assign_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unassign_api_tickets__ticket_id__unassign_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    handoff_preview_api_tickets__ticket_id__handoff_preview_get: {
+        parameters: {
+            query: {
+                to_user_id: string;
+            };
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_HandoffDiffOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reassign_api_tickets__ticket_id__reassign_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReassignIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    escalate_api_tickets__ticket_id__escalate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EscalateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    auto_route_api_tickets__ticket_id__route_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TicketOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    copilot_brief_api_tickets__ticket_id__brief_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Brief_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_comments_api_tickets__ticket_id__comments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_CommentOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_internal_api_tickets__ticket_id__comments_internal_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_CommentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_external_api_tickets__ticket_id__comments_external_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_CommentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_links_api_tickets__ticket_id__links_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_LinkOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_link_api_tickets__ticket_id__links_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManualLinkIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_LinkOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_frequencies_api_tickets__ticket_id__frequencies_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_FrequencyOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    open_frequency_api_tickets__ticket_id__frequencies_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FrequencyCreateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FrequencyOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_frequency_api_frequencies__frequency_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                frequency_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FrequencyOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_recipient_api_frequencies__frequency_id__recipients_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                frequency_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecipientIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FrequencyOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_recipient_api_frequencies__frequency_id__recipients__recipient_id__delete: {
+        parameters: {
+            query?: {
+                force?: boolean;
+            };
+            header?: never;
+            path: {
+                frequency_id: string;
+                recipient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FrequencyOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_message_api_frequencies__frequency_id__messages_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                frequency_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FrequencyMessageIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_FrequencyOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    taxonomy_api_intents_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_IntentNode__"];
+                };
+            };
+        };
+    };
+    suggest_api_intents_suggest_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SuggestIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_SuggestOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    themes_api_insights_themes_get: {
+        parameters: {
+            query?: {
+                week?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_InsightsOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    heatmap_api_insights_heatmap_get: {
+        parameters: {
+            query?: {
+                weeks?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_HeatmapOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_product_link_api_insights_themes__code__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProductLinkIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_dict_str__str__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_tickets_api_export_tickets_get: {
+        parameters: {
+            query?: {
+                format?: "csv" | "ndjson";
+                status?: string | null;
+                region?: string | null;
+                since?: string | null;
+                /** @description created_at|id to resume after */
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    stream_api_stream_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    archive_run_api_admin_archive_run_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ArchiveRunIn"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ArchiveRunOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    chaos_api_admin_chaos_post: {
+        parameters: {
+            query?: {
+                count?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_dict_str__int__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    booking_api_bookings__tboh__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tboh: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_BookingOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    agencies_api_agencies_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_AgencyBrief__"];
+                };
+            };
+        };
+    };
+    controllers_api_controllers_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_ControllerOut__"];
+                };
+            };
+        };
+    };
+    overview_api_stats_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_OverviewOut_"];
+                };
+            };
+        };
+    };
+    get_preset_api_routing_preset_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PresetIn_"];
+                };
+            };
+        };
+    };
+    put_preset_api_routing_preset_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PresetIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PresetIn_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    trend_api_stats_trend_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TrendOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_api_assistant_ask_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AskIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AssistantAnswer_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    suggestions_api_assistant_suggestions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_str__"];
+                };
+            };
+        };
+    };
+    channels_api_partner_channels_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_Channel__"];
+                };
+            };
+        };
+    };
+    channel_api_partner_channels__channel_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channel_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Channel_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reply_api_partner_channels__channel_id__messages_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channel_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReplyIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_Channel_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    stats_api_partner_stats_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PartnerStats_"];
+                };
+            };
+        };
+    };
+    roster_api_roster_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_RosterOut_"];
+                };
+            };
+        };
+    };
+    add_record_api_roster_records_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LeaveIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_RosterOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rebalance_api_roster_rebalance_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_dict_str__int__"];
+                };
+            };
+        };
+    };
+    ghosts_api_ghosts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_GhostOut__"];
+                };
+            };
+        };
+    };
+    preempt_api_ghosts__tboh__preempt_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                tboh: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreemptIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_dict_str__str__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    storms_api_storms_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_StormOut__"];
+                };
+            };
+        };
+    };
+    broadcast_api_storms_broadcast_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BroadcastIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_dict_str__int__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    forecast_api_tickets__ticket_id__forecast_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ForecastResult_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    signals_api_tickets__ticket_id__signals_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_SignalsOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    scorecard_api_suppliers_scorecard_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_SupplierScore__"];
+                };
+            };
+        };
+    };
+    simulate_routing_api_routing_simulate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SimulateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_SimulationResult_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_the_tower_api_nlq_get: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ParsedQuery_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    me_api_me_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_MeOut_"];
+                };
+            };
+        };
+    };
+    preferences_api_me_preferences_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreferencesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_MeOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    health_api_health_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
 }

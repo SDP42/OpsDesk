@@ -66,13 +66,32 @@ def effective_status(member: CrewMember, records: list[HrRecord], today: date) -
     s_end = shift.shift_end if shift and shift.shift_end else member.shift_end
     if leave:
         label = "on leave" if leave.kind == "leave" else "weekly off"
-        return CrewStatus(id=member.id, name=member.name, availability="away", on_leave=True,
-                          returns_on=leave.end, shift_start=s_start, shift_end=s_end, source="hrms",
-                          reason=f"HRMS: {label} until {leave.end.isoformat()}" + (f" ({leave.note})" if leave.note else ""))
-    reason = f"Presence: {member.presence}" + (f"; HRMS shift moved to {s_start}-{s_end}" if shift else "")
-    return CrewStatus(id=member.id, name=member.name, availability=member.presence, on_leave=False,
-                      returns_on=None, shift_start=s_start, shift_end=s_end,
-                      source="hrms" if shift else "presence", reason=reason)
+        return CrewStatus(
+            id=member.id,
+            name=member.name,
+            availability="away",
+            on_leave=True,
+            returns_on=leave.end,
+            shift_start=s_start,
+            shift_end=s_end,
+            source="hrms",
+            reason=f"HRMS: {label} until {leave.end.isoformat()}"
+            + (f" ({leave.note})" if leave.note else ""),
+        )
+    reason = f"Presence: {member.presence}" + (
+        f"; HRMS shift moved to {s_start}-{s_end}" if shift else ""
+    )
+    return CrewStatus(
+        id=member.id,
+        name=member.name,
+        availability=member.presence,
+        on_leave=False,
+        returns_on=None,
+        shift_start=s_start,
+        shift_end=s_end,
+        source="hrms" if shift else "presence",
+        reason=reason,
+    )
 
 
 def orphan_risks(flights: list[OpenFlight], statuses: list[CrewStatus]) -> list[OrphanRisk]:
@@ -82,6 +101,12 @@ def orphan_risks(flights: list[OpenFlight], statuses: list[CrewStatus]) -> list[
     for f in flights:
         if f.owner_id and f.owner_id in away:
             s = away[f.owner_id]
-            out.append(OrphanRisk(ticket_id=f.id, number=f.number, owner_id=f.owner_id,
-                                  reason=f"{s.name} is {s.reason.split(': ', 1)[1]}; reassign before the deadline"))
+            out.append(
+                OrphanRisk(
+                    ticket_id=f.id,
+                    number=f.number,
+                    owner_id=f.owner_id,
+                    reason=f"{s.name} is {s.reason.split(': ', 1)[1]}; reassign before the deadline",
+                )
+            )
     return out

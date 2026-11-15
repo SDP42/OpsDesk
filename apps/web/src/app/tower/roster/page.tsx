@@ -33,6 +33,17 @@ export default function RosterPage() {
     end: "",
     note: "",
   });
+  const sync = useMutation({
+    mutationFn: async () => unwrap(await api.POST("/api/roster/sync")),
+    onSuccess: (r) => {
+      push({
+        callsign: "DARWINBOX",
+        message: `${r.imported} RECORDS IMPORTED (${r.mode.toUpperCase()})`,
+        tone: "ice",
+      });
+      void qc.invalidateQueries({ queryKey: ["roster"] });
+    },
+  });
   const rebalance = useMutation({
     mutationFn: async () => unwrap(await api.POST("/api/roster/rebalance")),
     onSuccess: (r) => {
@@ -73,9 +84,27 @@ export default function RosterPage() {
         }
         plain="Leave, weekly offs and shift changes come straight from the HR system (Darwinbox-style feed). OpsDesk stops routing to anyone who is away and spots cases still owned by someone on leave, so they can be handed over before the guest is affected."
         action={
-          <Sign tone="dark">
-            <RefreshCw size={11} /> {d.source} · synced {clock(d.synced_at)}
-          </Sign>
+          <div className="flex flex-col items-end gap-2">
+            <Sign tone="dark">
+              <RefreshCw size={11} /> {d.source} · synced {clock(d.synced_at)}
+            </Sign>
+            {isLead && (
+              <button
+                className="btn !py-1.5"
+                onClick={() => sync.mutate()}
+                disabled={sync.isPending}
+              >
+                <RefreshCw size={13} className={sync.isPending ? "animate-spin" : ""} /> Sync from
+                Darwinbox
+              </button>
+            )}
+            {sync.data && (
+              <p className="text-text-dim font-mono text-[11px]">
+                {sync.data.mode} · {sync.data.imported} imported · {sync.data.skipped} skipped
+                {sync.data.errors.length ? ` · ${sync.data.errors.length} warnings` : ""}
+              </p>
+            )}
+          </div>
         }
       />
 

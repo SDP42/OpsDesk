@@ -656,7 +656,11 @@ async def scorecard(
         )
         median = round(statistics.median(gaps), 1) if gaps else None
         score = (
-            100.0 - min(40.0, (median or 90) / 6) - 6 * awaiting - 3 * unconfirmed - 0.25 * tickets
+            100.0
+            - min(30.0, (median or 90) / 8)
+            - min(24.0, 8 * awaiting)
+            - min(20.0, 2 * unconfirmed)
+            - min(20.0, tickets / 12)
         )
         score = round(max(0.0, min(100.0, score)), 1)
         out.append(

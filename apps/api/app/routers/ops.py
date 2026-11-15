@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import ROUTING_PRESETS
 from app.core.errors import bad_request, not_found
 from app.core.rbac import Principal, ensure_visible, require_lead, require_staff
 from app.core.sse import broker
@@ -36,6 +37,7 @@ from app.engines.frustration import FrustrationResult, score_frustration
 from app.engines.ghosts import GhostInput, GhostPrediction, score_booking
 from app.engines.lifecycle import OPEN_STATUSES
 from app.engines.promises import extract_promises
+from app.engines.simulator import SimFlight, SimulationResult, compare
 from app.engines.storms import StormCell, StormTicket, detect_storms
 from app.schemas.common import Envelope, StrictModel
 from app.services import routing as routing_service
@@ -681,3 +683,63 @@ async def scorecard(
         )
     out.sort(key=lambda x: x.reliability)
     return Envelope(data=out)
+
+
+# --------------------------------------------------------------------------- Routing simulator
+
+
+class SimulateIn(StrictModel):
+    hours: int = Field(default=24, ge=1, le=168)
+    presets: list[str] = Field(
+        default_factory=lambda: ["balanced", "urgency_first", "regional_affinity", "fairness"],
+        max_length=4,
+    )
+
+
+@router.post("/routing/simulate", response_model=Envelope[SimulationResult])
+async def simulate_routing(
+    body: SimulateIn,
+    principal: Principal = Depends(require_lead),
+    session: AsyncSession = Depends(get_session),
+) -> Envelope[SimulationResult]:
+    """Replay the last N hours of flights under each preset and compare breaches, waits and load."""
+    unknown = [p for p in body.presets if p not in ROUTING_PRESETS]
+    if unknown:
+        raise bad_request("unknown_preset", f"Unknown presets: {', '.join(unknown)}")
+    since = utcnow() - timedelta(hours=body.hours)
+    rows = (
+        (
+            await session.scalars(
+                select(Ticket).where(
+                    Ticket.created_at >= since, Ticket.is_demo.is_(principal.data_mode == "demo")
+                )
+            )
+        )
+        .unique()
+        .all()
+    )
+    flights = [
+        SimFlight(
+            id=t.id,
+            region=t.region,
+            priority=t.priority,
+            intent_code=t.intent.code if t.intent else None,
+            agency_tier=t.agency.tier,
+            created_at=t.created_at,
+            check_in=t.check_in,
+            lcd=t.lcd,
+        )
+        for t in rows
+    ]
+    controllers = await routing_service.load_controllers(session)
+    result = compare(flights, controllers, body.presets)
+    audit(
+        session,
+        principal,
+        "routing.simulate",
+        "routing",
+        None,
+        {"hours": body.hours, "flights": len(flights)},
+    )
+    await session.commit()
+    return Envelope(data=result)

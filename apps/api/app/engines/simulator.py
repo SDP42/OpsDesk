@@ -65,12 +65,16 @@ def simulate(
     flights: list[SimFlight], controllers: list[vectoring.Controller], preset: str
 ) -> PresetOutcome:
     ordered = sorted(flights, key=lambda f: f.created_at)
-    team = {c.id: c.model_copy(update={"open_tickets": 0}) for c in controllers}
+    # In the replay, capacity is concurrent work: lanes busy now plus a short queue.
+    team = {c.id: c.model_copy(update={"open_tickets": 0, "capacity": PARALLEL_SLOTS * 3}) for c in controllers}
+    finishes: dict[str, list[datetime]] = {c.id: [] for c in controllers}
     slots: dict[str, list[datetime]] = {}
     load: dict[str, int] = {c.name: 0 for c in controllers}
     breaches = unrouted = region_hits = 0
     waits: list[float] = []
     for f in ordered:
+        for cid, done in finishes.items():
+            team[cid].open_tickets = sum(1 for t in done if t > f.created_at)
         result = vectoring.route(
             vectoring.RoutingTicket(
                 region=f.region,
@@ -101,7 +105,7 @@ def simulate(
         start = max(f.created_at, lanes[lane])
         finish = start + timedelta(minutes=_handle(f, c))
         lanes[lane] = finish
-        c.open_tickets += 1
+        finishes[c.id].append(finish)
         load[c.name] += 1
         waits.append((start - f.created_at).total_seconds() / 60)
         region_hits += c.region == f.region

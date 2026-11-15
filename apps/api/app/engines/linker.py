@@ -92,8 +92,34 @@ def _semantic_scores(new: LinkTicket, pool: list[LinkTicket]) -> dict[str, float
     return {t.id: float(s) for t, s in zip(pool, sims, strict=True)}
 
 
-def find_links(new: LinkTicket, history: list[LinkTicket], now: datetime) -> LinkerResult:
-    """Propose links from ``new`` to earlier tickets and evaluate the Guardian rule."""
+EMBEDDING_THRESHOLD = 0.55  # MiniLM cosine: paraphrases of the same problem score ~0.55-0.9
+
+
+def _embedding_scores(
+    new: LinkTicket, pool: list[LinkTicket], vectors: dict[str, list[float]]
+) -> dict[str, float]:
+    if new.id not in vectors:
+        return {}
+    a = vectors[new.id]
+    out = {}
+    for t in pool:
+        b = vectors.get(t.id)
+        if b is not None:
+            out[t.id] = float(sum(x * y for x, y in zip(a, b, strict=True)))
+    return out
+
+
+def find_links(
+    new: LinkTicket,
+    history: list[LinkTicket],
+    now: datetime,
+    vectors: dict[str, list[float]] | None = None,
+) -> LinkerResult:
+    """Propose links from ``new`` to earlier tickets and evaluate the Guardian rule.
+
+    ``vectors`` (optional) are L2-normalised pretrained sentence embeddings keyed by
+    ticket id; when present the semantic link uses meaning, not shared words.
+    """
     candidates = [t for t in history if t.id != new.id]
     best: dict[str, LinkProposal] = {}
 
@@ -130,11 +156,21 @@ def find_links(new: LinkTicket, history: list[LinkTicket], now: datetime) -> Lin
             )
 
     same_agency = [t for t in candidates if t.agency_id == new.agency_id]
-    for tid, sim in _semantic_scores(new, same_agency).items():
-        if sim >= LINK_SEMANTIC_THRESHOLD:
-            strength = round(
-                0.5 + 0.2 * (sim - LINK_SEMANTIC_THRESHOLD) / (1 - LINK_SEMANTIC_THRESHOLD), 2
-            )
+    if vectors:
+        scores, threshold, how = (
+            _embedding_scores(new, same_agency, vectors),
+            EMBEDDING_THRESHOLD,
+            "Same meaning (MiniLM cosine",
+        )
+    else:
+        scores, threshold, how = (
+            _semantic_scores(new, same_agency),
+            LINK_SEMANTIC_THRESHOLD,
+            "Similar wording (TF-IDF cosine",
+        )
+    for tid, sim in scores.items():
+        if sim >= threshold:
+            strength = round(0.5 + 0.2 * (sim - threshold) / (1 - threshold), 2)
             num = next(t.number for t in same_agency if t.id == tid)
             offer(
                 LinkProposal(
@@ -142,7 +178,7 @@ def find_links(new: LinkTicket, history: list[LinkTicket], now: datetime) -> Lin
                     number=num,
                     link_type="semantic",
                     strength=min(strength, 0.7),
-                    reason=f"Similar wording (cosine {sim:.2f})",
+                    reason=f"{how} {sim:.2f})",
                 )
             )
 

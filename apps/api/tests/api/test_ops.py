@@ -18,7 +18,9 @@ async def test_routing_never_picks_controller_on_leave(client_factory) -> None:
     away = {c["id"] for c in crew if c["on_leave"]}
     pilot = await client_factory(PILOT)
     for i in range(3):
-        r = await pilot.post("/api/tickets", json={"title": f"Voucher missing number {i}", "priority": "P2"})
+        r = await pilot.post(
+            "/api/tickets", json={"title": f"Voucher missing number {i}", "priority": "P2"}
+        )
         tid = r.json()["data"]["ticket"]["id"]
         owner = (await lead.get(f"/api/tickets/{tid}")).json()["data"]["ticket"]["owner"]
         assert owner is None or owner["id"] not in away
@@ -31,7 +33,9 @@ async def test_ghosts_rank_unconfirmed_booking_and_preempt_dissolves(client_fact
     assert "TBOH-77341" in tbohs
     g = next(g for g in ghosts if g["tboh"] == "TBOH-77341")
     assert g["drivers"] and g["reason"]
-    r = await agent.post("/api/ghosts/TBOH-77341/preempt", json={"message": g["recommended_message"]})
+    r = await agent.post(
+        "/api/ghosts/TBOH-77341/preempt", json={"message": g["recommended_message"]}
+    )
     assert r.json()["data"]["status"] == "dissolved"
     assert "TBOH-77341" not in [x["tboh"] for x in (await agent.get("/api/ghosts")).json()["data"]]
 
@@ -41,7 +45,10 @@ async def test_chaos_forms_storm_and_broadcast_replies_all(client_factory) -> No
     await lead.post("/api/admin/chaos", params={"count": 8})
     storms = (await lead.get("/api/storms")).json()["data"]
     assert storms and len(storms[0]["ticket_ids"]) >= 5
-    r = await lead.post("/api/storms/broadcast", json={"key": storms[0]["key"], "message": "We are rebooking every affected guest tonight."})
+    r = await lead.post(
+        "/api/storms/broadcast",
+        json={"key": storms[0]["key"], "message": "We are rebooking every affected guest tonight."},
+    )
     assert r.json()["data"]["replied"] == len(storms[0]["ticket_ids"])
 
 
@@ -65,7 +72,12 @@ async def test_pilot_cannot_use_ops_routes(client_factory) -> None:
 async def test_simulator_compares_presets(client_factory) -> None:
     lead = await client_factory(LEAD)
     r = (await lead.post("/api/routing/simulate", json={"hours": 72})).json()["data"]
-    assert {o["preset"] for o in r["outcomes"]} == {"balanced", "urgency_first", "regional_affinity", "fairness"}
+    assert {o["preset"] for o in r["outcomes"]} == {
+        "balanced",
+        "urgency_first",
+        "regional_affinity",
+        "fairness",
+    }
     assert r["best_preset"] and r["reason"]
     assert all(o["flights"] > 0 and o["reason"] for o in r["outcomes"])
     agent = await client_factory(AGENT)
@@ -77,5 +89,17 @@ async def test_weather_heatmap_and_product_link(client_factory) -> None:
     h = (await lead.get("/api/insights/heatmap", params={"weeks": 8})).json()["data"]
     assert len(h["weeks"]) == 8 and all(len(t["counts"]) == 8 for t in h["themes"])
     assert any(t["emerging"] for t in h["themes"]), "seeded inventory-sync spike"
-    r = await lead.patch("/api/insights/themes/inventory_sync", json={"product_link": "JIRA-OPS-412"})
+    r = await lead.patch(
+        "/api/insights/themes/inventory_sync", json={"product_link": "JIRA-OPS-412"}
+    )
     assert r.json()["data"]["product_link"] == "JIRA-OPS-412"
+
+
+async def test_ask_the_tower_and_checkin_filter(client_factory) -> None:
+    agent = await client_factory(AGENT)
+    p = (
+        await agent.get("/api/nlq", params={"q": "critical flights in UAE checking in this week"})
+    ).json()["data"]
+    assert p["filters"]["region"] == "AE" and p["filters"]["checkin_within_days"] == "7"
+    r = await agent.get("/api/tickets", params={"region": "AE", "checkin_within_days": 7})
+    assert r.status_code == 200

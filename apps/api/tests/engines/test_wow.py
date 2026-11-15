@@ -103,11 +103,36 @@ def test_simulator_fairness_spreads_load() -> None:
     from app.engines.vectoring import Controller
 
     t0 = datetime(2026, 11, 15, 8, 0, tzinfo=UTC)
-    team = [Controller(id="a", name="A", region="AE", rank=3, skills=["refund"], capacity=60),
-            Controller(id="b", name="B", region="AE", rank=1, skills=[], capacity=60)]
-    flights = [SimFlight(id=str(i), region="AE", priority="P2", intent_code="refund.delay",
-                         created_at=t0 + timedelta(minutes=5 * i)) for i in range(30)]
+    team = [
+        Controller(id="a", name="A", region="AE", rank=3, skills=["refund"], capacity=60),
+        Controller(id="b", name="B", region="AE", rank=1, skills=[], capacity=60),
+    ]
+    flights = [
+        SimFlight(
+            id=str(i),
+            region="AE",
+            priority="P2",
+            intent_code="refund.delay",
+            created_at=t0 + timedelta(minutes=5 * i),
+        )
+        for i in range(30)
+    ]
     r = compare(flights, team, ["balanced", "fairness"])
     by = {o.preset: o for o in r.outcomes}
     assert by["fairness"].load_spread <= by["balanced"].load_spread
     assert r.reason
+
+
+def test_nlq_parses_plain_english_into_chips() -> None:
+    from app.engines.nlq import parse_query
+
+    p = parse_query("breached P1 refunds in UAE with check-in this week")
+    assert p.filters == {
+        "priority": "P1",
+        "region": "AE",
+        "sla_state": "breached",
+        "intent": "refund",
+        "checkin_within_days": "7",
+    }
+    assert all(c.because for c in p.chips) and p.reason.startswith("Read as")
+    assert parse_query("my unassigned flights").filters.get("view") in {"triage", "mine"}

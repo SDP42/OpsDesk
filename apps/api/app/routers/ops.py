@@ -6,7 +6,7 @@ from __future__ import annotations
 import statistics
 from datetime import date, datetime, timedelta
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,6 +36,7 @@ from app.engines.forecast import ForecastInput, ForecastResult, forecast_breach
 from app.engines.frustration import FrustrationResult, score_frustration
 from app.engines.ghosts import GhostInput, GhostPrediction, score_booking
 from app.engines.lifecycle import OPEN_STATUSES
+from app.engines.nlq import ParsedQuery, parse_query
 from app.engines.promises import extract_promises
 from app.engines.simulator import SimFlight, SimulationResult, compare
 from app.engines.storms import StormCell, StormTicket, detect_storms
@@ -743,3 +744,14 @@ async def simulate_routing(
     )
     await session.commit()
     return Envelope(data=result)
+
+
+# --------------------------------------------------------------------------- Ask the Tower
+
+
+@router.get("/nlq", response_model=Envelope[ParsedQuery])
+async def ask_the_tower(
+    q: str = Query(min_length=1, max_length=200), _: Principal = Depends(require_staff)
+) -> Envelope[ParsedQuery]:
+    """Plain English → explainable filter chips for the command palette."""
+    return Envelope(data=parse_query(q))

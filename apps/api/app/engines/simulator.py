@@ -1,6 +1,6 @@
 """Routing What-If Simulator: replay a day's flights under each routing preset.
 
-Pure discrete-event replay: flights arrive in order, Vectoring picks a controller
+Pure discrete-event replay: flights arrive in order, each controller has four parallel lanes, Vectoring picks a controller
 with the preset's weights (load updates as the day goes), each controller works
 their queue first-in-first-out, and a flight breaches if it finishes after its
 Wheels-Up deadline. Handle time grows when the controller lacks the intent skill
@@ -17,7 +17,8 @@ from pydantic import BaseModel
 from app.engines import vectoring
 from app.engines.wheels_up import SlaInput, compute_sla
 
-BASE_HANDLE_MINUTES = {"P1": 25.0, "P2": 35.0, "P3": 45.0, "P4": 50.0}
+BASE_HANDLE_MINUTES = {"P1": 18.0, "P2": 24.0, "P3": 30.0, "P4": 35.0}
+PARALLEL_SLOTS = 4  # controllers juggle several flights at once (waiting on suppliers etc.)
 
 
 class SimFlight(BaseModel):
@@ -65,7 +66,7 @@ def simulate(
 ) -> PresetOutcome:
     ordered = sorted(flights, key=lambda f: f.created_at)
     team = {c.id: c.model_copy(update={"open_tickets": 0}) for c in controllers}
-    free_at: dict[str, datetime] = {}
+    slots: dict[str, list[datetime]] = {}
     load: dict[str, int] = {c.name: 0 for c in controllers}
     breaches = unrouted = region_hits = 0
     waits: list[float] = []
@@ -95,9 +96,11 @@ def simulate(
             breaches += 1
             continue
         c = team[result.chosen_id]
-        start = max(f.created_at, free_at.get(c.id, f.created_at))
+        lanes = slots.setdefault(c.id, [f.created_at] * PARALLEL_SLOTS)
+        lane = min(range(PARALLEL_SLOTS), key=lambda i: lanes[i])
+        start = max(f.created_at, lanes[lane])
         finish = start + timedelta(minutes=_handle(f, c))
-        free_at[c.id] = finish
+        lanes[lane] = finish
         c.open_tickets += 1
         load[c.name] += 1
         waits.append((start - f.created_at).total_seconds() / 60)

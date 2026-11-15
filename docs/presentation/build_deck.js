@@ -77,9 +77,8 @@ const img = (slide, file, x, y, w, h, name) => {
 {
   const s = pres.addSlide();
   s.background = { color: K.paper };
-  T(s, "6 problems, 6 proven fixes: from isolated tickets to a control tower", { x: 0.4, y: 0.25, w: 9.75, h: 0.45, fontFace: "Cambria", fontSize: 22, bold: true });
-  T(s, "Every row below is live in the prototype, unit-tested and covered by an end-to-end demo journey", { x: 0.4, y: 0.75, w: 9.6, h: 0.3, fontSize: 12, color: K.dim, italic: true });
-  sign(s, 10.3, 0.3, 2.65, "SLIDE 1 · PROBLEM → SOLUTION", K.ink, K.taxi, 8.5);
+  T(s, "Six problems, six working fixes: from isolated tickets to a control tower", { x: 0.4, y: 0.25, w: 12.5, h: 0.45, fontFace: "Cambria", fontSize: 22, bold: true });
+  T(s, "Each row is built, unit-tested and demonstrated by an end-to-end journey in the prototype", { x: 0.4, y: 0.7, w: 12.5, h: 0.3, fontSize: 11, color: K.dim, italic: true });
 
   const head = (t) => ({ text: t, options: { bold: true, color: K.white, fill: { color: K.ink }, fontSize: 10, fontFace: "Calibri" } });
   const cell = (t, o = {}) => ({ text: t, options: { fontSize: 8.5, color: K.ink, fontFace: "Calibri", valign: "middle", ...o } });
@@ -92,30 +91,50 @@ const img = (slide, file, x, y, w, h, name) => {
     [cell("5", { bold: true, color: K.beacon, align: "center", fontSize: 12 }), cell("Insights trapped in tickets; AI costs extra and needs a human in the loop"), cell("Weather Radar heat map with emerging spikes + product links; Co-pilot Brief; Tower Radio voice assistant; Frustration Radar (VADER): all free, local, explainable"), cell("Journey E: 'Inventory sync' flagged Emerging; zero paid AI calls")],
     [cell("6", { bold: true, color: K.beacon, align: "center", fontSize: 12 }), cell("~3K-row export cap, no realtime, archive/API tax"), cell("Keyset-streamed CSV/NDJSON with live counter, no cap; SSE realtime; 90-day archive job; documented CDC → Kafka → ClickHouse scale path"), cell("Every row streamed (3,040 in 0.15 s); retention run on demand")],
   ];
-  s.addTable(rows, { x: 0.4, y: 1.15, w: 7.75, colW: [0.35, 2.0, 3.1, 2.3], rowH: [0.28, 0.6, 0.6, 0.58, 0.6, 0.58, 0.55], border: { type: "solid", color: K.line, pt: 0.75 }, fill: { color: K.white }, margin: 0.05 });
+  s.addTable(rows, { x: 0.4, y: 1.1, w: 7.75, colW: [0.35, 2.0, 3.1, 2.3], rowH: [0.28, 0.58, 0.58, 0.56, 0.58, 0.56, 0.52], border: { type: "solid", color: K.line, pt: 0.75 }, fill: { color: K.white }, margin: 0.05 });
 
-  // Right: radar + measured before/after
-  card(s, 8.3, 1.15, 4.65, 3.75, K.white, "Radar card");
-  T(s, "Before vs after: capability coverage", { x: 8.45, y: 1.22, w: 4.4, h: 0.28, fontSize: 12, bold: true });
-  s.addImage({ path: A("chart_radar.png"), x: 9.05, y: 1.5, w: 3.25, h: 3.35, altText: "Radar chart: today vs OpsDesk across the 6 problems", objectName: "Radar chart" });
+  // Bottom-left: two real engine visuals
+  const chartCard = (x, title, file, cap, alt) => {
+    card(s, x, 4.92, 3.8, 2.38, K.white, title);
+    T(s, title, { x: x + 0.15, y: 5.0, w: 3.5, h: 0.24, fontSize: 11, bold: true });
+    s.addImage({ path: A(file), x: x + 0.12, y: 5.27, w: 3.56, h: 1.62, sizing: { type: "contain", w: 3.56, h: 1.62 }, altText: alt, objectName: alt });
+    T(s, cap, { x: x + 0.15, y: 6.92, w: 3.5, h: 0.32, fontSize: 8.5, color: K.dim });
+  };
+  chartCard(0.4, "Explainable routing (Problem 2)", "chart_waterfall.png", "Real Vectoring output for a Dubai P1: every point is shown, and so is why the runners-up lost.", "Routing score waterfall");
+  chartCard(4.35, "Travel-aware SLA (Problem 4)", "chart_sla_curve.png", "Deadlines shrink as check-in or LCD nears; within 12 h a case gets a quarter of its normal time.", "SLA urgency curve");
 
-  card(s, 0.4, 5.45, 7.75, 1.88, K.white, "Before-after card");
-  T(s, "Measured on our build (not mock-ups)", { x: 0.55, y: 5.5, w: 7.4, h: 0.25, fontSize: 11.5, bold: true });
-  s.addImage({ path: A("chart_before_after.png"), x: 0.55, y: 5.76, w: 7.45, h: 1.52, sizing: { type: "contain", w: 7.45, h: 1.52 }, altText: "Before vs after bar charts", objectName: "Before after chart" });
+  // Right column: flow, measured deltas, uniqueness
+  card(s, 8.3, 1.1, 4.65, 2.1, K.white, "Flow card");
+  T(s, "How one case flows through OpsDesk", { x: 8.45, y: 1.18, w: 4.4, h: 0.24, fontSize: 11, bold: true });
+  const steps = [
+    ["File", "Pilot types; TBOH fills check-in + LCD"],
+    ["Classify", "Intent top-3 with confidence"],
+    ["Link", "Earlier cases + Third-Contact Guardian"],
+    ["Vector", "Best controller, scored with a reason"],
+    ["Clock", "Wheels-up SLA, live over SSE"],
+    ["Resolve", "Escalate, Frequency, brief, reply"],
+  ];
+  steps.forEach(([h, d], i) => {
+    const x = 8.45 + (i % 2) * 2.25, y = 1.5 + Math.floor(i / 2) * 0.55;
+    dot(s, x, y + 0.03, 0.3, [K.beacon, K.taxi, K.cobalt, K.signal, K.alarm, K.violet][i], String(i + 1), i === 1 ? K.ink : K.white, 9);
+    T(s, [{ text: h, options: { bold: true, breakLine: true } }, { text: d, options: { color: K.dim } }], { x: x + 0.38, y, w: 1.82, h: 0.5, fontSize: 8.5 });
+  });
 
-  // Right bottom: why unique
-  card(s, 8.3, 5.05, 4.65, 2.25, K.ink, "Unique card");
-  T(s, "Why it's unique: what others won't build", { x: 8.45, y: 5.12, w: 4.4, h: 0.28, fontSize: 12, bold: true, color: K.taxi });
+  card(s, 8.3, 3.33, 4.65, 1.95, K.white, "Measured card");
+  T(s, "Before vs after, measured on our build", { x: 8.45, y: 3.41, w: 4.4, h: 0.24, fontSize: 11, bold: true });
+  s.addImage({ path: A("chart_ba_compact.png"), x: 8.42, y: 3.7, w: 4.42, h: 1.27, sizing: { type: "contain", w: 4.42, h: 1.27 }, altText: "Before vs after bars", objectName: "Before after compact" });
+  T(s, "Journey A context · TF-IDF vs TF-IDF + MiniLM · Lighthouse 64 → 97", { x: 8.45, y: 4.98, w: 4.4, h: 0.24, fontSize: 8.5, color: K.dim });
+
+  card(s, 8.3, 5.41, 4.65, 1.89, K.ink, "Unique card");
+  T(s, "Why it's different", { x: 8.45, y: 5.49, w: 4.4, h: 0.24, fontSize: 11, bold: true, color: K.taxi });
   const uniq = [
-    ["Proactive, not reactive", "Ghost Flights (gradient boosting) fix bookings before agencies write; Storm Cells answer 40 tickets with one broadcast"],
-    ["HR-aware routing", "Darwinbox leave/shift sync: nobody on leave gets work; Follow-the-Sun hands off with holiday calendars"],
-    ["Every decision explains itself", "Route, link, SLA, forecast, ghost risk: each shows its inputs (no black boxes)"],
-    ["Zero paid AI", "MiniLM + VADER + sklearn run on CPU; voice via the browser"],
+    ["Proactive:", "Ghost Flights predict tickets; Storm Cells answer 40 agencies at once"],
+    ["HR-aware:", "Darwinbox leave and shifts drive routing and handoffs"],
+    ["Explainable:", "every route, link, SLA and forecast shows its inputs"],
+    ["No paid AI:", "MiniLM, VADER and scikit-learn run locally on CPU"],
   ];
   uniq.forEach(([h, b], i) => {
-    const y = 5.45 + i * 0.46;
-    dot(s, 8.45, y + 0.02, 0.26, [K.beacon, K.taxi, K.cobalt, K.signal][i], String(i + 1), i === 1 ? K.ink : K.white, 9);
-    T(s, [{ text: h + ": ", options: { bold: true, color: K.white } }, { text: b, options: { color: "C9D0D8" } }], { x: 8.8, y, w: 4.05, h: 0.44, fontSize: 9 });
+    T(s, [{ text: h + " ", options: { bold: true, color: K.white } }, { text: b, options: { color: "C9D0D8" } }], { x: 8.45, y: 5.82 + i * 0.37, w: 4.4, h: 0.35, fontSize: 9 });
   });
   s.addNotes("Problems 1-6 from the PS, the feature that solves each, and where the demo proves it. Charts use measured values only.");
 }
@@ -124,9 +143,8 @@ const img = (slide, file, x, y, w, h, name) => {
 {
   const s = pres.addSlide();
   s.background = { color: K.paper };
-  T(s, "Working prototype: 15 screens, 5 personas, one explainable engine", { x: 0.4, y: 0.25, w: 9.75, h: 0.45, fontFace: "Cambria", fontSize: 22, bold: true });
-  T(s, "Next.js 15 + FastAPI monorepo · 120+ unit/API tests · 12 Playwright journeys · Lighthouse 97 / 100 / 96 / 100", { x: 0.4, y: 0.75, w: 9.8, h: 0.3, fontSize: 12, color: K.dim, italic: true });
-  sign(s, 10.3, 0.3, 2.65, "SLIDE 2 · PROTOTYPE & STACK", K.ink, K.taxi, 8.5);
+  T(s, "Working prototype: 15 screens, five personas, one explainable engine layer", { x: 0.4, y: 0.25, w: 12.5, h: 0.45, fontFace: "Cambria", fontSize: 22, bold: true });
+  T(s, "Next.js 15 + FastAPI monorepo · 120+ unit/API tests · 12 Playwright journeys · Lighthouse 97 / 100 / 96 / 100", { x: 0.4, y: 0.7, w: 12.5, h: 0.3, fontSize: 11, color: K.dim, italic: true });
 
   // Screenshot grid (left)
   const shots = [
@@ -145,7 +163,7 @@ const img = (slide, file, x, y, w, h, name) => {
 
   // Architecture (right top)
   card(s, 8.4, 1.15, 4.55, 3.65, K.white, "Architecture card");
-  T(s, "System architecture", { x: 8.55, y: 1.22, w: 4.3, h: 0.28, fontSize: 12, bold: true });
+  T(s, "System architecture", { x: 8.55, y: 1.22, w: 4.3, h: 0.28, fontSize: 11, bold: true });
   const layer = (y, h, fill, title, body, tc = K.white, bc = "D9DEE5") => {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 8.55, y, w: 4.25, h, rectRadius: 0.06, fill: { color: fill }, line: { color: fill } });
     T(s, title, { x: 8.65, y: y + 0.05, w: 4.05, h: 0.22, fontSize: 9.5, bold: true, color: tc });

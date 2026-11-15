@@ -48,3 +48,5 @@ scripts/media/raw/
 *.mov
 e2e/reports/
 .next-prod/
+docs/presentation/node_modules/
+docs/presentation/package*.json

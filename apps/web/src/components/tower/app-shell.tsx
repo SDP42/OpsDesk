@@ -4,7 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Building2,
   CloudLightning,
+  CloudSun,
   Command,
+  Database,
+  FlaskConical,
   Ghost,
   HelpCircle,
   LogOut,
@@ -98,6 +101,27 @@ const NAV: NavItem[] = [
     gate: "E2",
     icon: <Building2 size={18} strokeWidth={1.5} />,
     roles: ["agent", "lead", "escalation_manager"],
+  },
+  {
+    href: "/tower/insights",
+    label: "Weather radar",
+    gate: "F1",
+    icon: <CloudSun size={18} strokeWidth={1.5} />,
+    roles: ["agent", "lead"],
+  },
+  {
+    href: "/tower/data",
+    label: "Black box",
+    gate: "F2",
+    icon: <Database size={18} strokeWidth={1.5} />,
+    roles: ["lead"],
+  },
+  {
+    href: "/tower/simulate",
+    label: "Simulator",
+    gate: "F3",
+    icon: <FlaskConical size={18} strokeWidth={1.5} />,
+    roles: ["lead"],
   },
 ];
 

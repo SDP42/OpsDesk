@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import base64
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Query, Request
@@ -80,6 +80,7 @@ async def list_tickets(
     agency: str | None = None,
     priority: str | None = None,
     q: str | None = Query(default=None, max_length=100),
+    checkin_within_days: int | None = Query(default=None, ge=1, le=60),
     sort: Sort = "created_desc",
     cursor: str | None = None,
     limit: int = Query(default=50, ge=1, le=200),
@@ -110,6 +111,11 @@ async def list_tickets(
     if intent:
         stmt = stmt.join(Intent, Ticket.intent_id == Intent.id).where(
             or_(Intent.code == intent, Intent.code.like(f"{intent}.%"))
+        )
+    if checkin_within_days:
+        now = svc.utcnow()
+        stmt = stmt.where(
+            Ticket.check_in >= now, Ticket.check_in <= now + timedelta(days=checkin_within_days)
         )
     if q:
         like = f"%{q}%"

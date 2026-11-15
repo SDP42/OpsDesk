@@ -950,6 +950,26 @@ async def seed(total: int, seed_value: int = 42) -> None:
     log("training intent classifier on generated corpus")
     model = intent_engine.train()
     intent_engine.save(model, settings.intent_model_path)
+    from app.engines.intent_taxonomy import HARD_EVAL, generate_corpus
+    from app.services import embeddings
+
+    base_acc = intent_engine.accuracy(model, HARD_EVAL)
+    corpus = generate_corpus()
+    corpus_vecs = embeddings.embed([t for t, _ in corpus])
+    if corpus_vecs is not None:
+        import joblib
+
+        head = intent_engine.train_embedding_head(corpus_vecs, [c for _, c in corpus])
+        joblib.dump(head, settings.intent_model_path.with_name("intent_head.joblib"))
+        hard_vecs = embeddings.embed([t for t, _ in HARD_EVAL])
+        hybrid_acc = intent_engine.accuracy(model, HARD_EVAL, head=head, vectors=hard_vecs)
+        log(
+            f"intent accuracy on hand-written phrasings: TF-IDF {base_acc:.0%} -> TF-IDF + MiniLM {hybrid_acc:.0%}"
+        )
+    else:
+        log(
+            f"intent accuracy on hand-written phrasings: TF-IDF {base_acc:.0%} (embeddings unavailable)"
+        )
 
     world = World(now, rng)
     world.build_reference()

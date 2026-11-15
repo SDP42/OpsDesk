@@ -60,3 +60,22 @@ async def test_pilot_cannot_use_ops_routes(client_factory) -> None:
     pilot = await client_factory(PILOT)
     for path in ["/api/roster", "/api/ghosts", "/api/storms", "/api/suppliers/scorecard"]:
         assert (await pilot.get(path)).status_code == 403
+
+
+async def test_simulator_compares_presets(client_factory) -> None:
+    lead = await client_factory(LEAD)
+    r = (await lead.post("/api/routing/simulate", json={"hours": 72})).json()["data"]
+    assert {o["preset"] for o in r["outcomes"]} == {"balanced", "urgency_first", "regional_affinity", "fairness"}
+    assert r["best_preset"] and r["reason"]
+    assert all(o["flights"] > 0 and o["reason"] for o in r["outcomes"])
+    agent = await client_factory(AGENT)
+    assert (await agent.post("/api/routing/simulate", json={})).status_code == 403
+
+
+async def test_weather_heatmap_and_product_link(client_factory) -> None:
+    lead = await client_factory(LEAD)
+    h = (await lead.get("/api/insights/heatmap", params={"weeks": 8})).json()["data"]
+    assert len(h["weeks"]) == 8 and all(len(t["counts"]) == 8 for t in h["themes"])
+    assert any(t["emerging"] for t in h["themes"]), "seeded inventory-sync spike"
+    r = await lead.patch("/api/insights/themes/inventory_sync", json={"product_link": "JIRA-OPS-412"})
+    assert r.json()["data"]["product_link"] == "JIRA-OPS-412"

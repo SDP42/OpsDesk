@@ -94,3 +94,20 @@ def test_promises_extracted_with_due_dates() -> None:
         "We will confirm by 5 pm IST. Your refund will be processed in 3 working days.", now
     )
     assert len(ps) >= 2 and all(p.due_epoch for p in ps)
+
+
+def test_simulator_fairness_spreads_load() -> None:
+    from datetime import timedelta
+
+    from app.engines.simulator import SimFlight, compare
+    from app.engines.vectoring import Controller
+
+    t0 = datetime(2026, 11, 15, 8, 0, tzinfo=UTC)
+    team = [Controller(id="a", name="A", region="AE", rank=3, skills=["refund"], capacity=60),
+            Controller(id="b", name="B", region="AE", rank=1, skills=[], capacity=60)]
+    flights = [SimFlight(id=str(i), region="AE", priority="P2", intent_code="refund.delay",
+                         created_at=t0 + timedelta(minutes=5 * i)) for i in range(30)]
+    r = compare(flights, team, ["balanced", "fairness"])
+    by = {o.preset: o for o in r.outcomes}
+    assert by["fairness"].load_spread <= by["balanced"].load_spread
+    assert r.reason

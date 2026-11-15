@@ -5,7 +5,7 @@ import { clsx } from "clsx";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Brand } from "@/components/tower/app-shell";
 import {
   FrequencyGlyph,
@@ -58,9 +58,14 @@ export default function LoginPage() {
   const login = useMutation({
     mutationFn: async (body: { email: string; password: string }) =>
       unwrap(await api.POST("/api/auth/login", { body })),
-    onSuccess: (me) => {
+    onSuccess: async (me) => {
       qc.setQueryData(["me"], me);
-      const go = () => router.push(homeFor(me.role));
+      const autopilot = new URLSearchParams(window.location.search).get("autopilot") === "1";
+      if (autopilot) {
+        await api.PATCH("/api/me/preferences", { body: { onboarded: true, data_mode: "demo" } });
+        qc.setQueryData(["me"], { ...me, onboarded: true });
+      }
+      const go = () => router.push(autopilot ? "/tower?autopilot=1" : homeFor(me.role));
       const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
       if (
         doc.startViewTransition &&
@@ -70,6 +75,19 @@ export default function LoginPage() {
       } else go();
     },
   });
+
+  // One-click demo: /login?autopilot=1 signs in as the Airport Director and starts the tour.
+  useEffect(() => {
+    if (
+      new URLSearchParams(window.location.search).get("autopilot") !== "1" ||
+      login.isPending ||
+      login.isSuccess
+    )
+      return;
+    const lead = accounts.data?.find((a) => a.role === "lead");
+    if (lead?.demo_password) login.mutate({ email: lead.email, password: lead.demo_password });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts.data]);
 
   const pick = (a: DemoAccount) => {
     setEmail(a.email);

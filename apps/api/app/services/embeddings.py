@@ -51,3 +51,27 @@ def embed(texts: list[str]) -> np.ndarray | None:
     vecs = np.array(list(model.embed(texts)), dtype=np.float32)
     norms = np.linalg.norm(vecs, axis=1, keepdims=True)
     return vecs / np.maximum(norms, 1e-9)
+
+
+_cache: dict[str, np.ndarray] = {}
+_CACHE_MAX = 20000
+
+
+def embed_cached(items: list[tuple[str, str]]) -> dict[str, np.ndarray] | None:
+    """Embed (key, text) pairs, reusing vectors already computed for the same key and text.
+
+    Linking a new flight compares it with up to 300 earlier flights; caching means each
+    text is embedded once per process instead of on every new flight (Chaos Mode safe).
+    """
+    if _load() is None or not items:
+        return None
+    missing = [(k, t) for k, t in items if f"{k}:{hash(t)}" not in _cache]
+    if missing:
+        mat = embed([t for _, t in missing])
+        if mat is None:
+            return None
+        if len(_cache) + len(missing) > _CACHE_MAX:
+            _cache.clear()
+        for (k, t), v in zip(missing, mat, strict=True):
+            _cache[f"{k}:{hash(t)}"] = v
+    return {k: _cache[f"{k}:{hash(t)}"] for k, t in items}

@@ -71,6 +71,34 @@ const NAV: NavItem[] = [
     icon: <TowerGlyph />,
     roles: ["escalation_manager", "lead", "agent"],
   },
+  {
+    href: "/tower/ghosts",
+    label: "Ghost flights",
+    gate: "D1",
+    icon: <Ghost size={18} strokeWidth={1.5} />,
+    roles: ["agent", "lead", "escalation_manager"],
+  },
+  {
+    href: "/tower/storms",
+    label: "Storm cells",
+    gate: "D2",
+    icon: <CloudLightning size={18} strokeWidth={1.5} />,
+    roles: ["agent", "lead", "escalation_manager"],
+  },
+  {
+    href: "/tower/roster",
+    label: "Crew roster",
+    gate: "E1",
+    icon: <Users size={18} strokeWidth={1.5} />,
+    roles: ["agent", "lead", "escalation_manager"],
+  },
+  {
+    href: "/tower/suppliers",
+    label: "Suppliers",
+    gate: "E2",
+    icon: <Building2 size={18} strokeWidth={1.5} />,
+    roles: ["agent", "lead", "escalation_manager"],
+  },
 ];
 
 export function Brand({ compact = false }: { compact?: boolean }) {

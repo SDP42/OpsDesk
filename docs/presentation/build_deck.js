@@ -91,11 +91,12 @@ const chips = (s, items, x, y, w, color, size = 7.5, h = 0.24, gap = 0.06) => {
   return cy + h;
 };
 /** Big-number tile. */
+const lead = (s, x, y, w, text) => T(s, text, { x, y, w, h: 0.18, fontSize: 8, italic: true, color: K.dim });
 const stat = (s, x, y, w, h, value, label, color) => {
   rect(s, x, y, w, h, TINT[color]);
   rect(s, x, y, w, 0.04, color);
-  T(s, value, { x: x + 0.1, y: y + 0.08, w: w - 0.15, h: 0.36, fontFace: "Cambria", fontSize: 18, bold: true, color });
-  T(s, label, { x: x + 0.1, y: y + 0.44, w: w - 0.15, h: h - 0.48, fontSize: 7.5, color: K.ink });
+  T(s, value, { x: x + 0.1, y: y + 0.08, w: w - 0.15, h: 0.36, fontFace: "Cambria", fontSize: 16, bold: true, color });
+  T(s, label, { x: x + 0.1, y: y + 0.37, w: w - 0.15, h: h - 0.4, fontSize: 7.5, color: K.ink });
 };
 const check = (s, x, y, t, ok = true) => {
   s.addShape(pres.shapes.OVAL, { x, y, w: 0.2, h: 0.2, fill: { color: ok ? K.signal : "B9BEC6" }, line: { color: ok ? K.signal : "B9BEC6" } });
@@ -168,6 +169,7 @@ const check = (s, x, y, t, ok = true) => {
   chart(4.8, "Before vs after", "chart_ba_compact.png", "Measured: context 0→2, intent 76→88%, load 4.7→0.8 s.", "Before after");
 
   panel(s, 7.05, 1.12, 5.93, 2.2, K.beacon, "Why it's unique: 8 ideas a generic helpdesk does not have");
+  lead(s, 7.23, 1.38, 5.6, "Built into the core of the product, not sold as paid add-ons or third-party apps.");
   const ideas = [
     ["Ghost Flights", "Predicts tickets before agencies write in", K.beacon],
     ["Storm Cells", "5+ cases on one hotel become 1 incident", K.alarm],
@@ -179,26 +181,29 @@ const check = (s, x, y, t, ok = true) => {
     ["Voice-first floor", "Tower Radio, plain-English ⌘K, Wall Mode", K.beacon],
   ];
   ideas.forEach(([h, d, col], i) => {
-    const x = 7.2 + (i % 4) * 1.43, y = 1.42 + Math.floor(i / 4) * 0.93;
-    rect(s, x, y, 1.36, 0.85, TINT[col]);
+    const x = 7.2 + (i % 4) * 1.43, y = 1.62 + Math.floor(i / 4) * 0.83;
+    rect(s, x, y, 1.36, 0.77, TINT[col]);
     rect(s, x, y, 1.36, 0.04, col);
-    T(s, String(i + 1).padStart(2, "0"), { x: x + 0.08, y: y + 0.09, w: 0.3, h: 0.18, fontSize: 8, bold: true, color: col, fontFace: "Courier New" });
-    T(s, h, { x: x + 0.08, y: y + 0.26, w: 1.25, h: 0.2, fontSize: 9, bold: true });
-    T(s, d, { x: x + 0.08, y: y + 0.47, w: 1.25, h: 0.36, fontSize: 7.5, color: K.dim });
+    T(s, String(i + 1).padStart(2, "0"), { x: x + 0.08, y: y + 0.08, w: 0.3, h: 0.18, fontSize: 8, bold: true, color: col, fontFace: "Courier New" });
+    T(s, h, { x: x + 0.08, y: y + 0.23, w: 1.25, h: 0.2, fontSize: 9, bold: true });
+    T(s, d, { x: x + 0.08, y: y + 0.43, w: 1.25, h: 0.33, fontSize: 7.5, color: K.dim });
   });
 
   // Impact: big numbers
   panel(s, 7.05, 3.42, 2.915, 1.88, K.alarm, "Impact");
+  lead(s, 7.23, 3.68, 2.7, "Measured on the running prototype.");
   [["0", "times an agency repeats its story", K.alarm], ["< 1 s", "escalation to the Tower Chief", K.beacon], ["76→88%", "intent accuracy, hand-written text", K.cobalt], ["3K→60K+", "rows per export, no cap", K.signal]].forEach(([v, l, col], i) =>
-    stat(s, 7.2 + (i % 2) * 1.37, 3.72 + Math.floor(i / 2) * 0.78, 1.3, 0.72, v, l, col));
+    stat(s, 7.2 + (i % 2) * 1.37, 3.92 + Math.floor(i / 2) * 0.69, 1.3, 0.63, v, l, col));
 
   // Feasibility: readiness grid
   panel(s, 10.065, 3.42, 2.915, 1.88, K.signal, "Feasibility");
+  lead(s, 10.245, 3.68, 2.7, "Runs today on a laptop, no paid services.");
   [["3", "commands to run: setup, seed, dev", K.signal], ["0 GPUs", "CPU only, 90 MB model, offline fallback", K.cobalt], ["120+", "tests · 12 e2e journeys · Lighthouse 97", K.violet], ["1 var", "DATABASE_URL: SQLite → Postgres", K.taxi]].forEach(([v, l, col], i) =>
-    stat(s, 10.215 + (i % 2) * 1.37, 3.72 + Math.floor(i / 2) * 0.78, 1.3, 0.72, v, l, col));
+    stat(s, 10.215 + (i % 2) * 1.37, 3.92 + Math.floor(i / 2) * 0.69, 1.3, 0.63, v, l, col));
 
   // Viability: comparison table
   panel(s, 7.05, 5.4, 2.915, 1.9, K.cobalt, "Viability vs pay-per-add-on");
+  lead(s, 7.23, 5.66, 2.7, "Same outcomes, without per-seat add-on costs.");
   const vh = (t, f) => ({ text: t, options: { bold: true, color: K.white, fill: { color: f }, fontSize: 7.5, align: "center" } });
   const vc = (t, o = {}) => ({ text: t, options: { fontSize: 7.5, valign: "middle", ...o } });
   s.addTable([
@@ -207,14 +212,15 @@ const check = (s, x, y, t, ok = true) => {
     [vc("TBOH linking", { bold: true }), vc("✗ 3rd-party app", { color: K.alarm }), vc("✓ built in", { color: K.signal, bold: true })],
     [vc("Export", { bold: true }), vc("✗ 3K cap, step-ups", { color: K.alarm }), vc("✓ streamed, no cap", { color: K.signal, bold: true })],
     [vc("Licence", { bold: true }), vc("✗ per seat", { color: K.alarm }), vc("✓ Apache / MIT", { color: K.signal, bold: true })],
-  ], { x: 7.2, y: 5.7, w: 2.65, colW: [0.72, 0.95, 0.98], rowH: 0.27, border: { type: "solid", color: K.line, pt: 0.5 }, fill: { color: K.white }, margin: 0.03 });
+  ], { x: 7.2, y: 5.9, w: 2.65, colW: [0.72, 0.95, 0.98], rowH: 0.27, border: { type: "solid", color: K.line, pt: 0.5 }, fill: { color: K.white }, margin: 0.03 });
 
   // Benefits: persona tiles
   panel(s, 10.065, 5.4, 2.915, 1.9, K.violet, "Benefits by persona");
+  lead(s, 10.245, 5.66, 2.7, "One platform, a clear win for every role.");
   [["Agency", "Never repeats the story", K.beacon], ["Agent", "History + why, one screen", K.cobalt], ["Manager", "Sorted by check-in", K.alarm], ["Lead", "Risk before breach", K.signal], ["Product", "Themes as they emerge", K.violet], ["Supplier", "Replies on the ticket", K.taxi]].forEach(([h, d, col], i) => {
-    const x = 10.215 + (i % 2) * 1.37, y = 5.7 + Math.floor(i / 2) * 0.52;
-    rect(s, x, y, 1.3, 0.46, TINT[col]);
-    rect(s, x, y, 0.04, 0.46, col);
+    const x = 10.215 + (i % 2) * 1.37, y = 5.9 + Math.floor(i / 2) * 0.465;
+    rect(s, x, y, 1.3, 0.42, TINT[col]);
+    rect(s, x, y, 0.04, 0.42, col);
     T(s, [{ text: h, options: { bold: true, color: col, breakLine: true } }, { text: d, options: { color: K.ink } }], { x: x + 0.1, y: y + 0.05, w: 1.18, h: 0.4, fontSize: 7.5 });
   });
   s.addNotes("Every MVP from the brief with what we built, stretch goals, technical expectations, eight differentiating ideas, and the impact, feasibility, viability and benefits.");
@@ -288,7 +294,7 @@ const check = (s, x, y, t, ok = true) => {
   s.background = { color: K.paper };
   rect(s, 0, 0, 13.333, 0.08, K.beacon);
   T(s, "Thank you", { x: 0.5, y: 0.35, w: 6, h: 0.8, fontFace: "Cambria", fontSize: 44, bold: true });
-  T(s, "Every ticket is a flight, and now someone is watching the tower.", { x: 0.5, y: 1.15, w: 7.6, h: 0.4, fontFace: "Cambria", fontSize: 17, italic: true, color: K.beacon });
+  T(s, "Thank you for reviewing OpsDesk Control Tower. We welcome your questions.", { x: 0.5, y: 1.15, w: 7.6, h: 0.4, fontFace: "Cambria", fontSize: 17, italic: true, color: K.beacon });
 
   [["Swayam Panchal", K.beacon], ["Jeevesh Bodhani", K.cobalt], ["Rishit Lahoti", K.signal], ["Shreyas Kale", K.violet]].forEach(([n, col], i) => {
     const x = 0.5 + i * 1.95;
@@ -307,17 +313,18 @@ const check = (s, x, y, t, ok = true) => {
     T(s, [{ text: a, options: { bold: true, breakLine: true } }, { text: b, options: { color: K.dim, fontSize: 8 } }], { x: 1.0, y: y - 0.03, w: 3.2, h: 0.36, fontSize: 9 });
   });
 
-  panel(s, 4.4, 3.3, 3.8, 2.38, K.cobalt, "Demo accounts");
-  T(s, [{ text: "Password for all:  ", options: { bold: true } }, { text: "cleared-for-takeoff", options: { fontFace: "Courier New", color: K.cobalt } }], { x: 4.58, y: 5.36, w: 3.5, h: 0.22, fontSize: 9 });
-  [["Pilot", "pilot.saf@opsdesk.demo"], ["Controller", "priya.nair@opsdesk.demo"], ["Tower Chief", "rahul.kapoor@opsdesk.demo"], ["Director", "meera.iyer@opsdesk.demo"], ["Supplier", "partner.atlas@opsdesk.demo"]].forEach(([r, e], i) => {
-    const y = 3.64 + i * 0.33;
-    T(s, r, { x: 4.58, y, w: 1.0, h: 0.22, fontSize: 9, bold: true });
-    T(s, e, { x: 5.6, y, w: 2.55, h: 0.22, fontSize: 9, color: K.dim, fontFace: "Courier New" });
+  panel(s, 4.4, 3.3, 3.8, 2.38, K.cobalt, "Run the prototype");
+  [["Clone", "git clone github.com/SDP42/OpsDesk"], ["Install + seed", "make setup && make seed"], ["Start", "make dev  →  localhost:3000"], ["Guided demo", "Autopilot walks every persona in 90 s"]].forEach(([h, d], i) => {
+    const y = 3.66 + i * 0.49;
+    s.addShape(pres.shapes.OVAL, { x: 4.58, y, w: 0.3, h: 0.3, fill: { color: K.cobalt }, line: { color: K.cobalt } });
+    T(s, String(i + 1), { x: 4.58, y: y + 0.06, w: 0.3, h: 0.18, fontSize: 9.5, bold: true, color: K.white, align: "center" });
+    if (i < 3) s.addShape(pres.shapes.LINE, { x: 4.73, y: y + 0.3, w: 0, h: 0.19, line: { color: K.cobalt, width: 1 } });
+    T(s, [{ text: h, options: { bold: true, breakLine: true } }, { text: d, options: { color: K.dim, fontSize: 8.5, fontFace: i < 3 ? "Courier New" : "Calibri" } }], { x: 5.0, y: y - 0.02, w: 3.1, h: 0.42, fontSize: 9.5 });
   });
 
   panel(s, 0.5, 5.8, 7.7, 1.3, K.beacon, "What's next");
   chips(s, ["Webhooks", "CSAT after resolve", "Multi-tenant agencies", "Live Darwinbox tenant", "Kafka + ClickHouse", "WhatsApp channel"], 0.68, 6.12, 7.4, K.beacon, 8.5, 0.28, 0.07);
-  T(s, [{ text: "GitHub  ", options: { bold: true, color: K.beacon } }, { text: GH, options: { color: K.cobalt, hyperlink: { url: GH } } }, { text: "   ·   open localhost:3000 → 'Take the 90-second flight'", options: { color: K.dim } }], { x: 0.68, y: 6.65, w: 7.4, h: 0.3, fontSize: 10.5 });
+  T(s, [{ text: "GitHub  ", options: { bold: true, color: K.beacon } }, { text: GH, options: { color: K.cobalt, hyperlink: { url: GH } } }, { text: "   ·   source code, README and model card", options: { color: K.dim } }], { x: 0.68, y: 6.65, w: 7.4, h: 0.3, fontSize: 10.5 });
 
   img(s, "tower.png", 8.45, 0.4, 4.45, 2.0, "Tower");
   img(s, "flight.png", 8.45, 2.55, 2.15, 1.35, "Flight");

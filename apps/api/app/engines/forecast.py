@@ -64,11 +64,16 @@ def forecast_breach(data: ForecastInput) -> ForecastResult:
         )
     best = min(out, key=lambda a: a.breach_probability)
     now = next(a for a in out if a.action == "none")
-    reason = (
+    head = (
         f"From {len(hist)} past resolutions (median {np.median(hist):.0f} min) and "
-        f"{data.minutes_remaining:.0f} min left: breach risk {now.breach_probability:.0%} now; "
-        f"'{best.action}' lowers it to {best.breach_probability:.0%}"
+        f"{data.minutes_remaining:.0f} min left: breach risk {now.breach_probability:.0%} now"
     )
+    if best.action == "none" or now.breach_probability - best.breach_probability < 0.02:
+        reason = head + "; no action changes the odds much, so act on the root cause now"
+    else:
+        reason = (
+            head + f"; '{best.action.replace('_', ' ')}' lowers it to {best.breach_probability:.0%}"
+        )
     return ForecastResult(
         actions=out,
         best_action=best.action,

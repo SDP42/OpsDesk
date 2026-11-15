@@ -103,3 +103,49 @@ async def test_ask_the_tower_and_checkin_filter(client_factory) -> None:
     assert p["filters"]["region"] == "AE" and p["filters"]["checkin_within_days"] == "7"
     r = await agent.get("/api/tickets", params={"region": "AE", "checkin_within_days": 7})
     assert r.status_code == 200
+
+
+def test_darwinbox_payload_parsing_inspects_errors() -> None:
+    from app.services.hrms import parse_darwinbox
+
+    pull = parse_darwinbox(
+        {
+            "data": [
+                {
+                    "employee_email": "Priya.Nair@opsdesk.demo",
+                    "leave_type": "Annual Leave",
+                    "from_date": "2026-11-20",
+                    "to_date": "2026-11-22",
+                    "status": "Approved",
+                },
+                {
+                    "employee_email": "x@opsdesk.demo",
+                    "leave_type": "Sick Leave",
+                    "from_date": "2026-11-20",
+                    "to_date": "2026-11-20",
+                    "status": "Pending",
+                },
+                {
+                    "employee_email": "bad@opsdesk.demo",
+                    "from_date": "nope",
+                    "to_date": "2026-11-20",
+                },
+            ],
+            "errors": [{"message": "employee 991 not mapped"}],
+        }
+    )
+    assert [r.email for r in pull.records] == ["priya.nair@opsdesk.demo"]
+    assert "employee 991 not mapped" in pull.errors and any("skipped" in e for e in pull.errors)
+
+
+async def test_roster_sync_simulated_and_handoffs_and_constellation(client_factory) -> None:
+    lead = await client_factory(LEAD)
+    sync = (await lead.post("/api/roster/sync")).json()["data"]
+    assert sync["mode"] == "simulated" and sync["imported"] + sync["skipped"] >= 1
+    board = (await lead.get("/api/handoffs/plan")).json()["data"]
+    assert set(board["regions"]) == {"IN", "AE", "UK", "SEA"}
+    assert all(p["reason"] for p in board["plans"])
+    moved = (await lead.post("/api/handoffs/apply")).json()["data"]["moved"]
+    assert moved == sum(1 for p in board["plans"] if p["to_user_id"])
+    g = (await lead.get("/api/constellation", params={"tboh": "TBOH-88213"})).json()["data"]
+    assert len(g["nodes"]) >= 2 and g["edges"] and any(n["seed"] for n in g["nodes"])

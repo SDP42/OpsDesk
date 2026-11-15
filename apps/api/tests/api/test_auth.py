@@ -83,6 +83,8 @@ async def test_login_rate_limit_is_per_account(client_factory, monkeypatch) -> N
     bad = {"email": AGENT, "password": "wrong"}
     codes = [(await client.post("/api/auth/login", json=bad)).status_code for _ in range(3)]
     assert codes[-1] == 429
-    ok = await client.post("/api/auth/login", json={"email": LEAD, "password": "cleared-for-takeoff"})
+    ok = await client.post(
+        "/api/auth/login", json={"email": LEAD, "password": "cleared-for-takeoff"}
+    )
     assert ok.status_code == 200
     auth_router._attempts.clear()

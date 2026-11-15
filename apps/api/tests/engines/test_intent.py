@@ -37,3 +37,28 @@ def test_refund_delay_override_rule(model) -> None:
 
 def test_short_text_needs_human(model) -> None:
     assert suggest(model, "hi").needs_human
+
+
+def test_minilm_ensemble_beats_tfidf_on_hand_written_phrasings(model) -> None:
+    """Runs only when the pretrained model is cached locally (no network in CI)."""
+    from app.core.config import DATA_DIR
+
+    if not (DATA_DIR / "models").exists():
+        pytest.skip("MiniLM not cached; run `make seed` once with network")
+    import numpy as np
+    from fastembed import TextEmbedding
+
+    from app.engines.intent import accuracy, train_embedding_head
+    from app.engines.intent_taxonomy import HARD_EVAL, generate_corpus
+
+    emb = TextEmbedding("sentence-transformers/all-MiniLM-L6-v2", cache_dir=str(DATA_DIR / "models"))
+
+    def vecs(texts: list[str]) -> np.ndarray:
+        m = np.array(list(emb.embed(texts)))
+        return m / np.linalg.norm(m, axis=1, keepdims=True)
+
+    corpus = generate_corpus(seed=7)
+    head = train_embedding_head(vecs([t for t, _ in corpus]), [c for _, c in corpus])
+    base = accuracy(model, HARD_EVAL)
+    hybrid = accuracy(model, HARD_EVAL, head=head, vectors=vecs([t for t, _ in HARD_EVAL]))
+    assert hybrid >= base and hybrid >= 0.8

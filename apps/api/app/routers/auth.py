@@ -28,9 +28,11 @@ me_router = APIRouter(tags=["auth"])
 _attempts: dict[str, deque[float]] = defaultdict(deque)
 
 
-def _rate_limit(ip: str) -> None:
+def _rate_limit(key: str) -> None:
+    """Sliding one-minute window per (IP, account): stops brute force on any one account
+    without locking out a whole office that shares an IP."""
     limit = get_settings().login_rate_limit_per_minute
-    window = _attempts[ip]
+    window = _attempts[key]
     now = time.monotonic()
     while window and now - window[0] > 60:
         window.popleft()
@@ -62,7 +64,7 @@ async def login(
     session: AsyncSession = Depends(get_session),
 ) -> Envelope[MeOut]:
     ip = request.client.host if request.client else "unknown"
-    _rate_limit(ip)
+    _rate_limit(f"{ip}:{body.email.lower()}")
     user = await session.scalar(select(User).where(func.lower(User.email) == body.email.lower()))
     if user is None or not user.is_active or not verify_password(body.password, user.password_hash):
         raise AppError(401, "invalid_credentials", "Callsign or password is incorrect")

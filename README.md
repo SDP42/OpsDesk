@@ -190,6 +190,10 @@ bedbanks and DMCs, channel partners such as HyperGuest, rate-intelligence partne
 | 📺 **Wall Mode** | Everyone on the ops floor | Full-screen big board for the ops-floor TV: live radar, big counters (open, unassigned, with Tower Chief, breached, storm cells), panels that rotate every 10 s (lowest fuel, storms, ghosts, crew on leave, emerging themes) and a tower-call ticker from the SSE stream. | reuses existing routes + `/api/stream` | `/wall` |
 | ✈ **Demo Autopilot** | Anyone demoing | A narrated 90-second flight through the tower, a linked case, ghosts, storms (runs Chaos Mode live if needed), roster, weather, simulator and black box. Captions plus optional voice, pause, skip and step. *Take the 90-second flight* on the landing page signs in as the Director and starts it in one click. | client-side, `/login?autopilot=1` | everywhere in the tower |
 
+| 🌍 **Follow-the-Sun** | Tower Chief, Director | At shift change, urgent flights (deadline within 24 h) owned by someone off shift move to the least-loaded controller on shift, preferring the same region, with an auto-written **Handoff Brief** posted as an internal note. Regional **public holidays** (open-source `holidays` calendars for IN, AE, GB, SG) and weekends (Fri-Sat in the UAE) count as non-working. | `engines/follow_the_sun.py` · `GET /handoffs/plan` · `POST /handoffs/apply` | `/tower/handoffs` |
+| 🌌 **Constellation 3D** | Controller | Every flight linked to a booking within two hops as a force-directed 3D star map (React Three Fiber): booking flights in orange, links coloured by type, orbit, hover to read, click to open, plus an accessible list mode. Opened from any flight's TBOH or ⌘K. | `GET /constellation?tboh=` | `/tower/links` |
+| 🔌 **Darwinbox adapter** | Director | *Sync from Darwinbox* pulls 14 days of approved leave and shift changes. Live mode with `DARWINBOX_BASE_URL` + `DARWINBOX_API_KEY` (checks both `data` and `errors`, since Darwinbox can answer 200 with partial errors); simulated mode otherwise. | `services/hrms.py` · `POST /roster/sync` | `/tower/roster` |
+
 #### Pretrained models
 
 | Model | Licence | Where it helps | Measured |
@@ -377,6 +381,9 @@ All routes are under `/api`, validated with Pydantic (unknown fields rejected), 
 | `GET /suppliers/scorecard` | Supplier reliability | staff |
 | `GET /insights/heatmap` · `PATCH /insights/themes/{code}` | Weather Radar heat map · product link | agent, lead · lead |
 | `POST /routing/simulate` | Routing What-If Simulator | lead |
+| `GET /handoffs/plan` · `POST /handoffs/apply` | Follow-the-Sun handoffs | staff |
+| `GET /constellation?tboh=` | Linked-case graph | staff |
+| `POST /roster/sync` | Darwinbox HRMS pull | lead |
 | `GET /nlq?q=` | Ask the Tower parser | staff |
 | `GET /agencies` · `GET /controllers` · `GET /stats/overview` · `GET /stats/trend` | Supporting reads | staff |
 | `GET/PUT /routing/preset` | Active routing preset | staff / lead |
@@ -400,7 +407,7 @@ springs, **NumberFlow** animated numbers, **driver.js** onboarding tour, **Recha
 
 Screens: `/login`, `/tower` (radar of open flights, queue health, SLA risk board, preset switch, Chaos Mode), `/tower/ghosts`,
 `/tower/storms`, `/tower/roster`, `/tower/suppliers`, `/tower/insights` (Weather Radar), `/tower/data` (Black Box),
-`/tower/simulate`, `/wall` (Wall Mode), `/tower/queue` (also Ask-the-Tower results),
+`/tower/simulate`, `/tower/handoffs` (Follow-the-Sun), `/tower/links` (Constellation 3D), `/wall` (Wall Mode), `/tower/queue` (also Ask-the-Tower results),
 `/tower/triage`, `/tower/escalations`, `/tower/t/[id]` (three panes: linked history and agency turbulence · conversation, Frequencies,
 Co-pilot · fuel gauge, actions, vectoring waterfall, intent, timeline with scrubber), `/pilot` (split-flap departures board and create
 flow), `/partner`. Every screen has designed **loading** (shimmer strips), **empty** and **error** states.
@@ -458,7 +465,8 @@ make test
 make e2e
 ```
 
-`make e2e` reseeds and runs **all demo journeys A to H plus Wall Mode and Autopilot** in Chromium (10 tests, about 90 s),
+`make e2e` reseeds and runs **all demo journeys A to H plus Wall Mode, Autopilot, Constellation and Follow-the-Sun** in
+Chromium (12 tests, about 2 minutes),
 saving a screenshot at the end of each into `e2e/screenshots/`.
 
 | Level | Coverage |
@@ -513,6 +521,7 @@ engine: no per-seat AI add-on, no third-party TBOH-linking app, no export or arc
 | `make chaos` | Post 40 overbooking flights to the running API |
 | `make media` | Fetch licensed clips and build frames, manifest, palette and credits |
 | `make test` · `make e2e` · `make lint` | Tests, Playwright journeys, lint and types |
+| `make lighthouse` | Production build of the landing page + Lighthouse (desktop), report in `e2e/reports/` |
 | `make gen-api` | Regenerate the typed web client from OpenAPI |
 
 ---
@@ -552,9 +561,8 @@ portal, and tests.
 Supplier Scorecard, Weather Radar screen, Black Box screen with a live export counter, Routing What-If Simulator, Ask the Tower,
 and the pretrained MiniLM and VADER models, all with unit and API tests.
 
-**Stubbed with typed signatures and placeholder tests** (`app/engines`): Follow-the-Sun handoffs.
+**Also done:** Follow-the-Sun handoffs with regional holiday calendars, the Constellation 3D page, the Darwinbox adapter (live
+and simulated) and a Lighthouse audit (Performance 97). Every engine from the spec is now implemented; there are no stubs left.
 
-**Also done:** Wall Mode, Demo Autopilot, and Playwright journeys A to H plus Wall Mode and Autopilot (all passing).
-
-**Next:** Follow-the-Sun handoffs with regional holiday calendars, Constellation 3D page, a live Darwinbox API adapter (the
-roster already accepts its record shape) and Lighthouse checks.
+**Possible next steps:** a real Darwinbox tenant mapping (endpoint path and field names are configurable), webhooks for
+near-realtime partner sync, and Postgres + Kafka for the documented scale path.

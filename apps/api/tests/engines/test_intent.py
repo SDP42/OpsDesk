@@ -51,7 +51,9 @@ def test_minilm_ensemble_beats_tfidf_on_hand_written_phrasings(model) -> None:
     from app.engines.intent import accuracy, train_embedding_head
     from app.engines.intent_taxonomy import HARD_EVAL, generate_corpus
 
-    emb = TextEmbedding("sentence-transformers/all-MiniLM-L6-v2", cache_dir=str(DATA_DIR / "models"))
+    emb = TextEmbedding(
+        "sentence-transformers/all-MiniLM-L6-v2", cache_dir=str(DATA_DIR / "models")
+    )
 
     def vecs(texts: list[str]) -> np.ndarray:
         m = np.array(list(emb.embed(texts)))

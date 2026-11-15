@@ -83,7 +83,7 @@ function StormCard({ s }: { s: Storm }) {
           ))}
         </ul>
         <div className="flex flex-col gap-3">
-          {s.broadcast_at ? (
+          {s.broadcast_at || send.isSuccess ? (
             <p className="bg-signal/10 text-signal rounded-xl p-4 text-sm">
               Broadcast already sent to every agency in this cell.
             </p>

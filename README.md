@@ -163,6 +163,30 @@ LCV ADB BTK`), two controllers per region (`priya.nair`, `arjun.mehta`, `omar.ha
 | ⌘ **Command palette** | `⌘K`: jump to a callsign or TBOH, switch screens, toggle the radar ping. |
 | 📡 **Tower calls** | Live toasts with the callsign first (`OD-24817 ESCALATED > TOWER CHIEF`), with an optional synthesised radar ping. |
 
+### 5b. Proactive operations (features nobody else will think of)
+
+Built from research into how TBO works with other organisations: ~159k agencies in 100+ countries, hotel suppliers,
+bedbanks and DMCs, channel partners such as HyperGuest, rate-intelligence partners such as RateGain, and HR systems such as
+**Darwinbox** (named in the problem statement) whose leave and shift data never reaches the helpdesk today.
+
+| Feature | Persona | What it does | Engine / route | Screen |
+| --- | --- | --- | --- | --- |
+| 👻 **Ghost Flights** | Controller, Director | A **GradientBoostingClassifier** (scikit-learn) scores upcoming bookings on supplier confirmation lag, check-in proximity, rate change, agency repeat contacts, supplier speed and earlier cases. Each ghost shows its top drivers (feature ablation) and a ready pre-emptive message; sending it dissolves the ghost before the agency ever writes in. | `engines/ghosts.py` · `GET /ghosts` · `POST /ghosts/{tboh}/preempt` | `/tower/ghosts` |
+| ⛈ **Storm Cells** | Controller, Tower Chief | Sliding-window clustering (5+ flights in 60 min sharing a hotel, supplier or theme), merged with **networkx**, forms a parent incident. One approved broadcast replies to every affected agency and is recorded on each timeline. | `engines/storms.py` · `GET /storms` · `POST /storms/broadcast` | `/tower/storms` |
+| 🗓 **Crew Roster (HRMS sync)** | Director, Tower Chief | Darwinbox-style leave, weekly-off and shift-change records override self-reported presence. Routing never picks someone on leave, flights still owned by an away controller are flagged as **orphan risk** and re-vectored in one click. | `engines/roster.py` · `GET /roster` · `POST /roster/records` · `POST /roster/rebalance` | `/tower/roster` |
+| 📈 **Breach Forecast** | Controller, Tower Chief | NumPy **Monte Carlo** over historical resolution times for the flight's intent: breach probability and a histogram for *keep going*, *escalate*, *reassign* and *call supplier*. | `engines/forecast.py` · `GET /tickets/{id}/forecast` | flight detail |
+| 🔥 **Frustration Radar** | Controller | Lexicon + VADER-style rules (repeats, "still no update", capitals, threats to switch supplier) give an agency mood score, a priority-bump flag and a calm-reply tone. | `engines/frustration.py` · `GET /tickets/{id}/signals` | flight detail |
+| 🤝 **Promise Tracker** | Controller, Tower Chief | Regex + **dateparser** extract commitments such as "will confirm by 5 pm IST" or "refund in 3 working days" from replies and supplier messages, with due dates and overdue flags. | `engines/promises.py` · `GET /tickets/{id}/signals` | flight detail |
+| 🏨 **Supplier Scorecard** | Director, Controller | Reliability per hotel, bedbank and DMC from Frequency reply times, open asks, unconfirmed upcoming bookings and ticket volume, with the best contact to chase. | `GET /suppliers/scorecard` | `/tower/suppliers` |
+
+Every result carries a plain-language **reason**, and every screen opens with an *In plain words* explainer for non-technical users.
+
+| Journey | Script |
+| --- | --- |
+| **F. Ghost Flight** | Open *Ghost flights*: TBOH-77341 (unconfirmed supplier, check-in in 36 h) is high risk with its drivers. Send the suggested message and the ghost dissolves. |
+| **G. Storm Cell** | As the Director press *Run chaos mode*: 40 overbooking flights arrive, a *Palm Crescent Resort disruption* cell forms across agencies, and one broadcast replies to all of them. |
+| **H. Crew Roster** | Open *Crew roster*: Arjun is on Diwali leave per the HRMS feed, so his flights (including journey D) show as orphan risk. *Re-vector all now* hands them to available controllers with reasons. |
+
 ---
 
 ## 6. How the engines work
@@ -481,8 +505,11 @@ docs/                     build spec
 **Done:** everything in sections 4 and 5, the landing page with footage and 3D, onboarding, Tower Radio, the Supplier Partner
 portal, and tests.
 
-**Stubbed with typed signatures and placeholder tests** (`app/engines`): Ghost Flights (predicted tickets), Breach Forecast (Monte
-Carlo), Storm Cells (incident clustering), Promise Tracker, Frustration Radar, Follow-the-Sun handoffs, Ask-the-Tower NLQ filters.
+**Also done:** Ghost Flights, Storm Cells, Crew Roster (HRMS sync), Breach Forecast, Frustration Radar, Promise Tracker and the
+Supplier Scorecard (section 5b), with unit and API tests.
 
-**Next:** Weather Radar and Black Box screens with live export counter, Routing What-If Simulator, Constellation 3D page, Ghost
-Flights and Storm Cells (journeys F and G), Wall Mode, Demo Autopilot, more Playwright journeys and Lighthouse checks.
+**Stubbed with typed signatures and placeholder tests** (`app/engines`): Follow-the-Sun handoffs, Ask-the-Tower NLQ filters.
+
+**Next:** Weather Radar and Black Box screens with a live export counter, Routing What-If Simulator, Constellation 3D page, Wall
+Mode, Demo Autopilot, a live Darwinbox API adapter (the roster already accepts its record shape), more Playwright journeys and
+Lighthouse checks.

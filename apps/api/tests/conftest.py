@@ -15,6 +15,7 @@ os.environ.update(
         "JWT_SECRET": "test-secret-not-for-production-000000000000",
         "SCHEDULER_ENABLED": "false",
         "LOGIN_RATE_LIMIT_PER_MINUTE": "10000",
+    "EMBEDDINGS_ENABLED": "false",
     }
 )
 

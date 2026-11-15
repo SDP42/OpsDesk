@@ -11,7 +11,6 @@ import { ArrowLeft, Maximize2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { RadarScope } from "@/components/tower/radar-scope";
-import { Num } from "@/components/ui/primitives";
 import { api, unwrap, type Ticket } from "@/lib/api/client";
 import { cn } from "@/lib/cn";
 import { SLA_COLOR, tMinus } from "@/lib/format";
@@ -160,8 +159,8 @@ export default function WallPage() {
             <p className="font-mono text-[11px] tracking-[0.14em] text-white/50 uppercase">
               {label}
             </p>
-            <p className={cn("display mt-1 text-7xl", cls)}>
-              <Num value={v ?? 0} />
+            <p className={cn("display tabular mt-1 text-7xl leading-none", cls)}>
+              {(v ?? 0).toLocaleString()}
             </p>
           </div>
         ))}

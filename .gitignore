@@ -46,3 +46,4 @@ playwright/.cache/
 # Media: raw footage never goes into git
 scripts/media/raw/
 *.mov
+e2e/reports/

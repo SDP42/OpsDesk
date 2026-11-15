@@ -3,7 +3,7 @@ SHELL := /bin/bash
 API := apps/api
 WEB := apps/web
 
-.PHONY: help setup dev api web seed seed-big chaos media test test-api test-web e2e lint typecheck gen-api clean
+.PHONY: help setup dev api web seed seed-big chaos media test test-api test-web e2e lighthouse lint typecheck gen-api clean
 
 help: ## Show targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -42,6 +42,9 @@ test-api:
 
 e2e: ## Run Playwright demo journeys (needs `make seed` and `make dev` running)
 	cd e2e && pnpm test
+
+lighthouse: ## Lighthouse on a production build of the landing page (API must be running)
+	./scripts/lighthouse.sh
 
 lint: ## Lint and type-check everything
 	cd $(API) && uv run ruff check app tests && uv run ruff format --check app tests && uv run mypy app

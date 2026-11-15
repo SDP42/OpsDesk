@@ -1,26 +1,6 @@
-"""Placeholder tests: every Round-two stub imports cleanly and returns its typed model."""
+"""Remaining stubs import cleanly; implemented engines have their own test files."""
 
-from app.engines import follow_the_sun, forecast, frustration, ghosts, nlq, promises, storms
-
-
-def test_ghosts_stub() -> None:
-    assert ghosts.score_booking(ghosts.GhostInput(tboh="TBOH-1")).risk == 0.0
-
-
-def test_forecast_stub() -> None:
-    assert forecast.forecast_breach(forecast.ForecastInput(minutes_remaining=30)).reason
-
-
-def test_storms_stub() -> None:
-    assert storms.detect_storms([]) == []
-
-
-def test_promises_stub() -> None:
-    assert promises.extract_promises("will confirm by 5 pm", 0.0) == []
-
-
-def test_frustration_stub() -> None:
-    assert frustration.score_frustration("again!").score == 0.0
+from app.engines import follow_the_sun, nlq
 
 
 def test_follow_the_sun_stub() -> None:

@@ -16,7 +16,9 @@ async def test_supplier_sees_only_their_channels_and_no_tickets(client_factory) 
 async def test_supplier_reply_lands_on_ticket_timeline(client_factory) -> None:
     sup = await client_factory(SUPPLIER)
     chan = (await sup.get("/api/partner/channels")).json()["data"][0]
-    r = await sup.post(f"/api/partner/channels/{chan['id']}/messages", json={"body": "Confirmed, HCN 55821."})
+    r = await sup.post(
+        f"/api/partner/channels/{chan['id']}/messages", json={"body": "Confirmed, HCN 55821."}
+    )
     assert r.status_code == 201
     agent = await client_factory(AGENT)
     detail = (await agent.get(f"/api/tickets/{chan['ticket_number']}")).json()["data"]

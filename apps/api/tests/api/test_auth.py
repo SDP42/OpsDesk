@@ -45,7 +45,13 @@ async def test_logout_clears_session(client_factory) -> None:
 async def test_demo_accounts_lists_four_cards(client_factory) -> None:
     client = await client_factory()
     data = (await client.get("/api/auth/demo-accounts")).json()["data"]
-    assert {d["role"] for d in data} == {"requester", "agent", "escalation_manager", "lead", "supplier"}
+    assert {d["role"] for d in data} == {
+        "requester",
+        "agent",
+        "escalation_manager",
+        "lead",
+        "supplier",
+    }
 
 
 async def test_unknown_fields_are_rejected(client_factory) -> None:

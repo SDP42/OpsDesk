@@ -26,6 +26,7 @@ dependencies = [
   "dateparser>=1.2",
   "fastembed>=0.9.1",
   "vadersentiment>=3.3.2",
+  "holidays>=0.108",
 ]
 
 [dependency-groups]

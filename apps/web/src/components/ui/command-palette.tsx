@@ -8,6 +8,8 @@ import { clsx } from "clsx";
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { api, unwrap } from "@/lib/api/client";
 import { useTowerCalls } from "@/lib/stores/tower-calls";
 
 interface Command {
@@ -24,6 +26,19 @@ export function CommandPalette({ role }: { role: string }) {
   const router = useRouter();
   const toggleSound = useTowerCalls((s) => s.toggleSound);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [asked, setAsked] = useState("");
+  useEffect(() => {
+    const t = setTimeout(() => setAsked(query.trim()), 300);
+    return () => clearTimeout(t);
+  }, [query]);
+  const isPhrase =
+    role !== "requester" && asked.split(/\s+/).length >= 2 && !/^(OD|TBOH)-?\d/i.test(asked);
+  const nlq = useQuery({
+    queryKey: ["nlq", asked],
+    queryFn: async () => unwrap(await api.GET("/api/nlq", { params: { query: { q: asked } } })),
+    enabled: open && isPhrase,
+    staleTime: 60_000,
+  });
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -60,6 +75,15 @@ export function CommandPalette({ role }: { role: string }) {
   const commands = useMemo<Command[]>(() => {
     const q = query.trim().toUpperCase();
     const out: Command[] = [];
+    if (isPhrase && nlq.data && nlq.data.chips.length > 0) {
+      const params = new URLSearchParams({ ask: asked, ...nlq.data.filters });
+      out.push({
+        id: "ask",
+        label: `Show flights: ${nlq.data.chips.map((c) => c.label).join(" · ")}`,
+        hint: "ask the tower",
+        run: () => go(`/tower/queue?${params.toString()}`),
+      });
+    }
     if (/^OD-?\d{3,}$/.test(q)) {
       const n = q.startsWith("OD-") ? q : `OD-${q.slice(2)}`;
       out.push({
@@ -127,7 +151,7 @@ export function CommandPalette({ role }: { role: string }) {
     nav.push({ id: "home", label: "Landing page", hint: "go", run: () => go("/") });
     const filtered = nav.filter((c) => !q || c.label.toUpperCase().includes(q));
     return [...out, ...filtered];
-  }, [query, role, go, toggleSound]);
+  }, [query, role, go, toggleSound, isPhrase, nlq.data, asked]);
 
   const onInputKey = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
@@ -173,12 +197,22 @@ export function CommandPalette({ role }: { role: string }) {
                   setIndex(0);
                 }}
                 onKeyDown={onInputKey}
-                placeholder="Callsign, TBOH or command…"
+                placeholder="Callsign, TBOH, command, or ask: breached P1 refunds in UAE this week"
                 className="placeholder:text-text-dim h-12 flex-1 bg-transparent font-mono text-sm outline-none"
                 aria-label="Command"
               />
               <kbd className="micro">esc</kbd>
             </div>
+            {isPhrase && nlq.data && (
+              <div className="border-line flex flex-wrap items-center gap-1.5 border-b px-4 py-2.5">
+                {nlq.data.chips.map((c) => (
+                  <span key={c.key + c.value} title={`from “${c.because}”`} className="sign">
+                    {c.label}
+                  </span>
+                ))}
+                <span className="micro w-full pt-1">{nlq.data.reason}</span>
+              </div>
+            )}
             <ul className="max-h-80 overflow-auto py-1" role="listbox">
               {commands.map((c, i) => (
                 <li key={c.id} role="option" aria-selected={i === index}>

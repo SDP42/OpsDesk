@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ArrowRight, Play } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { preload } from "react-dom";
 import { detectCaps, useLanding } from "@/lib/landing/motion";
 import { Magnetic } from "./crosshair-cursor";
 import { Scene, SceneGrid, SceneTag } from "./scene";
@@ -30,11 +31,23 @@ export function Hero() {
   const root = useRef<HTMLDivElement>(null);
   const ready = useLanding((s) => s.ready);
   const [useVideo, setUseVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!useVideo || !v) return;
+    v.load();
+    void v.play().catch(() => undefined);
+  }, [useVideo]);
 
+  // Performance: the preloaded poster is the LCP; the video mounts only once the page is idle.
+  preload("/video/hero-poster.webp", { as: "image", fetchPriority: "high" });
   useEffect(() => {
     const caps = detectCaps();
-    setUseVideo(!caps.reduced && !caps.saveData);
-  }, []);
+    if (caps.reduced || caps.saveData || !ready) return;
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+    const t = setTimeout(() => (w.requestIdleCallback ? w.requestIdleCallback(() => setUseVideo(true), { timeout: 2500 }) : setUseVideo(true)), 1500);
+    return () => clearTimeout(t);
+  }, [ready]);
 
   useEffect(() => {
     if (!ready || !root.current || detectCaps().reduced) return;
@@ -83,27 +96,19 @@ export function Hero() {
     <Scene index={1} length={100} label="Every ticket is a flight">
       <div ref={root} className="relative flex min-h-dvh flex-col">
         <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/video/hero-poster.webp"
-            alt=""
-            fetchPriority="high"
+          {/* The poster paints immediately (LCP); playback starts once the page is idle. */}
+          <video
+            ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
-          />
-          {useVideo && (
-            <video
-              className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/video/hero-poster.webp"
-              onCanPlay={(e) => (e.currentTarget.style.opacity = "1")}
-            >
-              <source src="/video/hero.webm" type="video/webm" />
-              <source src="/video/hero.mp4" type="video/mp4" />
-            </video>
-          )}
+            muted
+            loop
+            playsInline
+            preload="none"
+            poster="/video/hero-poster.webp"
+          >
+            {useVideo && <source src="/video/hero.webm" type="video/webm" />}
+            {useVideo && <source src="/video/hero.mp4" type="video/mp4" />}
+          </video>
           <div className="bg-ink-950/10 absolute inset-0" />
           <div className="from-ink-950 absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t to-transparent" />
         </div>

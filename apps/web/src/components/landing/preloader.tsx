@@ -31,11 +31,11 @@ export function Preloader() {
         const off = store.onProgress((r) =>
           setPct((p) => Math.max(p, Math.round(35 + Math.min(1, r / (24 / store.seq.count)) * 60))),
         );
-        await store.load(caps.rich ? 24 : 1);
+        await store.load(caps.rich ? 12 : 1);
         off();
       }
       const elapsed = performance.now() - start;
-      await new Promise((r) => setTimeout(r, Math.max(0, (caps.reduced ? 0 : 900) - elapsed)));
+      await new Promise((r) => setTimeout(r, Math.max(0, (caps.reduced ? 0 : 450) - elapsed)));
       if (cancelled) return;
       setPct(100);
       set({ ready: true });
@@ -48,9 +48,9 @@ export function Preloader() {
         { clipPath: "circle(150% at 50% 50%)" },
         {
           clipPath: "circle(0% at 50% 50%)",
-          duration: 1.2,
+          duration: 0.8,
           ease: "power3.inOut",
-          delay: 0.2,
+          delay: 0.05,
           onComplete: () => setGone(true),
         },
       );

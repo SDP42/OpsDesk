@@ -916,6 +916,28 @@ async def write_world(world: World, session: AsyncSession, light: bool) -> None:
             .where(m.Agency.id == agency["id"])
             .values(turbulence_score=result.score)
         )
+    # Crew Roster: HRMS (Darwinbox-style) leave, weekly off and shift changes.
+    by_callsign = {a["callsign"]: a for a in world.agents}
+    day = world.now.replace(hour=0, minute=0, second=0, microsecond=0)
+    for callsign, kind, start, end, note, shift in [
+        ("IN-02", "leave", 0, 2, "Diwali leave", None),
+        ("UK-02", "weekly_off", 0, 0, "Weekly off", None),
+        ("SEA-01", "shift_change", 0, 0, "Covering night desk", ("20:00", "05:00")),
+        ("AE-02", "leave", 3, 5, "Annual leave", None),
+        ("IN-01", "leave", 9, 11, "Training", None),
+    ]:
+        agent = by_callsign[callsign]
+        session.add(
+            m.HrRecord(
+                user_id=agent["id"],
+                kind=kind,
+                start=day + timedelta(days=start),
+                end=day + timedelta(days=end),
+                note=note,
+                shift_start=shift[0] if shift else None,
+                shift_end=shift[1] if shift else None,
+            )
+        )
     await session.commit()
 
 

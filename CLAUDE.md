@@ -23,4 +23,5 @@ Spec: `docs/OpsDesk_Build_Spec.pdf` is the source of truth (the design moved fro
 make setup | make dev | make seed | make seed-big | make chaos | make media | make test | make e2e | make lint | make gen-api
 
 ## Definition of done
-Tests pass, journeys A to G pass, screenshots reviewed, README updated.
+Tests pass, `make e2e` passes (journeys A to H, Wall Mode, Autopilot), screenshots reviewed, README and
+`docs/MODELS.md` updated. New features also get an Autopilot step when they are demo-worthy.

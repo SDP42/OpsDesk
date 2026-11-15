@@ -181,14 +181,14 @@ const check = (s, x, y, t, ok = true) => {
   chart(4.8, "Before vs after", "chart_ba_compact.png", "Measured: context 0→2, intent 76→88%, load 4.7→0.8 s.", "Before after");
 
   // A. Headline: the one sentence a judge should remember
-  rect(s, 7.05, 1.12, 5.93, 0.7, TINT[K.beacon]);
-  rect(s, 7.05, 1.12, 0.06, 0.7, K.beacon);
-  icon(s, "rocket", 7.22, 1.27, 0.4, K.beacon);
+  rect(s, 7.05, 1.12, 5.93, 0.6, TINT[K.beacon]);
+  rect(s, 7.05, 1.12, 0.06, 0.6, K.beacon);
+  icon(s, "rocket", 7.22, 1.22, 0.4, K.beacon);
   T(s, [{ text: "From a first-come inbox to an air-traffic control tower.", options: { bold: true, fontFace: "Cambria", fontSize: 13.5, breakLine: true } },
-    { text: "Every case linked to its booking, routed with a visible reason, and timed to the guest's check-in.", options: { color: K.dim, fontSize: 8.5 } }], { x: 7.75, y: 1.2, w: 5.15, h: 0.58 });
+    { text: "Every case linked to its booking, routed with a visible reason, and timed to the guest's check-in.", options: { color: K.dim, fontSize: 8.5 } }], { x: 7.75, y: 1.16, w: 5.15, h: 0.54 });
 
   // B. Hero: capability comparison
-  ipanel(s, 7.05, 1.92, 5.93, 2.43, K.beacon, "Why it's unique · OpsDesk vs a generic helpdesk", "target");
+  ipanel(s, 7.05, 1.8, 5.93, 2.76, K.beacon, "Why it's unique · OpsDesk vs a generic helpdesk", "target");
   const rowsU = [
     ["ghost", K.beacon, "Ghost Flights", "predicts tickets before they arrive", "—", "—"],
     ["cloud-lightning", K.alarm, "Storm Cells", "5+ cases → 1 incident, 1 broadcast", "—", "manual"],
@@ -198,15 +198,17 @@ const check = (s, x, y, t, ok = true) => {
     ["triangle-alert", K.violet, "Churn early-warning", "3rd contact + frustration radar", "—", "paid AI"],
     ["lightbulb", K.ink, "Explainable by default", "every score shows its 'why'", "—", "—"],
     ["mic", K.beacon, "Voice + plain English", "Tower Radio voice, ⌘K questions", "—", "paid bot"],
+    ["truck", K.taxi, "Supplier partner portal", "suppliers reply on the ticket", "—", "paid seat"],
+    ["database", K.cobalt, "Uncapped export", "60K+ rows streamed, live counter", "3K cap", "step-up"],
   ];
   const th = (t, f, al = "center") => ({ text: t, options: { bold: true, color: K.white, fill: { color: f }, fontSize: 8, align: al, valign: "middle" } });
   const tc = (t, o = {}) => ({ text: t, options: { fontSize: 7.5, align: "center", valign: "middle", ...o } });
-  const RH = 0.228, TY = 2.23;
+  const RH = 0.218, TY = 2.1;
   s.addTable([
     [th("Capability", K.ink, "left"), th("Generic helpdesk", "5A6270"), th("+ paid add-ons", K.alarm), th("OpsDesk", K.signal)],
     ...rowsU.map(([, , h, d, g, a]) => [
       { text: [{ text: h + "  ", options: { bold: true } }, { text: d, options: { color: K.dim } }], options: { fontSize: 7.5, valign: "middle", margin: [0, 0.04, 0, 0.32] } },
-      tc(g, { color: "9AA0A8", bold: true }),
+      tc(g, { color: g === "—" ? "9AA0A8" : K.alarm, bold: g === "—" }),
       tc(a, { color: a === "—" ? "9AA0A8" : K.alarm, bold: a === "—" }),
       tc("✓ built in", { color: K.signal, bold: true, fill: { color: TINT[K.signal] } }),
     ]),
@@ -214,29 +216,29 @@ const check = (s, x, y, t, ok = true) => {
   rowsU.forEach(([ic, col], k) => icon(s, ic, 7.25, TY + 0.26 + k * RH + 0.025, 0.18, col));
 
   // C. Impact strip
-  rect(s, 7.05, 4.45, 5.93, 0.92, K.white, K.line);
-  rect(s, 7.05, 4.45, 0.06, 0.92, K.alarm);
-  icon(s, "zap", 7.24, 4.55, 0.3, K.alarm);
-  T(s, [{ text: "IMPACT", options: { bold: true, color: K.alarm, charSpacing: 1.5, breakLine: true, fontSize: 9.5 } }, { text: "measured on the prototype", options: { color: K.dim, fontSize: 7, italic: true } }], { x: 7.22, y: 4.92, w: 0.95, h: 0.42 });
+  rect(s, 7.05, 4.64, 5.93, 0.84, K.white, K.line);
+  rect(s, 7.05, 4.64, 0.06, 0.84, K.alarm);
+  icon(s, "zap", 7.24, 4.7, 0.28, K.alarm);
+  T(s, [{ text: "IMPACT", options: { bold: true, color: K.alarm, charSpacing: 1.5, breakLine: true, fontSize: 9.5 } }, { text: "measured on the prototype", options: { color: K.dim, fontSize: 7, italic: true } }], { x: 7.22, y: 5.02, w: 0.95, h: 0.42 });
   [["0", "repeat stories per booking", K.alarm], ["< 1 s", "escalation to Tower Chief", K.beacon], ["76→88%", "intent accuracy", K.cobalt], ["3K→60K+", "rows per export", K.signal]].forEach(([v, l, col], k) => {
     const x = 8.2 + k * 1.2;
-    rect(s, x, 4.53, 1.13, 0.76, TINT[col]);
-    rect(s, x, 4.53, 1.13, 0.04, col);
-    T(s, v, { x: x + 0.08, y: 4.61, w: 1.0, h: 0.34, fontFace: "Cambria", fontSize: 15, bold: true, color: col });
-    T(s, l, { x: x + 0.08, y: 4.97, w: 1.0, h: 0.3, fontSize: 7, color: K.ink });
+    rect(s, x, 4.7, 1.13, 0.72, TINT[col]);
+    rect(s, x, 4.7, 1.13, 0.04, col);
+    T(s, v, { x: x + 0.08, y: 4.76, w: 1.0, h: 0.34, fontFace: "Cambria", fontSize: 15, bold: true, color: col });
+    T(s, l, { x: x + 0.08, y: 5.1, w: 1.0, h: 0.3, fontSize: 7, color: K.ink });
   });
 
   // D. Feasible & viable + benefits
-  ipanel(s, 7.05, 5.47, 2.915, 1.83, K.signal, "Feasible & viable", "badge-check");
-  [["terminal", K.signal, "Runs today:", "3 commands on a laptop"], ["cpu", K.cobalt, "CPU only:", "pretrained MiniLM, offline fallback"], ["wallet", K.violet, "₹0 add-ons:", "Apache / MIT stack, no per-seat fee"], ["database", K.taxi, "Scales:", "SQLite → Postgres → Kafka path"]].forEach(([ic, col, h, d], k) => {
-    const y = 5.86 + k * 0.355;
-    icon(s, ic, 7.22, y, 0.26, col);
-    T(s, [{ text: h + " ", options: { bold: true } }, { text: d, options: { color: K.dim } }], { x: 7.56, y: y + 0.04, w: 2.35, h: 0.2, fontSize: 7.5 });
+  ipanel(s, 7.05, 5.56, 2.915, 1.74, K.signal, "Feasible & viable", "badge-check");
+  [["terminal", K.signal, "Runs today:", "3 commands on a laptop"], ["cpu", K.cobalt, "CPU only:", "pretrained MiniLM, offline fallback"], ["wallet", K.violet, "₹0 add-ons:", "Apache / MIT stack, no per-seat fee"], ["database", K.taxi, "Scales:", "SQLite → Postgres → Kafka path"], ["shield-alert", K.alarm, "Secure:", "RBAC, argon2, audit log on every change"]].forEach(([ic, col, h, d], k) => {
+    const y = 5.9 + k * 0.275;
+    icon(s, ic, 7.22, y, 0.22, col);
+    T(s, [{ text: h + " ", options: { bold: true } }, { text: d, options: { color: K.dim } }], { x: 7.52, y: y + 0.02, w: 2.35, h: 0.2, fontSize: 7.5 });
   });
-  ipanel(s, 10.065, 5.47, 2.915, 1.83, K.violet, "Benefits by persona", "users");
+  ipanel(s, 10.065, 5.56, 2.915, 1.74, K.violet, "Benefits by persona", "users");
   [["Agency", "Never repeats the story", K.beacon, "building-2"], ["Agent", "History + why, one screen", K.cobalt, "headset"], ["Manager", "Sorted by check-in", K.alarm, "shield-alert"], ["Lead", "Risk before breach", K.signal, "chart-column"], ["Product", "Themes as they emerge", K.violet, "lightbulb"], ["Supplier", "Replies on the ticket", K.taxi, "truck"]].forEach(([h, d, col, ic], k) => {
-    const x = 10.215 + (k % 2) * 1.37, y = 5.84 + Math.floor(k / 2) * 0.475;
-    rect(s, x, y, 1.3, 0.42, TINT[col]);
+    const x = 10.215 + (k % 2) * 1.37, y = 5.9 + Math.floor(k / 2) * 0.46;
+    rect(s, x, y, 1.3, 0.41, TINT[col]);
     icon(s, ic, x + 0.06, y + 0.085, 0.25, col);
     T(s, [{ text: h, options: { bold: true, color: col, breakLine: true } }, { text: d, options: { color: K.ink } }], { x: x + 0.37, y: y + 0.05, w: 0.92, h: 0.36, fontSize: 7 });
   });
@@ -333,17 +335,19 @@ const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdN
   });
 
   ipanel(s, 4.1, 3.2, 3.5, 2.5, K.cobalt, "Run the prototype", "terminal");
-  [["Clone", "git clone github.com/SDP42/OpsDesk"], ["Install + seed", "make setup && make seed"], ["Start", "make dev  →  localhost:3000"], ["Guided demo", "Autopilot walks every persona in 90 s"]].forEach(([h, d], i) => {
-    const y = 3.6 + i * 0.5;
+  [["Clone", "git clone github.com/SDP42/OpsDesk"], ["Install + seed", "make setup && make seed"], ["Start", "make dev  →  localhost:3000"], ["Guided demo", "Autopilot walks every persona in 90 s"], ["Verify", "make test && make e2e  (journeys A-H)"]].forEach(([h, d], i) => {
+    const y = 3.58 + i * 0.41;
     s.addShape(pres.shapes.OVAL, { x: 4.28, y, w: 0.3, h: 0.3, fill: { color: K.cobalt }, line: { color: K.cobalt } });
     T(s, String(i + 1), { x: 4.28, y: y + 0.06, w: 0.3, h: 0.18, fontSize: 9.5, bold: true, color: K.white, align: "center" });
-    if (i < 3) s.addShape(pres.shapes.LINE, { x: 4.43, y: y + 0.3, w: 0, h: 0.2, line: { color: K.cobalt, width: 1 } });
-    T(s, [{ text: h, options: { bold: true, breakLine: true } }, { text: d, options: { color: K.dim, fontSize: 8, fontFace: i < 3 ? "Courier New" : "Calibri" } }], { x: 4.7, y: y - 0.02, w: 2.85, h: 0.42, fontSize: 9.5 });
+    if (i < 4) s.addShape(pres.shapes.LINE, { x: 4.43, y: y + 0.3, w: 0, h: 0.11, line: { color: K.cobalt, width: 1 } });
+    T(s, [{ text: h, options: { bold: true, breakLine: true } }, { text: d, options: { color: K.dim, fontSize: 8, fontFace: i === 3 ? "Calibri" : "Courier New" } }], { x: 4.7, y: y - 0.02, w: 2.85, h: 0.42, fontSize: 9.5 });
   });
 
   ipanel(s, 0.5, 5.82, 7.1, 1.28, K.beacon, "What's next", "rocket");
-  chips(s, ["Webhooks", "CSAT after resolve", "Multi-tenant agencies", "Live Darwinbox tenant", "Kafka + ClickHouse", "WhatsApp"], 0.68, 6.2, 6.8, K.beacon, 8, 0.27, 0.06);
-  T(s, [{ text: "GitHub  ", options: { bold: true, color: K.beacon } }, { text: GH, options: { color: K.cobalt, hyperlink: { url: GH } } }, { text: "   ·   source, README, model card", options: { color: K.dim } }], { x: 0.68, y: 6.68, w: 6.8, h: 0.3, fontSize: 10 });
+  chips(s, ["Webhooks", "CSAT after resolve", "Multi-tenant agencies", "Live Darwinbox tenant", "Kafka + ClickHouse", "WhatsApp"], 0.68, 6.16, 6.8, K.beacon, 8, 0.26, 0.06);
+  [["GitHub", GH, GH, "source, README mapped to P1-P6"], ["Demo video", "Google Drive · 4:11", VIDEO, "problem → every persona → architecture"], ["Model card", "docs/MODELS.md", GH + "/blob/main/docs/MODELS.md", "licences + measured accuracy"]].forEach(([h, t, u, d], k) => {
+    T(s, [{ text: h + "  ", options: { bold: true, color: K.beacon } }, { text: t, options: { color: K.cobalt, hyperlink: { url: u } } }, { text: "  ·  " + d, options: { color: K.dim } }], { x: 0.68, y: 6.52 + k * 0.19, w: 6.8, h: 0.19, fontSize: 8.5 });
+  });
 
   // Demo video: the hero of this slide
   const VX = 7.85, VW = 5.08, VH = VW * 9 / 16;
@@ -361,10 +365,10 @@ const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdN
   T(s, [{ text: "OpsDesk in 4 minutes", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "Problem → solution → every persona, live → architecture → impact. Narrated, with captions.", options: { color: K.dim, fontSize: 8.5, breakLine: true } }, { text: "Open the video on Google Drive", options: { color: K.cobalt, fontSize: 9, bold: true, hyperlink: { url: VIDEO } } }], { x: VX + 1.15, y: 3.58, w: VW - 1.25, h: 0.88 });
 
   ipanel(s, VX, 4.62, VW, 2.48, K.violet, "Built and verified", "flask-conical");
-  [["347", "commits, small and conventional", K.beacon], ["120+", "unit and API tests passing", K.cobalt], ["12", "Playwright journeys end to end", K.signal], ["97", "Lighthouse performance score", K.violet], ["88%", "intent accuracy, pretrained MiniLM", K.beacon], ["< 1 s", "escalation to the Tower Chief", K.cobalt]].forEach(([v, l, col], i) => {
-    const x = VX + 0.2 + (i % 2) * 2.45, y = 5.0 + Math.floor(i / 2) * 0.68;
-    T(s, v, { x, y, w: 2.3, h: 0.36, fontFace: "Cambria", fontSize: 18, bold: true, color: col });
-    T(s, l, { x, y: y + 0.36, w: 2.35, h: 0.22, fontSize: 8.5, color: K.dim });
+  [["347", "commits, small and conventional", K.beacon], ["120+", "unit and API tests passing", K.cobalt], ["12", "Playwright journeys end to end", K.signal], ["97", "Lighthouse performance score", K.violet], ["88%", "intent accuracy, pretrained MiniLM", K.beacon], ["< 1 s", "escalation to the Tower Chief", K.cobalt], ["30+", "features across 6 personas", K.signal], ["16", "pure engines, each with a reason", K.violet]].forEach(([v, l, col], i) => {
+    const x = VX + 0.2 + (i % 2) * 2.45, y = 4.96 + Math.floor(i / 2) * 0.52;
+    T(s, v, { x, y, w: 2.3, h: 0.3, fontFace: "Cambria", fontSize: 16, bold: true, color: col });
+    T(s, l, { x, y: y + 0.29, w: 2.35, h: 0.2, fontSize: 8, color: K.dim });
   });
   s.addNotes("Team, deliverables, how to run it, what's next, and the demo video on Google Drive.");
 }

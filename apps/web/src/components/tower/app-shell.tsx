@@ -11,6 +11,7 @@ import {
   Ghost,
   HelpCircle,
   LogOut,
+  Plane,
   Tv,
   Users,
   Volume2,
@@ -26,6 +27,8 @@ import { useLogout } from "@/lib/hooks/use-me";
 import { useTowerStream } from "@/lib/hooks/use-tower-stream";
 import { useTowerCalls } from "@/lib/stores/tower-calls";
 import { TowerRadio } from "@/components/assistant/tower-radio";
+import { Autopilot } from "@/components/autopilot/autopilot";
+import { useAutopilot } from "@/lib/stores/autopilot";
 import { FirstFlight, startTour } from "@/components/onboarding/first-flight";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { HangarGlyph, RadarGlyph, StripGlyph, TowerGlyph } from "@/components/ui/glyphs";
@@ -334,6 +337,7 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <AutopilotButton />
             <DataModeSwitch me={me} />
             <Tip label="Replay the tour">
               <button
@@ -363,7 +367,20 @@ export function AppShell({ me, children }: { me: Me; children: React.ReactNode }
       </div>
       <CommandPalette role={me.role} />
       <FirstFlight me={me} />
+      <Autopilot />
       <TowerRadio persona={PERSONA[me.role] ?? "controller"} />
     </div>
+  );
+}
+
+function AutopilotButton() {
+  const { active, start } = useAutopilot();
+  if (active) return null;
+  return (
+    <Tip label="Narrated 90-second tour of every feature">
+      <button onClick={start} className="btn !py-1.5">
+        <Plane size={14} /> Autopilot
+      </button>
+    </Tip>
   );
 }

@@ -14,6 +14,11 @@ export type StripQuery = {
   tboh?: string;
   region?: string;
   sla_state?: string[];
+  status?: string[];
+  priority?: string;
+  intent?: string;
+  checkin_within_days?: number;
+  q?: string;
   limit?: number;
 };
 

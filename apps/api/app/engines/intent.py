@@ -111,7 +111,33 @@ def _apply_rules(text: str) -> tuple[str, str] | None:
     return None
 
 
-def suggest(model: IntentModel, text: str, k: int = 3) -> IntentSuggestion:
+def train_embedding_head(vectors: np.ndarray, labels: list[str]) -> LogisticRegression:
+    """Logistic-regression head on pretrained MiniLM sentence embeddings."""
+    head = LogisticRegression(max_iter=3000, C=12.0)
+    head.fit(vectors, labels)
+    return head
+
+
+def accuracy(
+    model: IntentModel,
+    rows: list[tuple[str, str]],
+    head: LogisticRegression | None = None,
+    vectors: np.ndarray | None = None,
+) -> float:
+    hits = 0
+    for i, (text, code) in enumerate(rows):
+        vec = vectors[i] if vectors is not None else None
+        hits += suggest(model, text, head=head, vector=vec).top[0].code == code
+    return hits / max(len(rows), 1)
+
+
+def suggest(
+    model: IntentModel,
+    text: str,
+    k: int = 3,
+    head: LogisticRegression | None = None,
+    vector: np.ndarray | None = None,
+) -> IntentSuggestion:
     """Top-k intents for ``text`` with confidences, override rule and a reason."""
     text = (text or "").strip()
     if len(text) < 4:
@@ -120,6 +146,11 @@ def suggest(model: IntentModel, text: str, k: int = 3) -> IntentSuggestion:
         )
     probs = model.predict_proba([text])[0]
     classes = list(model.classes_)
+    blended = False
+    if head is not None and vector is not None and list(head.classes_) == classes:
+        # Ensemble: TF-IDF catches exact phrasing, MiniLM catches meaning.
+        probs = 0.45 * probs + 0.55 * head.predict_proba(vector.reshape(1, -1))[0]
+        blended = True
     order = np.argsort(probs)[::-1]
     scores = {classes[i]: float(probs[i]) for i in order}
 
@@ -138,8 +169,12 @@ def suggest(model: IntentModel, text: str, k: int = 3) -> IntentSuggestion:
     top = [IntentCandidate(code=c, label=label_of(c), confidence=round(v, 3)) for c, v in ranked]
     needs_human = top[0].confidence < INTENT_NEEDS_HUMAN_BELOW
     rule_name = rule[0] if rule else None
-    reason = (f"Rule '{rule_name}' matched; " if rule_name else "") + (
-        f"model says {top[0].label} at {top[0].confidence:.0%}"
-        + (" (below 55%: needs a human)" if needs_human else "")
+    reason = (
+        (f"Rule '{rule_name}' matched; " if rule_name else "")
+        + ("TF-IDF + MiniLM ensemble: " if blended else "")
+        + (
+            f"model says {top[0].label} at {top[0].confidence:.0%}"
+            + (" (below 55%: needs a human)" if needs_human else "")
+        )
     )
     return IntentSuggestion(top=top, needs_human=needs_human, rule=rule_name, reason=reason)

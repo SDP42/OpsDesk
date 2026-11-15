@@ -1,10 +1,17 @@
-"""Frustration Radar: detect agency frustration from message text (lexicon + VADER-style rules)."""
+"""Frustration Radar: agency frustration from message text.
+
+Travel-ops lexicon (repeats, "still no update", threats to switch supplier) plus the
+pretrained VADER sentiment model, capitals and exclamation rules.
+"""
 
 from __future__ import annotations
 
 import re
 
 from pydantic import BaseModel
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+_VADER = SentimentIntensityAnalyzer()  # pretrained, rule-based sentiment lexicon (MIT)
 
 LEXICON = {
     "again": 0.18,
@@ -58,6 +65,10 @@ def score_frustration(text: str) -> FrustrationResult:
     if text.count("!") >= 2:
         score += 0.12
         signals.append("multiple exclamation marks")
+    compound = _VADER.polarity_scores(text)["compound"] if text.strip() else 0.0
+    if compound <= -0.3:
+        score += 0.35 * (-compound)
+        signals.append(f"negative sentiment (VADER {compound:.2f})")
     score = round(max(0.0, min(1.0, score)), 2)
     band = (
         "boiling"

@@ -113,7 +113,9 @@ def _apply_rules(text: str) -> tuple[str, str] | None:
 
 def train_embedding_head(vectors: np.ndarray, labels: list[str]) -> LogisticRegression:
     """Logistic-regression head on pretrained MiniLM sentence embeddings."""
-    head = LogisticRegression(max_iter=4000, C=2000.0)  # tuned on HARD_EVAL: 88% acc, 0.75 mean confidence
+    head = LogisticRegression(
+        max_iter=4000, C=2000.0
+    )  # tuned on HARD_EVAL: 88% acc, 0.75 mean confidence
     head.fit(vectors, labels)
     return head
 

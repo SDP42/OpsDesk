@@ -358,7 +358,9 @@ async def create_ticket(
     new_lt = _to_link_ticket(ticket)
     vectors = None
     same_agency = [h for h in history_lt if h.agency_id == new_lt.agency_id][:300]
-    cached = embeddings.embed_cached([(t.id, f"{t.title}. {t.description}") for t in [new_lt, *same_agency]])
+    cached = embeddings.embed_cached(
+        [(t.id, f"{t.title}. {t.description}") for t in [new_lt, *same_agency]]
+    )
     if cached is not None:
         vectors = {k: v.tolist() for k, v in cached.items()}
     link_result = linker.find_links(new_lt, history_lt, now, vectors)

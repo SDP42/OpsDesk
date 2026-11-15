@@ -374,3 +374,34 @@ def render_example(
 
 
 INTENT_CODES: list[str] = [i.code for i in SUB_INTENTS]
+
+
+# Realistic phrasings written by hand, deliberately unlike the templates: used to
+# measure how well the classifier generalises (TF-IDF alone vs TF-IDF + MiniLM).
+HARD_EVAL: list[tuple[str, str]] = [
+    ("Money still hasn't come back to our account for the cancelled stay", "refund.delay"),
+    ("Client is chasing us, when will they get their money back?", "refund.status"),
+    ("You returned 200 dirhams less than we paid", "refund.amount_mismatch"),
+    ("Guest can't travel anymore, kindly drop the reservation", "cancellation.request"),
+    ("Why did you keep a penalty when the free cancel window was open?", "cancellation.charges"),
+    ("Can the guest arrive two days later than planned?", "amendment.dates"),
+    ("Surname is misspelt on the booking", "amendment.guest_name"),
+    ("Family wants a bigger room with two beds", "amendment.room_type"),
+    ("Where is the confirmation document for the guest?", "voucher.not_received"),
+    ("Front desk has no record, we need the hotel's reference", "voucher.confirmation_number"),
+    ("Our card got declined at checkout but the bank shows a hold", "payment.failed"),
+    ("We can't book anything, says our limit is used up", "payment.credit_limit"),
+    ("The same booking was billed to us two times", "payment.double_charge"),
+    ("Invoice price is higher than what the portal showed", "rates.mismatch"),
+    ("Portal keeps selling rooms the property says are full", "rates.inventory_sync"),
+    ("Booking is still on request, no answer from the vendor", "supplier.confirmation_pending"),
+    ("Property gave away the room, guest sent to another hotel", "supplier.overbooking"),
+    ("Flight lands at dawn, can they get the room early?", "special_request.early_checkin"),
+    ("Traveller uses a wheelchair and needs step-free access", "special_request.accessibility"),
+    ("Please arrange Jain food for the whole group", "special_request.meal"),
+    ("Has the embassy approved the guest's entry permit?", "visa.status"),
+    ("What paperwork is needed for the guest's travel permit?", "visa.documents"),
+    ("I am locked out of my agent account", "platform.login"),
+    ("Integration is throwing server errors on every request", "platform.api_error"),
+    ("Nothing comes up when we look for hotels next month", "platform.search"),
+]

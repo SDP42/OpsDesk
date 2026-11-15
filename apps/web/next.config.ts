@@ -10,6 +10,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Separate output for audit builds so `make lighthouse` never clobbers a running `next dev`.
+  distDir: process.env.NEXT_DIST_DIR ?? ".next",
   reactStrictMode: true,
   poweredByHeader: false,
   // Same-origin API: the browser talks to /api/* and Next proxies to FastAPI,

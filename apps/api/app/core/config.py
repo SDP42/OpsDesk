@@ -49,6 +49,10 @@ class Settings(BaseSettings):
     intent_model_path: Path = DATA_DIR / "intent_model.joblib"
     # Pretrained MiniLM sentence embeddings (fastembed / ONNX); falls back to TF-IDF when off.
     embeddings_enabled: bool = True
+    # Darwinbox HRMS (Crew Roster). Leave empty to use the simulated feed.
+    darwinbox_base_url: str = ""
+    darwinbox_api_key: str = ""
+    darwinbox_leave_path: str = "/attendance/leave/approved"
 
     @field_validator("cors_origins", mode="before")
     @classmethod

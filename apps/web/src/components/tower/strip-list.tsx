@@ -3,7 +3,7 @@
 /** Live list of Flight Strips with J/K keyboard navigation and cursor paging. */
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { api, unwrap, type Ticket } from "@/lib/api/client";
 import { EmptyState, ErrorState, LoadingStrips } from "@/components/ui/states";
 import { FlightStrip } from "./flight-strip";
@@ -46,7 +46,7 @@ export function StripList({
     getNextPageParam: (last) => last.meta.next_cursor ?? undefined,
     refetchInterval: 60_000,
   });
-  const tickets = q.data?.pages.flatMap((p) => p.data) ?? [];
+  const tickets = useMemo(() => q.data?.pages.flatMap((p) => p.data) ?? [], [q.data]);
 
   useEffect(() => {
     if (!keyboard) return;

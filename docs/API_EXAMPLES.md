@@ -11,7 +11,7 @@ curl -c jar -H 'content-type: application/json' \
 ## List my queue
 
 ```bash
-curl -b jar 'http://localhost:3000/api/tickets?limit=20'
+curl -b jar 'http://localhost:3000/api/tickets?view=mine&limit=20'
 ```
 
 ## File a flight

@@ -21,3 +21,11 @@ curl -b jar -H 'content-type: application/json' \
   -d '{"title":"Refund for TBOH-88213 still not received","tboh":"TBOH-88213","priority":"P3"}' \
   http://localhost:3000/api/tickets
 ```
+
+## Suggest an intent
+
+```bash
+curl -b jar -H 'content-type: application/json' \
+  -d '{"text":"refund still pending for cancelled booking"}' \
+  http://localhost:3000/api/intents/suggest
+```

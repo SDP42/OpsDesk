@@ -25,3 +25,7 @@ Search a TBOH that has linked flights, such as `TBOH-88213`, or switch to List m
 ## Tower Radio does not hear me
 
 Voice uses the browser's Web Speech API. Allow microphone access, or type the question instead.
+
+## Playwright journeys fail on a fresh machine
+
+Run `make seed` and `make dev` first, then `make e2e`. The global setup reseeds before the tests.

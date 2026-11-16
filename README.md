@@ -536,6 +536,8 @@ engine: no per-seat AI add-on, no third-party TBOH-linking app, no export or arc
 
 ## 16. Commands
 
+> Something not working? See [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) and the [FAQ](docs/FAQ.md).
+
 | Command | What it does |
 | --- | --- |
 | `make setup` | Install Python and Node dependencies, create `.env` |

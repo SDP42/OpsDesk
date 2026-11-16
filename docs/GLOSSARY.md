@@ -68,3 +68,7 @@ OpsDesk borrows air-traffic words so the ops floor reads like a control tower. T
 | **SSE** | Server-sent events: the server pushes live updates to the browser |
 | **Demo airspace** | The 3,000 seeded flights used for demos |
 | **Live airspace** | Only real flights created by users |
+
+## Personas
+
+Who the Pilot, Controller, Tower Chief, Director, Weather desk and Supplier Partner are, and what each does: [`personas/`](personas/README.md).

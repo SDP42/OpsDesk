@@ -15,3 +15,7 @@ Open the flight and press **Why**. Vectoring shows every point it awarded (regio
 ## Can an agency see another agency's tickets?
 
 No. Requesters are scoped to their own agency in `app/core/rbac.py`; any other agency's ticket returns 404, and a test enforces it.
+
+## Why is the SLA shorter for some P3 tickets?
+
+Wheels-Up multiplies the base target by an urgency factor from the guest's check-in or LCD: within 12 hours it is a quarter of the normal time.

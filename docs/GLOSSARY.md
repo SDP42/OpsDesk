@@ -31,3 +31,12 @@ OpsDesk borrows air-traffic words so the ops floor reads like a control tower. T
 | **Preset** | A routing policy: balanced, urgency first, regional affinity or fairness |
 | **Runner-up** | The next-best controller, with the points they lost by |
 | **Triage** | Flights not yet assigned to anyone |
+
+## SLA terms
+
+| Term | Plain meaning |
+| --- | --- |
+| **Wheels-Up clock** | The SLA timer, which shortens as check-in or LCD nears |
+| **Fuel** | Time left on the clock, from full tank to empty |
+| **At risk / Critical / Breached** | 60%, 85% and 100% of the time used |
+| **Holiday pause** | Clock hours not counted on a regional public holiday |

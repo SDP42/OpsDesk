@@ -21,3 +21,7 @@ Seed data is relative to the time it was generated. Run `make seed` again shortl
 ## The Constellation is blank
 
 Search a TBOH that has linked flights, such as `TBOH-88213`, or switch to List mode. WebGL must be enabled in the browser.
+
+## Tower Radio does not hear me
+
+Voice uses the browser's Web Speech API. Allow microphone access, or type the question instead.

@@ -31,3 +31,7 @@ The Crew Roster reads leave, weekly-off and shift data through a Darwinbox adapt
 ## Which database does it use?
 
 SQLite in WAL mode by default. Set `DATABASE_URL` to a PostgreSQL URL for production; Alembic migrations cover both.
+
+## How do I reset the demo?
+
+Run `make seed`. Seed data is generated relative to now, so run it shortly before a demo.

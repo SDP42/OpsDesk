@@ -29,3 +29,11 @@ curl -b jar -H 'content-type: application/json' \
   -d '{"text":"refund still pending for cancelled booking"}' \
   http://localhost:3000/api/intents/suggest
 ```
+
+## Escalate with a reason
+
+```bash
+curl -b jar -H 'content-type: application/json' \
+  -d '{"reason":"Guest checks in tonight, supplier silent"}' \
+  http://localhost:3000/api/tickets/<ticket_id>/escalate
+```

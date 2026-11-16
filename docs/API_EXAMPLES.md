@@ -49,3 +49,9 @@ curl -b jar http://localhost:3000/api/tickets/<ticket_id>/forecast
 ```bash
 curl -b jar http://localhost:3000/api/insights/themes
 ```
+
+## Stream every ticket as CSV
+
+```bash
+curl -b jar -o tickets.csv 'http://localhost:3000/api/export/tickets?format=csv'
+```

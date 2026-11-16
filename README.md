@@ -311,6 +311,8 @@ affected agencies and sample tickets. A theme is **emerging** when this week's z
 
 ## 7. Architecture
 
+> The reasoning behind the main choices is recorded in [`docs/decisions`](docs/decisions/README.md).
+
 ```mermaid
 flowchart TB
   subgraph Web["apps/web · Next.js 15 · React 19 · Tailwind 4"]

@@ -231,6 +231,8 @@ Every result carries a plain-language **reason**, and every screen opens with an
 
 ## 6. How the engines work
 
+> One page per engine, with formulas and inputs and outputs: [`docs/engines`](docs/engines/README.md).
+
 All business logic lives in `apps/api/app/engines/` as **pure functions** with Pydantic inputs and outputs: no database, no HTTP.
 Every score, link, route and prediction returns a human-readable **reason**. All weights live in `app/core/config.py`.
 

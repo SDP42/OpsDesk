@@ -9,3 +9,7 @@ A production build was written into `.next` while `next dev` was running. Stop t
 ## Login fails with HTTP 429
 
 Login is rate-limited per IP and email (10 attempts a minute). Wait a minute, or restart the API in development.
+
+## The first `make seed` is slow
+
+It downloads the MiniLM model once into `apps/api/data/models/`. Later seeds reuse the cached file.

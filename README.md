@@ -479,6 +479,8 @@ point cloud. Preloader "ESTABLISHING CONTACT", crosshair cursor, magnetic CTAs, 
 
 ## 13. Testing
 
+> Journey write-ups: [`docs/journeys`](docs/journeys/README.md) · how to run them: [`e2e/README.md`](e2e/README.md).
+
 ```bash
 make test
 ```

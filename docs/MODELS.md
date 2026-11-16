@@ -40,3 +40,7 @@ Each one returns a human-readable reason, and each falls back to a simpler path 
 * Set `EMBEDDINGS_ENABLED=false` to run fully offline. Linking and intent then use TF-IDF only.
 * Tests run with embeddings disabled for determinism. The ensemble test runs only when the model is cached.
 * All training data is synthetic or generated. No customer data is used to train anything.
+
+## See also
+
+Each engine that uses these models has its own page with formulas and inputs: [`docs/engines`](engines/README.md).

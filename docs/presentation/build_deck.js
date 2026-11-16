@@ -94,14 +94,14 @@ const chips = (s, items, x, y, w, color, size = 7.5, h = 0.24, gap = 0.06) => {
 /** Lucide (ISC) icon, white on a coloured disc. */
 const icon = (s, name, x, y, d, color) => {
   s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color }, line: { color } });
-  s.addImage({ path: A(`icons/${name}.png`), x: x + d * 0.22, y: y + d * 0.22, w: d * 0.56, h: d * 0.56, altText: name });
+  s.addImage({ path: A(`icons/${name}.png`), x: x + d * 0.2, y: y + d * 0.2, w: d * 0.6, h: d * 0.6, altText: name });
 };
 /** Panel whose label sits beside an icon disc. */
 const ipanel = (s, x, y, w, h, color, label, ic) => {
   rect(s, x, y, w, h, K.white, K.line);
   rect(s, x, y, 0.06, h, color);
-  icon(s, ic, x + 0.17, y + 0.09, 0.26, color);
-  T(s, label.toUpperCase(), { x: x + 0.5, y: y + 0.1, w: w - 0.6, h: 0.22, fontSize: 9.5, bold: true, color, charSpacing: 1.5 });
+  icon(s, ic, x + 0.17, y + 0.08, 0.22, color);
+  T(s, label.toUpperCase(), { x: x + 0.47, y: y + 0.1, w: w - 0.57, h: 0.2, fontSize: 9.5, bold: true, color, charSpacing: 1.5 });
 };
 const lead = (s, x, y, w, text) => T(s, text, { x, y, w, h: 0.18, fontSize: 8, italic: true, color: K.dim });
 const stat = (s, x, y, w, h, value, label, color) => {
@@ -131,15 +131,21 @@ const check = (s, x, y, t, ok = true) => {
   rect(s, 0.55, 2.78, 0.6, 0.04, K.ink);
   T(s, "Every ticket is a flight.", { x: 0.55, y: 2.88, w: 6, h: 0.4, fontFace: "Cambria", fontSize: 20, italic: true, color: K.dim });
   T(s, "A travel-ops ticketing platform for TBO's B2B world, run like an air-traffic control tower: every case linked to its booking, routed with a visible reason, timed to the guest's check-in, and worked together with suppliers and HR data.", { x: 0.55, y: 3.35, w: 5.9, h: 0.95, fontSize: 13, color: "2A3038" });
-  [["30+", "features shipped", K.beacon], ["6", "personas served", K.cobalt], ["347", "commits", K.signal], ["12", "e2e journeys", K.violet], ["97", "Lighthouse perf", K.beacon], ["88%", "intent accuracy", K.cobalt]].forEach(([v, l, c], i) => {
+  [["30+", "features shipped", K.beacon], ["6", "personas served", K.cobalt], ["16", "explainable engines", K.signal], ["12", "e2e journeys", K.violet], ["97", "Lighthouse perf", K.beacon], ["88%", "intent accuracy", K.cobalt]].forEach(([v, l, c], i) => {
     const x = 0.55 + (i % 3) * 2.0, y = 4.4 + Math.floor(i / 3) * 0.98;
     rect(s, x, y, 1.85, 0.86, K.white, K.line);
     rect(s, x, y, 0.06, 0.86, c);
     T(s, v, { x: x + 0.18, y: y + 0.06, w: 1.6, h: 0.48, fontFace: "Cambria", fontSize: 24, bold: true, color: c });
     T(s, l, { x: x + 0.18, y: y + 0.55, w: 1.65, h: 0.25, fontSize: 10.5, color: K.dim });
   });
-  T(s, [{ text: "Team  ", options: { bold: true, color: K.beacon } }, { text: "Swayam Panchal · Jeevesh Bodhani · Rishit Lahoti · Shreyas Kale", options: {} }], { x: 0.55, y: 6.42, w: 6.1, h: 0.3, fontSize: 11.5 });
-  T(s, [{ text: "Dept. of AI & Data Science, Dwarkadas J. Sanghvi College of Engineering  ·  ", options: { color: K.dim } }, { text: GH, options: { color: K.cobalt, hyperlink: { url: GH } } }], { x: 0.55, y: 6.75, w: 12.4, h: 0.3, fontSize: 10.5 });
+  T(s, "Team Outliers", { x: 0.55, y: 6.32, w: 1.9, h: 0.3, fontFace: "Cambria", fontSize: 15, bold: true });
+  [["trophy", "10× Hackathon winners", K.beacon, 2.35], ["award", "3× Ideathon winners", K.cobalt, 4.4]].forEach(([ic, t, col, x]) => {
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 6.33, w: 1.95, h: 0.28, rectRadius: 0.14, fill: { color: TINT[col] }, line: { color: col, width: 1 } });
+    icon(s, ic, x + 0.04, 6.355, 0.23, col);
+    T(s, t, { x: x + 0.32, y: 6.385, w: 1.6, h: 0.18, fontSize: 9.5, bold: true, color: col });
+  });
+  T(s, "Swayam Panchal · Jeevesh Bodhani · Rishit Lahoti · Shreyas Kale", { x: 0.55, y: 6.66, w: 6.1, h: 0.26, fontSize: 11.5 });
+  T(s, [{ text: "Dept. of AI & Data Science, Dwarkadas J. Sanghvi College of Engineering  ·  ", options: { color: K.dim } }, { text: GH, options: { color: K.cobalt, hyperlink: { url: GH } } }], { x: 0.55, y: 6.95, w: 12.4, h: 0.28, fontSize: 10.5 });
   s.addNotes("Cover. OpsDesk Control Tower reframes TBO ops ticketing as air-traffic control.");
 }
 
@@ -147,7 +153,15 @@ const check = (s, x, y, t, ok = true) => {
 {
   const s = pres.addSlide();
   s.background = { color: K.paper };
-  header(s, "01", "The solution", "Every MVP in the brief, built, and why it matters to TBO", "MVP-1 to MVP-7 and the stretch goals from the problem statement, then what makes OpsDesk unique, its impact, feasibility, viability and benefits");
+  header(s, "01", "The solution", "Every MVP in the brief, built, and why it matters to TBO", "");
+  // The problem, in three lines
+  rect(s, 0.35, 0.74, 12.63, 0.34, TINT[K.alarm]);
+  rect(s, 0.35, 0.74, 0.06, 0.34, K.alarm);
+  icon(s, "triangle-alert", 0.5, 0.79, 0.24, K.alarm);
+  T(s, "THE PROBLEM", { x: 0.82, y: 0.83, w: 1.1, h: 0.18, fontSize: 9, bold: true, color: K.alarm, charSpacing: 1.5 });
+  T(s, [{ text: "TBO's ops desk gets thousands of agency tickets (refunds, lost bookings, missing vouchers), yet each arrives with no booking history, is routed first-come-first-served, and has an SLA that ignores the guest's check-in. ", options: {} },
+    { text: "Agencies repeat themselves, urgent cases breach, side threads lose recipients, and reporting stops at 3,000 rows.", options: { bold: true } }],
+    { x: 1.95, y: 0.765, w: 10.95, h: 0.3, fontSize: 8.5, valign: "middle" });
 
   const hd = (t) => ({ text: t, options: { bold: true, color: K.white, fill: { color: K.ink }, fontSize: 9 } });
   const c = (t, o = {}) => ({ text: t, options: { fontSize: 8, color: K.ink, valign: "middle", ...o } });
@@ -188,18 +202,18 @@ const check = (s, x, y, t, ok = true) => {
     { text: "Every case linked to its booking, routed with a visible reason, and timed to the guest's check-in.", options: { color: K.dim, fontSize: 8.5 } }], { x: 7.75, y: 1.16, w: 5.15, h: 0.54 });
 
   // B. Hero: capability comparison
-  ipanel(s, 7.05, 1.8, 5.93, 2.76, K.beacon, "Why it's unique · OpsDesk vs a generic helpdesk", "target");
+  ipanel(s, 7.05, 1.8, 5.93, 2.76, K.beacon, "Why it's unique · OpsDesk vs a generic helpdesk", "sparkles");
   const rowsU = [
     ["ghost", K.beacon, "Ghost Flights", "predicts tickets before they arrive", "—", "—"],
     ["cloud-lightning", K.alarm, "Storm Cells", "5+ cases → 1 incident, 1 broadcast", "—", "manual"],
-    ["user-check", K.signal, "HR-aware routing", "Darwinbox leave and shifts", "—", "paid app"],
-    ["sun", K.taxi, "Follow-the-Sun", "region handoff, holiday-aware", "—", "manual"],
-    ["chart-line", K.cobalt, "Breach Forecast", "Monte Carlo what-if before acting", "—", "—"],
-    ["triangle-alert", K.violet, "Churn early-warning", "3rd contact + frustration radar", "—", "paid AI"],
-    ["lightbulb", K.ink, "Explainable by default", "every score shows its 'why'", "—", "—"],
+    ["calendar-x", K.signal, "HR-aware routing", "Darwinbox leave and shifts", "—", "paid app"],
+    ["earth", K.taxi, "Follow-the-Sun", "region handoff, holiday-aware", "—", "manual"],
+    ["hourglass", K.cobalt, "Breach Forecast", "Monte Carlo what-if before acting", "—", "—"],
+    ["user-x", K.violet, "Churn early-warning", "3rd contact + frustration radar", "—", "paid AI"],
+    ["scan-search", K.ink, "Explainable by default", "every score shows its 'why'", "—", "—"],
     ["mic", K.beacon, "Voice + plain English", "Tower Radio voice, ⌘K questions", "—", "paid bot"],
-    ["truck", K.taxi, "Supplier partner portal", "suppliers reply on the ticket", "—", "paid seat"],
-    ["database", K.cobalt, "Uncapped export", "60K+ rows streamed, live counter", "3K cap", "step-up"],
+    ["handshake", K.taxi, "Supplier partner portal", "suppliers reply on the ticket", "—", "paid seat"],
+    ["download", K.cobalt, "Uncapped export", "60K+ rows streamed, live counter", "3K cap", "step-up"],
   ];
   const th = (t, f, al = "center") => ({ text: t, options: { bold: true, color: K.white, fill: { color: f }, fontSize: 8, align: al, valign: "middle" } });
   const tc = (t, o = {}) => ({ text: t, options: { fontSize: 7.5, align: "center", valign: "middle", ...o } });
@@ -218,7 +232,7 @@ const check = (s, x, y, t, ok = true) => {
   // C. Impact strip
   rect(s, 7.05, 4.64, 5.93, 0.84, K.white, K.line);
   rect(s, 7.05, 4.64, 0.06, 0.84, K.alarm);
-  icon(s, "zap", 7.24, 4.7, 0.28, K.alarm);
+  icon(s, "trending-up", 7.22, 4.72, 0.28, K.alarm);
   T(s, [{ text: "IMPACT", options: { bold: true, color: K.alarm, charSpacing: 1.5, breakLine: true, fontSize: 9.5 } }, { text: "measured on the prototype", options: { color: K.dim, fontSize: 7, italic: true } }], { x: 7.22, y: 5.02, w: 0.95, h: 0.42 });
   [["0", "repeat stories per booking", K.alarm], ["< 1 s", "escalation to Tower Chief", K.beacon], ["76→88%", "intent accuracy", K.cobalt], ["3K→60K+", "rows per export", K.signal]].forEach(([v, l, col], k) => {
     const x = 8.2 + k * 1.2;
@@ -230,16 +244,16 @@ const check = (s, x, y, t, ok = true) => {
 
   // D. Feasible & viable + benefits
   ipanel(s, 7.05, 5.56, 2.915, 1.74, K.signal, "Feasible & viable", "badge-check");
-  [["terminal", K.signal, "Runs today:", "3 commands on a laptop"], ["cpu", K.cobalt, "CPU only:", "pretrained MiniLM, offline fallback"], ["wallet", K.violet, "₹0 add-ons:", "Apache / MIT stack, no per-seat fee"], ["database", K.taxi, "Scales:", "SQLite → Postgres → Kafka path"], ["shield-alert", K.alarm, "Secure:", "RBAC, argon2, audit log on every change"]].forEach(([ic, col, h, d], k) => {
-    const y = 5.9 + k * 0.275;
+  [["terminal", K.signal, "Runs today:", "3 commands on a laptop"], ["cpu", K.cobalt, "CPU only:", "pretrained MiniLM, offline fallback"], ["indian-rupee", K.violet, "₹0 add-ons:", "Apache / MIT stack, no per-seat fee"], ["server", K.taxi, "Scales:", "SQLite → Postgres → Kafka path"], ["lock", K.alarm, "Secure:", "RBAC, argon2, audit log on every change"]].forEach(([ic, col, h, d], k) => {
+    const y = 5.93 + k * 0.268;
     icon(s, ic, 7.22, y, 0.22, col);
     T(s, [{ text: h + " ", options: { bold: true } }, { text: d, options: { color: K.dim } }], { x: 7.52, y: y + 0.02, w: 2.35, h: 0.2, fontSize: 7.5 });
   });
   ipanel(s, 10.065, 5.56, 2.915, 1.74, K.violet, "Benefits by persona", "users");
-  [["Agency", "Never repeats the story", K.beacon, "building-2"], ["Agent", "History + why, one screen", K.cobalt, "headset"], ["Manager", "Sorted by check-in", K.alarm, "shield-alert"], ["Lead", "Risk before breach", K.signal, "chart-column"], ["Product", "Themes as they emerge", K.violet, "lightbulb"], ["Supplier", "Replies on the ticket", K.taxi, "truck"]].forEach(([h, d, col, ic], k) => {
-    const x = 10.215 + (k % 2) * 1.37, y = 5.9 + Math.floor(k / 2) * 0.46;
+  [["Agency", "Never repeats the story", K.beacon, "briefcase-business"], ["Agent", "History + why, one screen", K.cobalt, "headset"], ["Manager", "Sorted by check-in", K.alarm, "siren"], ["Lead", "Risk before breach", K.signal, "gauge"], ["Product", "Themes as they emerge", K.violet, "lightbulb"], ["Supplier", "Replies on the ticket", K.taxi, "handshake"]].forEach(([h, d, col, ic], k) => {
+    const x = 10.215 + (k % 2) * 1.37, y = 5.92 + Math.floor(k / 2) * 0.45;
     rect(s, x, y, 1.3, 0.41, TINT[col]);
-    icon(s, ic, x + 0.06, y + 0.085, 0.25, col);
+    icon(s, ic, x + 0.07, y + 0.09, 0.23, col);
     T(s, [{ text: h, options: { bold: true, color: col, breakLine: true } }, { text: d, options: { color: K.ink } }], { x: x + 0.37, y: y + 0.05, w: 0.92, h: 0.36, fontSize: 7 });
   });
   s.addNotes("Every MVP from the brief with what we built, stretch goals, technical expectations, eight differentiating ideas, and the impact, feasibility, viability and benefits.");
@@ -293,7 +307,7 @@ const check = (s, x, y, t, ok = true) => {
     [p("Product / Insights", "Weather desk"), c("Recurring themes into the backlog"), c("Weather Radar 8-week heat map → emerging spike flagged → reads sample tickets → attaches a Jira or roadmap product link")],
     [p("Supplier Partner", "our addition"), c("Answer TBO without email chains"), c("Sees only its own channels → quick replies ('Confirmed, HCN to follow') → reply lands on the ticket timeline live → tracks its own reply speed")],
   ];
-  s.addTable(journeys, { x: 0.35, y: 4.8, w: 9.0, colW: [1.55, 2.0, 5.45], rowH: [0.22, 0.36, 0.36, 0.36, 0.36, 0.33, 0.33], border: { type: "solid", color: K.line, pt: 0.75 }, fill: { color: K.white }, margin: 0.04 });
+  s.addTable(journeys, { x: 0.35, y: 4.8, w: 9.0, colW: [1.55, 2.0, 5.45], rowH: [0.24, 0.39, 0.39, 0.39, 0.39, 0.35, 0.35], border: { type: "solid", color: K.line, pt: 0.75 }, fill: { color: K.white }, margin: 0.04 });
 
   panel(s, 9.5, 4.8, 3.48, 2.5, K.cobalt, "Tech stack");
   let ty = 5.1;
@@ -319,7 +333,7 @@ const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdN
 
   // Team Outliers + track record
   T(s, "Team Outliers", { x: 0.5, y: 1.47, w: 2.6, h: 0.34, fontFace: "Cambria", fontSize: 17, bold: true });
-  [["trophy", "10× Hackathon winners", K.beacon, 3.05], ["award", "3× Ideathon winners", K.cobalt, 5.3]].forEach(([ic, t, col, x]) => {
+  [["trophy", "10× Hackathon winners", K.beacon, 2.4], ["award", "3× Ideathon winners", K.cobalt, 4.65]].forEach(([ic, t, col, x]) => {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.48, w: 2.15, h: 0.32, rectRadius: 0.16, fill: { color: TINT[col] }, line: { color: col, width: 1 } });
     icon(s, ic, x + 0.05, 1.51, 0.26, col);
     T(s, t, { x: x + 0.36, y: 1.54, w: 1.75, h: 0.2, fontSize: 10, bold: true, color: col });
@@ -336,7 +350,7 @@ const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdN
 
   ipanel(s, 0.5, 3.2, 3.5, 2.5, K.signal, "Brief deliverables", "badge-check");
   [["Runnable application", "make setup · seed · dev"], ["README mapped to P1-P6", "accounts, formulas, scale"], ["3-5 min demo video", "problem → solution → every persona"], ["Seed data", "3,000+ flights, 5 agencies"], ["Architecture + cost contrast", "this deck · docs/MODELS.md"]].forEach(([a, b], i) => {
-    const y = 3.58 + i * 0.41;
+    const y = 3.6 + i * 0.41;
     s.addShape(pres.shapes.OVAL, { x: 0.68, y, w: 0.24, h: 0.24, fill: { color: K.signal }, line: { color: K.signal } });
     T(s, "✓", { x: 0.68, y: y + 0.03, w: 0.24, h: 0.18, fontSize: 9, bold: true, color: K.white, align: "center" });
     T(s, [{ text: a, options: { bold: true, breakLine: true } }, { text: b, options: { color: K.dim, fontSize: 8 } }], { x: 1.0, y: y - 0.03, w: 2.9, h: 0.36, fontSize: 9 });
@@ -344,7 +358,7 @@ const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdN
 
   ipanel(s, 4.1, 3.2, 3.5, 2.5, K.cobalt, "Run the prototype", "terminal");
   [["Clone", "git clone github.com/SDP42/OpsDesk"], ["Install + seed", "make setup && make seed"], ["Start", "make dev  →  localhost:3000"], ["Guided demo", "Autopilot walks every persona in 90 s"], ["Verify", "make test && make e2e  (journeys A-H)"]].forEach(([h, d], i) => {
-    const y = 3.58 + i * 0.41;
+    const y = 3.6 + i * 0.41;
     s.addShape(pres.shapes.OVAL, { x: 4.28, y, w: 0.3, h: 0.3, fill: { color: K.cobalt }, line: { color: K.cobalt } });
     T(s, String(i + 1), { x: 4.28, y: y + 0.06, w: 0.3, h: 0.18, fontSize: 9.5, bold: true, color: K.white, align: "center" });
     if (i < 4) s.addShape(pres.shapes.LINE, { x: 4.43, y: y + 0.3, w: 0, h: 0.11, line: { color: K.cobalt, width: 1 } });
@@ -373,7 +387,7 @@ const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdN
   T(s, [{ text: "OpsDesk in 4 minutes", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "Problem → solution → every persona, live → architecture → impact. Narrated, with captions.", options: { color: K.dim, fontSize: 8.5, breakLine: true } }, { text: "Open the video on Google Drive", options: { color: K.cobalt, fontSize: 9, bold: true, hyperlink: { url: VIDEO } } }], { x: VX + 1.15, y: 3.58, w: VW - 1.25, h: 0.88 });
 
   ipanel(s, VX, 4.62, VW, 2.48, K.violet, "Built and verified", "flask-conical");
-  [["347", "commits, small and conventional", K.beacon], ["120+", "unit and API tests passing", K.cobalt], ["12", "Playwright journeys end to end", K.signal], ["97", "Lighthouse performance score", K.violet], ["88%", "intent accuracy, pretrained MiniLM", K.beacon], ["< 1 s", "escalation to the Tower Chief", K.cobalt], ["30+", "features across 6 personas", K.signal], ["16", "pure engines, each with a reason", K.violet]].forEach(([v, l, col], i) => {
+  [["0", "paid APIs or GPUs needed", K.beacon], ["120+", "unit and API tests passing", K.cobalt], ["12", "Playwright journeys end to end", K.signal], ["97", "Lighthouse performance score", K.violet], ["88%", "intent accuracy, pretrained MiniLM", K.beacon], ["< 1 s", "escalation to the Tower Chief", K.cobalt], ["30+", "features across 6 personas", K.signal], ["16", "pure engines, each with a reason", K.violet]].forEach(([v, l, col], i) => {
     const x = VX + 0.2 + (i % 2) * 2.45, y = 4.96 + Math.floor(i / 2) * 0.52;
     T(s, v, { x, y, w: 2.3, h: 0.3, fontFace: "Cambria", fontSize: 16, bold: true, color: col });
     T(s, l, { x, y: y + 0.29, w: 2.35, h: 0.2, fontSize: 8, color: K.dim });

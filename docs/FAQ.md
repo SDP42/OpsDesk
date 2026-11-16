@@ -11,3 +11,7 @@ The intent ensemble returns its top three guesses with confidence. Below 0.55 th
 ## Why did my flight go to that controller?
 
 Open the flight and press **Why**. Vectoring shows every point it awarded (region, priority, shift, availability, skill, load) and the runners-up.
+
+## Can an agency see another agency's tickets?
+
+No. Requesters are scoped to their own agency in `app/core/rbac.py`; any other agency's ticket returns 404, and a test enforces it.

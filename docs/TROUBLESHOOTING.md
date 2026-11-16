@@ -13,3 +13,7 @@ Login is rate-limited per IP and email (10 attempts a minute). Wait a minute, or
 ## The first `make seed` is slow
 
 It downloads the MiniLM model once into `apps/api/data/models/`. Later seeds reuse the cached file.
+
+## Seeded flights look already breached
+
+Seed data is relative to the time it was generated. Run `make seed` again shortly before a demo.

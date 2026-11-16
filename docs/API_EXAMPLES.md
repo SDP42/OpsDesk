@@ -55,3 +55,9 @@ curl -b jar http://localhost:3000/api/insights/themes
 ```bash
 curl -b jar -o tickets.csv 'http://localhost:3000/api/export/tickets?format=csv'
 ```
+
+## Live updates over SSE
+
+```bash
+curl -N -b jar http://localhost:3000/api/stream
+```

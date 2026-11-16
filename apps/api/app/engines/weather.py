@@ -1,9 +1,8 @@
 """Weather Radar: themes and turbulence from conversations (spec section 8.5).
 
-Basic version: keyword-lexicon tagging plus weekly aggregation with
-week-over-week change. TODO(phase-3): nearest-centroid tagging on TF-IDF and the
-z-score "emerging" flag against the previous 6 weeks are wired below as
-``emerging_zscore`` but tuned in Phase 3.
+Keyword-lexicon tagging plus weekly aggregation with week-over-week change. A theme is
+flagged "emerging" only when its z-score against the previous six weeks is >= 2.5 and it
+is at least 2.5x the average of the last four weeks (see ``is_emerging``).
 """
 
 from __future__ import annotations

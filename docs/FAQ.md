@@ -19,3 +19,7 @@ No. Requesters are scoped to their own agency in `app/core/rbac.py`; any other a
 ## Why is the SLA shorter for some P3 tickets?
 
 Wheels-Up multiplies the base target by an urgency factor from the guest's check-in or LCD: within 12 hours it is a quarter of the normal time.
+
+## Is there really no export limit?
+
+Exports stream with keyset pagination, so there is no 3,000-row cap. `make seed-big` loads 60,000 rows to show it.

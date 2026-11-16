@@ -17,3 +17,7 @@ It downloads the MiniLM model once into `apps/api/data/models/`. Later seeds reu
 ## Seeded flights look already breached
 
 Seed data is relative to the time it was generated. Run `make seed` again shortly before a demo.
+
+## The Constellation is blank
+
+Search a TBOH that has linked flights, such as `TBOH-88213`, or switch to List mode. WebGL must be enabled in the browser.

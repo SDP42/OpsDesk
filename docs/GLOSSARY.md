@@ -40,3 +40,12 @@ OpsDesk borrows air-traffic words so the ops floor reads like a control tower. T
 | **Fuel** | Time left on the clock, from full tank to empty |
 | **At risk / Critical / Breached** | 60%, 85% and 100% of the time used |
 | **Holiday pause** | Clock hours not counted on a regional public holiday |
+
+## Conversation terms
+
+| Term | Plain meaning |
+| --- | --- |
+| **Frequency** | A side conversation with named recipients, such as a supplier or finance |
+| **Internal note** | A message only TBO staff see |
+| **External reply** | A message the Pilot sees |
+| **HandoffDiff** | The check on transfer showing who stays, joins or drops from a Frequency |

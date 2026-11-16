@@ -37,3 +37,9 @@ curl -b jar -H 'content-type: application/json' \
   -d '{"reason":"Guest checks in tonight, supplier silent"}' \
   http://localhost:3000/api/tickets/<ticket_id>/escalate
 ```
+
+## Breach forecast for a flight
+
+```bash
+curl -b jar http://localhost:3000/api/tickets/<ticket_id>/forecast
+```

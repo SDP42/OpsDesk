@@ -27,3 +27,7 @@ Exports stream with keyset pagination, so there is no 3,000-row cap. `make seed-
 ## Does OpsDesk work with our HR system?
 
 The Crew Roster reads leave, weekly-off and shift data through a Darwinbox adapter. Without credentials it runs on simulated data, so demos still work.
+
+## Which database does it use?
+
+SQLite in WAL mode by default. Set `DATABASE_URL` to a PostgreSQL URL for production; Alembic migrations cover both.

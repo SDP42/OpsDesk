@@ -39,3 +39,7 @@ Run `make seed`. Seed data is generated relative to now, so run it shortly befor
 ## Where are the models and their licences listed?
 
 In [`docs/MODELS.md`](MODELS.md), with measured accuracy.
+
+## How do I rebuild the pitch deck or the demo video?
+
+See [`presentation/README.md`](presentation/README.md) and [`video/README.md`](video/README.md). Both are generated from scripts in the repository.

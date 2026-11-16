@@ -43,3 +43,9 @@ curl -b jar -H 'content-type: application/json' \
 ```bash
 curl -b jar http://localhost:3000/api/tickets/<ticket_id>/forecast
 ```
+
+## Themes this week
+
+```bash
+curl -b jar http://localhost:3000/api/insights/themes
+```

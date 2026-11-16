@@ -53,6 +53,8 @@ Built by **Team Outliers** (Swayam Panchal · Jeevesh Bodhani · Rishit Lahoti �
 
 ## 1. What OpsDesk is
 
+> New to the air-traffic words? The [glossary](docs/GLOSSARY.md) maps each one to plain language.
+
 TBO's current ticketing tool treats every agency contact as an isolated task. The same refund raised three times becomes three
 unrelated tickets; routing is FIFO; side conversations break when a ticket moves; SLAs ignore when the guest actually travels;
 insights stay trapped in threads; exports stop at about 3,000 rows.

@@ -556,6 +556,8 @@ engine: no per-seat AI add-on, no third-party TBOH-linking app, no export or arc
 
 ## 17. Project layout
 
+> All documentation is indexed in [`docs/README.md`](docs/README.md). Contributing rules: [`CONTRIBUTING.md`](CONTRIBUTING.md) · security: [`SECURITY.md`](SECURITY.md).
+
 ```
 apps/
   api/                    FastAPI backend (uv, ruff, mypy, pytest)

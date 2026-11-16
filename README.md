@@ -117,6 +117,8 @@ PostgreSQL (`docker compose up -d postgres` gives you one).
 
 ## 3. Demo accounts and personas
 
+> Each persona has a step-by-step guide in [`docs/personas`](docs/personas/README.md).
+
 All demo users share the demo-only password **`cleared-for-takeoff`** (from `DEMO_PASSWORD`, used only by the seed script). On
 `/login`, click a callsign card to sign in instantly.
 

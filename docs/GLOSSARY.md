@@ -59,3 +59,12 @@ OpsDesk borrows air-traffic words so the ops floor reads like a control tower. T
 | **Turbulence** | An agency's churn risk |
 | **Storm Cell** | Many tickets with one cause, grouped into one incident |
 | **Ghost Flight** | A booking predicted to become a ticket soon |
+
+## Data terms
+
+| Term | Plain meaning |
+| --- | --- |
+| **Black Box** | The export screen; streams every row with no cap |
+| **SSE** | Server-sent events: the server pushes live updates to the browser |
+| **Demo airspace** | The 3,000 seeded flights used for demos |
+| **Live airspace** | Only real flights created by users |

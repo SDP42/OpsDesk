@@ -23,3 +23,7 @@ Wheels-Up multiplies the base target by an urgency factor from the guest's check
 ## Is there really no export limit?
 
 Exports stream with keyset pagination, so there is no 3,000-row cap. `make seed-big` loads 60,000 rows to show it.
+
+## Does OpsDesk work with our HR system?
+
+The Crew Roster reads leave, weekly-off and shift data through a Darwinbox adapter. Without credentials it runs on simulated data, so demos still work.

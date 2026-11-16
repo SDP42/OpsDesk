@@ -375,6 +375,8 @@ Migrations: `0001_initial_schema`, `0002_data_mode_and_onboarding`, `0003_suppli
 
 ## 9. API reference
 
+> Ready-to-run curl calls: [`docs/API_EXAMPLES.md`](docs/API_EXAMPLES.md).
+
 All routes are under `/api`, validated with Pydantic (unknown fields rejected), and return `{ "data": … }` or
 `{ "error": { "code", "message" } }`. Lists use cursor pagination with `meta.next_cursor`. Full schema at `/docs`.
 

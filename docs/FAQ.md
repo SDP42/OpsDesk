@@ -3,3 +3,7 @@
 ## Do I need a GPU or a paid AI key?
 
 No. Every model runs on a laptop CPU. The pretrained MiniLM model (about 90 MB) downloads once on the first `make seed`; set `EMBEDDINGS_ENABLED=false` to run fully offline on TF-IDF.
+
+## Why does a ticket say "needs a human" for intent?
+
+The intent ensemble returns its top three guesses with confidence. Below 0.55 the UI does not pretend: it asks a person to pick.

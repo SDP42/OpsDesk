@@ -22,3 +22,12 @@ OpsDesk borrows air-traffic words so the ops floor reads like a control tower. T
 | **LCD** | Last cancellation date: after it, cancelling costs money |
 | **HCN** | Hotel confirmation number from the supplier |
 | **Supplier** | The hotel, bedbank or wholesaler that fulfils the booking |
+
+## Routing terms
+
+| Term | Plain meaning |
+| --- | --- |
+| **Vectoring** | Choosing which controller gets a flight, with a reason |
+| **Preset** | A routing policy: balanced, urgency first, regional affinity or fairness |
+| **Runner-up** | The next-best controller, with the points they lost by |
+| **Triage** | Flights not yet assigned to anyone |

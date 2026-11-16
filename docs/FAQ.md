@@ -7,3 +7,7 @@ No. Every model runs on a laptop CPU. The pretrained MiniLM model (about 90 MB) 
 ## Why does a ticket say "needs a human" for intent?
 
 The intent ensemble returns its top three guesses with confidence. Below 0.55 the UI does not pretend: it asks a person to pick.
+
+## Why did my flight go to that controller?
+
+Open the flight and press **Why**. Vectoring shows every point it awarded (region, priority, shift, availability, skill, load) and the runners-up.

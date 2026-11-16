@@ -7,3 +7,9 @@ curl -c jar -H 'content-type: application/json' \
   -d '{"email":"priya.nair@opsdesk.demo","password":"'$DEMO_PASSWORD'"}' \
   http://localhost:3000/api/auth/login
 ```
+
+## List my queue
+
+```bash
+curl -b jar 'http://localhost:3000/api/tickets?limit=20'
+```

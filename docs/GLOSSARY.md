@@ -49,3 +49,13 @@ OpsDesk borrows air-traffic words so the ops floor reads like a control tower. T
 | **Internal note** | A message only TBO staff see |
 | **External reply** | A message the Pilot sees |
 | **HandoffDiff** | The check on transfer showing who stays, joins or drops from a Frequency |
+
+## Insight terms
+
+| Term | Plain meaning |
+| --- | --- |
+| **Weather Radar** | Theme trends from ticket text |
+| **Emerging** | A theme spiking well above its recent weeks |
+| **Turbulence** | An agency's churn risk |
+| **Storm Cell** | Many tickets with one cause, grouped into one incident |
+| **Ghost Flight** | A booking predicted to become a ticket soon |

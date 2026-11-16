@@ -58,7 +58,7 @@ const img = (s, file, x, y, w, h, name) => {
 };
 const header = (s, n, kicker, title, sub) => {
   T(s, `${n}  ·  ${kicker}`.toUpperCase(), { x: 0.35, y: 0.16, w: 6, h: 0.2, fontSize: 9, bold: true, color: K.beacon, charSpacing: 2 });
-  T(s, "OPSDESK CONTROL TOWER  ·  TBO VOYAGEHACK PS3", { x: 7.0, y: 0.16, w: 5.98, h: 0.2, fontSize: 8, color: K.dim, align: "right", charSpacing: 1.5 });
+  T(s, "OPSDESK FOR TBO (ZENDESK)  ·  TBO VOYAGEHACK", { x: 7.0, y: 0.16, w: 5.98, h: 0.2, fontSize: 8, color: K.dim, align: "right", charSpacing: 1.5 });
   T(s, title, { x: 0.35, y: 0.36, w: 12.63, h: 0.42, fontFace: "Cambria", fontSize: 22, bold: true });
   T(s, sub, { x: 0.35, y: 0.78, w: 12.63, h: 0.22, fontSize: 10.5, color: K.dim, italic: true });
 };
@@ -125,7 +125,7 @@ const check = (s, x, y, t, ok = true) => {
   img(s, "wall.png", 6.75, 4.6, 3.0, 1.875, "Wall Mode");
   img(s, "constellation.png", 9.95, 4.6, 3.0, 1.875, "Constellation");
   sign(s, 0.55, 0.55, 2.3, "TBO VOYAGEHACK", K.ink);
-  sign(s, 2.95, 0.55, 3.25, "PROBLEM STATEMENT 3 · OPSDESK", K.beacon);
+  sign(s, 2.95, 0.55, 3.25, "OPSDESK FOR TBO (ZENDESK)", K.beacon);
   T(s, "OpsDesk", { x: 0.55, y: 1.05, w: 6, h: 0.9, fontFace: "Cambria", fontSize: 54, bold: true });
   T(s, "Control Tower", { x: 0.55, y: 1.85, w: 6, h: 0.8, fontFace: "Cambria", fontSize: 40, italic: true, color: K.beacon });
   rect(s, 0.55, 2.78, 0.6, 0.04, K.ink);
@@ -315,14 +315,22 @@ const VIDEO = "https://drive.google.com/drive/folders/1E1uyaZgydQRglXeVXrytohNdN
   s.background = { color: K.paper };
   rect(s, 0, 0, 13.333, 0.08, K.beacon);
   T(s, "Thank you", { x: 0.5, y: 0.35, w: 6, h: 0.8, fontFace: "Cambria", fontSize: 44, bold: true });
-  T(s, "Thank you for reviewing OpsDesk Control Tower. We welcome your questions.", { x: 0.5, y: 1.15, w: 7.1, h: 0.4, fontFace: "Cambria", fontSize: 16, italic: true, color: K.beacon });
+  T(s, "Thank you for reviewing OpsDesk Control Tower. We welcome your questions.", { x: 0.5, y: 1.08, w: 7.1, h: 0.34, fontFace: "Cambria", fontSize: 15, italic: true, color: K.beacon });
+
+  // Team Outliers + track record
+  T(s, "Team Outliers", { x: 0.5, y: 1.47, w: 2.6, h: 0.34, fontFace: "Cambria", fontSize: 17, bold: true });
+  [["trophy", "10× Hackathon winners", K.beacon, 3.05], ["award", "3× Ideathon winners", K.cobalt, 5.3]].forEach(([ic, t, col, x]) => {
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 1.48, w: 2.15, h: 0.32, rectRadius: 0.16, fill: { color: TINT[col] }, line: { color: col, width: 1 } });
+    icon(s, ic, x + 0.05, 1.51, 0.26, col);
+    T(s, t, { x: x + 0.36, y: 1.54, w: 1.75, h: 0.2, fontSize: 10, bold: true, color: col });
+  });
 
   [["Swayam Panchal", K.beacon], ["Jeevesh Bodhani", K.cobalt], ["Rishit Lahoti", K.signal], ["Shreyas Kale", K.violet]].forEach(([n, col], i) => {
     const x = 0.5 + i * 1.8;
-    rect(s, x, 1.72, 1.7, 0.95, K.white, K.line);
-    rect(s, x, 1.72, 1.7, 0.06, col);
-    T(s, n, { x: x + 0.14, y: 1.93, w: 1.5, h: 0.26, fontSize: 12, bold: true });
-    T(s, "AI & Data Science · DJSCE", { x: x + 0.14, y: 2.22, w: 1.55, h: 0.2, fontSize: 8.5, color: K.dim });
+    rect(s, x, 1.92, 1.7, 0.78, K.white, K.line);
+    rect(s, x, 1.92, 1.7, 0.06, col);
+    T(s, n, { x: x + 0.14, y: 2.07, w: 1.5, h: 0.26, fontSize: 12, bold: true });
+    T(s, "AI & Data Science · DJSCE", { x: x + 0.14, y: 2.36, w: 1.55, h: 0.2, fontSize: 8.5, color: K.dim });
   });
   T(s, "Dept. of Artificial Intelligence and Data Science · Dwarkadas J. Sanghvi College of Engineering, Mumbai", { x: 0.5, y: 2.8, w: 7.1, h: 0.25, fontSize: 10, color: K.dim });
 

@@ -29,3 +29,7 @@ Voice uses the browser's Web Speech API. Allow microphone access, or type the qu
 ## Playwright journeys fail on a fresh machine
 
 Run `make seed` and `make dev` first, then `make e2e`. The global setup reseeds before the tests.
+
+## `make seed` while the API is running
+
+Supported: the seed empties tables in place instead of deleting the database file, so the running API keeps working.

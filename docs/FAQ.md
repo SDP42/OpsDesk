@@ -35,3 +35,7 @@ SQLite in WAL mode by default. Set `DATABASE_URL` to a PostgreSQL URL for produc
 ## How do I reset the demo?
 
 Run `make seed`. Seed data is generated relative to now, so run it shortly before a demo.
+
+## Where are the models and their licences listed?
+
+In [`docs/MODELS.md`](MODELS.md), with measured accuracy.
